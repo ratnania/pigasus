@@ -1,0 +1,22 @@
+% Bold math
+\usepackage{bm}
+
+
+% Define colors.
+\usepackage{color}
+  \definecolor{myDarkBlue}{rgb}{0,0,0.6}      % used for LINKS and URLs (see hyperref package).
+  \definecolor{myDarkGreen}{rgb}{0,0.4,0}     % used for REFERENCES (see hyperref package).
+  \definecolor{black}{rgb}{0,0,0}
+  \definecolor{Red1}{rgb}{0.90,0.00,0.00}
+  \definecolor{grey45}{rgb}{0.45,0.45,0.45}
+
+% User defined macros and adaptations.
+\newcommand{\pderiv}[2]{\frac{\partial #1}{\partial #2}} % partial derivatives
+\newcommand{\dderiv}[2]{\frac{d #1}{d #2}}               % d-derivatives
+\newcommand{\myalert}[1]{\textcolor{Red1}{#1}}
+\newcommand{\revision}[0]{THE-CURRENT-SVN-REVISION}
+
+\newcommand{\rots}{\mathrm{rot}\,}
+\newcommand{\divs}{\mathrm{div}\,}
+\newcommand{\divv}{\mathbf{div}\,}
+\newcommand{\rotv}{\mathbf{rot}\,}
