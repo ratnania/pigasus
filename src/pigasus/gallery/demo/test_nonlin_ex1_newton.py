@@ -8,7 +8,7 @@ except ImportError:
     PLOT=False
 # ...
 import numpy                as np
-from igakit.cad_geometry import circle
+from caid.cad_geometry import circle
 from pigasus.gallery.poisson_nonlin import poisson_newton
 import sys
 import inspect

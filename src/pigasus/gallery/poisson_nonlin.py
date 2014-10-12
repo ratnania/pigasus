@@ -13,8 +13,8 @@ __all__ = ['poisson_picard', 'poisson_newton']
 class poisson_picard(poisson):
     """
     A multidimentional nonlinear Poisson class solver using Picard algorithm.
-        >>> import igakit.cad_geometry  as cg
-        >>> from igakit.cad import line
+        >>> import caid.cad_geometry  as cg
+        >>> from caid.cad_geometry import line
         >>> import pylab                as pl
 
 
@@ -144,8 +144,8 @@ class poisson_picard(poisson):
 class poisson_newton(poisson):
     """
     A multidimentional nonlinear Poisson class solver using Picard algorithm.
-        >>> import igakit.cad_geometry  as cg
-        >>> from igakit.cad import line
+        >>> import caid.cad_geometry  as cg
+        >>> from caid.cad_geometry import line
         >>> import pylab                as pl
 
     """
@@ -334,7 +334,7 @@ class poisson_newton(poisson):
     #-----------------------------------
 
 if __name__ == '__main__':
-    from igakit.cad_geometry import circle
+    from caid.cad_geometry import circle
     from matplotlib import pylab as plt
 
     sin = np.sin ; cos = np.cos ; exp = np.exp ; log = np.log ; sqrt = np.sqrt ; pi = np.pi

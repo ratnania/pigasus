@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 import numpy as np
-from igakit.cad_geometry import square as domain
+from caid.cad_geometry import square as domain
 from igakit.igalib import bsp
 
 # ------------------------------
@@ -248,7 +248,7 @@ if __name__ == '__main__':
     dxf = lambda x,y : x
     dyf = lambda x,y : y
 
-    from igakit.cad_geometry import square as domain
+    from caid.cad_geometry import square as domain
     geo = domain(n=[31,31], p=[2,2])
 
     interpolator = surfint(geo)

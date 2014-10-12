@@ -431,8 +431,8 @@ class splineRefMat(object):
 
 if __name__ == '__main__':
 
-    import igakit.cad_geometry  as cg
-    from igakit.cad_geometry import line, square
+    import caid.cad_geometry  as cg
+    from caid.cad_geometry import line, square
 
     DIM_1D = 1
     DIM_2D = 2

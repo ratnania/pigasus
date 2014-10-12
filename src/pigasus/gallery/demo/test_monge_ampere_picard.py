@@ -9,7 +9,7 @@ except ImportError:
 # ...
 import numpy                as np
 from pigasus.gallery.poisson_nonlin import poisson_picard
-from igakit.cad_geometry import square
+from caid.cad_geometry import square
 import sys
 import inspect
 filename = inspect.getfile(inspect.currentframe()) # script filename (usually with path)

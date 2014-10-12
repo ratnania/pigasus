@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from pigasus.gallery.basicPDE import *
 from pigasus.fem.field import *
-from igakit.cad_geometry import circle
+from caid.cad_geometry import circle
 import pylab as pl
 import numpy as np
 

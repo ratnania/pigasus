@@ -1,6 +1,6 @@
 import sys
 import numpy as np
-import igakit.cad_geometry as cg
+import caid.cad_geometry as cg
 
 nx = int(sys.argv[1])
 px = int(sys.argv[2])

@@ -1,7 +1,7 @@
 from pigasus.gallery.multigrid import *
 from pigasus.gallery.poisson import *
 from pigasus.utils.utils import hierarchical_geometries
-from igakit.cad_geometry import square as domain
+from caid.cad_geometry import square as domain
 import numpy                as np
 import time
 import sys

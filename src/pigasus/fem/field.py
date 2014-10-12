@@ -823,9 +823,9 @@ class field(pigasusObject):
         self.set(_np.genfromtxt(filename))
 
     def export(self, filename):
-        from igakit.cad_geometry import cad_geometry, cad_nurbs
+        from caid.cad_geometry import cad_geometry, cad_nurbs
         from igakit.nurbs import NURBS
-        from igakit.field import field as iga_field
+        from caid.field import field as iga_field
         U = self
         geo   = U.space.geometry
         geo_c = cad_geometry()

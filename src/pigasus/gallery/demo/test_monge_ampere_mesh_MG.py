@@ -4,7 +4,7 @@ import sys
 import time
 import numpy as np
 from pigasus.gallery.monge_ampere import picard
-from igakit.cad_geometry import square as domain
+from caid.cad_geometry import square as domain
 from matplotlib import pylab as plt
 from pigasus.multigrid.agregation import *
 

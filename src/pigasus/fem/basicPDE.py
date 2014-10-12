@@ -4,7 +4,7 @@
 import sys
 import numpy as np
 from scipy.sparse.linalg import cg as ConjugateGradient
-from igakit.cad_geometry import cad_geometry
+from caid.cad_geometry import cad_geometry
 
 from constants import *
 from field import *
@@ -57,8 +57,8 @@ class basicPDE(pigasus):
     linear system, and the solve, plot, norm and get functions, as explained
     next.
     We start by importing the following modules
-        >>> import igakit.cad_geometry  as cg
-        >>> from igakit.cad_geometry import line as domain
+        >>> import caid.cad_geometry  as cg
+        >>> from caid.cad_geometry import line as domain
         >>> import pylab                as pl
         >>> import numpy                as np
 
@@ -1406,7 +1406,7 @@ class basicPDE(pigasus):
 
 
 if __name__ == '__main__':
-    import igakit.cad_geometry  as cg
+    import caid.cad_geometry  as cg
     import pylab                as pl
     import numpy                as np
     from utils import assembler
@@ -1630,7 +1630,7 @@ if __name__ == '__main__':
 
     #-----------------------------------
     # ...
-    from igakit.cad_geometry import line
+    from caid.cad_geometry import line
     geo1 = line(n=[nx], p=[px])
 
     testcase1 = testcase_line()
@@ -1639,15 +1639,15 @@ if __name__ == '__main__':
 
     # ...
 #    testcase2 = testcase_square_Neumann()
-#    from igakit.cad_geometry import square as domain
+#    from caid.cad_geometry import square as domain
 #    geo2 = domain(n=[nx,ny], p=[px,py])
 
     testcase2 = testcase_square_Dirichlet()
-    from igakit.cad_geometry import square as domain
+    from caid.cad_geometry import square as domain
     geo2 = domain(n=[nx,ny], p=[px,py])
 ##    PDE1 = basicPDE(geometry=geo2, testcase=testcase2)
 
-#    from igakit.cad_geometry import annulus as domain
+#    from caid.cad_geometry import annulus as domain
 #    geo2 = domain(n=[nx+1,ny+1], p=[px,py])
 #    testcase2 = testcase_annulus_Dirichlet()
 

@@ -3,7 +3,7 @@
 import sys
 import numpy as np
 
-import igakit.cad_geometry  as cg
+import caid.cad_geometry  as cg
 import matplotlib.pyplot    as plt
 import numpy                as np
 from __main__ import __file__ as filename
@@ -85,7 +85,7 @@ tc_I = testcase(eps, dt, alpha-1., m1, m2, s1, s2)
 #-----------------------------------
 
 # ...
-from igakit.cad_geometry import square as domain
+from caid.cad_geometry import square as domain
 geo = domain(n=[nx,ny],p=[px,px])
 execfile('../run_anisotropicDiffusionMMPDE.py')
 # ...

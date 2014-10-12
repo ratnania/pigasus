@@ -10,7 +10,7 @@ __all__ = ['parabolic', 'onestep']
 class parabolic(object):
     """
     A multidimentional Parabolic equations class solver.
-        >>> import igakit.cad_geometry  as cg
+        >>> import caid.cad_geometry  as cg
 
     """
 
@@ -160,8 +160,8 @@ class parabolic(object):
 class onestep(parabolic):
     """
     A multidimentional nonlinear Poisson class solver using Picard algorithm.
-        >>> import igakit.cad_geometry  as cg
-        >>> from igakit.cad import line
+        >>> import caid.cad_geometry  as cg
+        >>> from caid.cad_geometry import line
         >>> import pylab                as pl
 
 
@@ -214,8 +214,8 @@ class onestep(parabolic):
 
 
 if __name__ == '__main__':
-    import igakit.cad_geometry  as cg
-    from igakit.cad import line, bilinear
+    import caid.cad_geometry  as cg
+    from caid.cad_geometry import line, bilinear
     import pylab                as pl
     import numpy                as np
 
@@ -277,7 +277,7 @@ if __name__ == '__main__':
 
     #-----------------------------------
     # ...
-    from igakit.cad_geometry import line
+    from caid.cad_geometry import line
     geo1 = line(n=[nx], p=[px])
 
     bc1, dicte1, dicti1 = testcase_line()

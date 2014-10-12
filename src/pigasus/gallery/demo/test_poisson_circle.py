@@ -8,8 +8,8 @@ except ImportError:
     PLOT=False
 # ...
 import numpy                as np
-from igakit.cad_geometry import circle as domain
-from igakit.cad_geometry import square as patch
+from caid.cad_geometry import circle as domain
+from caid.cad_geometry import square as patch
 from pigasus.gallery.poisson import *
 import sys
 import inspect

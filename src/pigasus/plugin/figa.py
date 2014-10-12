@@ -128,7 +128,7 @@ def assemble(A, R ,B):
 
 if __name__ == "__main__":
     from pigasus.gallery.basicPDE import *
-    from igakit.cad_geometry import cad_geometry
+    from caid.cad_geometry import cad_geometry
     from scipy.io import mmwrite
     from scipy.sparse import csr_matrix
 
@@ -321,7 +321,7 @@ if __name__ == "__main__":
 
     #-----------------------------------
     # ...
-    from igakit.cad_geometry import line as domain
+    from caid.cad_geometry import line as domain
     geo = domain(n=[nx],p=[px])
     # ...
     PDE11 = basicPDE(geometry=geo, testcase=tc11)

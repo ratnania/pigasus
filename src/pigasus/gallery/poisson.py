@@ -10,8 +10,8 @@ __all__ = ['poisson']
 class poisson(basicPDE):
     """
     A multidimentional EllipticPDE class solver.
-        >>> import igakit.cad_geometry  as cg
-        >>> from igakit.cad import line
+        >>> import caid.cad_geometry  as cg
+        >>> from caid.cad_geometry import line
         >>> import pylab                as pl
         >>> import numpy                as np
 
@@ -146,8 +146,8 @@ class poisson(basicPDE):
 
 
 if __name__ == '__main__':
-    import igakit.cad_geometry  as cg
-    from igakit.cad import line, bilinear
+    import caid.cad_geometry  as cg
+    from caid.cad_geometry import line, bilinear
     import pylab                as pl
     import numpy                as np
 
@@ -188,7 +188,7 @@ if __name__ == '__main__':
 
     #-----------------------------------
     # ...
-    from igakit.cad_geometry import line
+    from caid.cad_geometry import line
     geo1 = line(n=[nx], p=[px])
 
     f1, u1 = testcase_line()
@@ -196,7 +196,7 @@ if __name__ == '__main__':
     # ...
 
     # ...
-    from igakit.cad_geometry import square as domain
+    from caid.cad_geometry import square as domain
     geo2 = domain(n=[nx,ny], p=[px,py])
 
     f2, u2 = testcase_square_Dirichlet()

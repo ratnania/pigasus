@@ -19,8 +19,8 @@ sech = lambda x: 1./cosh(x)
 class picard(PDE_picard):
     """
     A multidimentional nonlinear Monge Ampere class solver using Picard algorithm.
-        >>> import igakit.cad_geometry  as cg
-        >>> from igakit.cad import line
+        >>> import caid.cad_geometry  as cg
+        >>> from caid.cad_geometry import line
         >>> import pylab                as pl
 
 
@@ -258,7 +258,7 @@ class picard(PDE_picard):
 
     #-----------------------------------
     def transferSolution(self, geo_H, U_H, geo_h, U_h):
-        from igakit.cad_geometry import cad_geometry
+        from caid.cad_geometry import cad_geometry
         from igakit.nurbs import NURBS
 
         patch_id = 0
@@ -324,8 +324,8 @@ class picard(PDE_picard):
 class picardTwoGrids(object):
     """
     A multidimentional nonlinear Monge Ampere class solver using a two grids Picard algorithm.
-        >>> import igakit.cad_geometry  as cg
-        >>> from igakit.cad import line
+        >>> import caid.cad_geometry  as cg
+        >>> from caid.cad_geometry import line
         >>> import pylab                as pl
 
 
@@ -638,7 +638,7 @@ class testcase(object):
 
 
 #if __name__ == '__main__':
-#    from igakit.cad_geometry import square
+#    from caid.cad_geometry import square
 #    from matplotlib import pylab as plt
 #    from time import time
 #

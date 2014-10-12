@@ -1,5 +1,5 @@
 from pigasus.gallery.poisson import poisson
-from igakit.cad_geometry import square as domain
+from caid.cad_geometry import square as domain
 import numpy as np
 import time
 import sys

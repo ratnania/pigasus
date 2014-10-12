@@ -126,7 +126,7 @@ class multigrid(object):
 
 
 if __name__ == '__main__':
-    from igakit.cad_geometry import square as domain
+    from caid.cad_geometry import square as domain
     from pigasus.gallery.poisson import *
 
     px = 2 ; py = 2

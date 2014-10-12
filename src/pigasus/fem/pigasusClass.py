@@ -93,7 +93,7 @@ class pigasus(object):
         self.fem.__del__()
 
 if __name__ == '__main__':
-    import igakit.cad_geometry  as cg
+    import caid.cad_geometry  as cg
     import pylab                as pl
     import numpy                as np
 
@@ -112,8 +112,8 @@ if __name__ == '__main__':
     # ------------------------------
     def test3():
         import fem      as fem
-        from igakit.cad import line, circle, bilinear
-        import igakit.cad_geometry as cg
+        from caid.cad_geometry import line, circle, bilinear
+        import caid.cad_geometry as cg
 
         fe = fem.fem()
 

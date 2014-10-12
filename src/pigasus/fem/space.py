@@ -49,7 +49,7 @@ class space(pigasusObject):
         self._sites  = None
 
         if as_file is not None:
-            import igakit.cad_geometry as cg
+            import caid.cad_geometry as cg
             self.geometry = cg.cad_geometry(file=as_file)
         else :
             if geometry is None:
@@ -142,7 +142,7 @@ class space(pigasusObject):
 
     def add_patchs(self):
         # ...
-        from igakit.io import formatter
+        from caid.io import formatter
         fmt = formatter()
         def _add_patch(ai_id, nrb):
             """
@@ -529,7 +529,7 @@ class space(pigasusObject):
 
     def update_geometry(self, geometry):
         # ...
-        from igakit.io import formatter
+        from caid.io import formatter
         fmt = formatter()
         def update_points_patch(ai_id, nrb):
             """

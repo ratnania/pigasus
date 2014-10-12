@@ -1,5 +1,5 @@
-from igakit.cad_geometry import square as domain
-from igakit.cad_geometry import cad_nurbs
+from caid.cad_geometry import square as domain
+from caid.cad_geometry import cad_nurbs
 import matplotlib.pyplot as plt
 import numpy as np
 

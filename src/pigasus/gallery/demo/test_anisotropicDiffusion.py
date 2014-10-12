@@ -8,7 +8,7 @@ except ImportError:
     PLOT=False
 # ...
 from pigasus.gallery.parabolic import onestep
-from igakit.cad_geometry import square as domain
+from caid.cad_geometry import square as domain
 import numpy                as np
 import sys
 import inspect

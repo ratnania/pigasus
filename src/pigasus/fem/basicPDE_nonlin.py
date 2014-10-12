@@ -11,8 +11,8 @@ __all__ = ['basicPDE_picard']
 class basicPDE_picard(basicPDE):
     """
     A multidimentional nonlinear Poisson class solver using Picard algorithm.
-        >>> import igakit.cad_geometry  as cg
-        >>> from igakit.cad import line
+        >>> import caid.cad_geometry  as cg
+        >>> from caid.cad_geometry import line
         >>> import pylab                as pl
 
 
@@ -133,7 +133,7 @@ class basicPDE_picard(basicPDE):
     #-----------------------------------
 
 if __name__ == '__main__':
-    from igakit.cad_geometry import circle
+    from caid.cad_geometry import circle
     from matplotlib import pylab as plt
 
     sin = np.sin ; cos = np.cos ; exp = np.exp ; log = np.log ; sqrt = np.sqrt ; pi = np.pi

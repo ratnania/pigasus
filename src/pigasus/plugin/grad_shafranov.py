@@ -173,6 +173,6 @@ class testcase(object):
         self.F = F
 
 #if __name__ == '__main__':
-#    from igakit.cad_geometry import square
+#    from caid.cad_geometry import square
 #    from matplotlib import pylab as plt
 

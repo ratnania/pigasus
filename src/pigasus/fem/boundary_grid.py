@@ -335,7 +335,7 @@ class boundary_grid(pigasusObject):
 
 
 if __name__ == '__main__':
-    from igakit.cad_geometry import square as domain
+    from caid.cad_geometry import square as domain
     geo = domain(n=[3,2], p=[1,1])
     k = [2,2]
     nrb = geo[0]

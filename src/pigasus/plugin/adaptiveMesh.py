@@ -1,10 +1,10 @@
 # -*- coding: UTF-8 -*-
 #! /usr/bin/python
 
-from igakit.cad_geometry import square
-from igakit.cad_geometry import circle
-from igakit.cad_geometry import quart_circle
-from igakit.cad_geometry import annulus
+from caid.cad_geometry import square
+from caid.cad_geometry import circle
+from caid.cad_geometry import quart_circle
+from caid.cad_geometry import annulus
 from matplotlib import pyplot as plt
 import numpy                as np
 from time import time
@@ -135,8 +135,8 @@ class adaptiveMeshMA(object):
 
     def genGeometry(self):
         from igakit.nurbs import NURBS
-        from igakit.op_nurbs import opNURBS, grad
-        from igakit.cad_geometry import cad_geometry, cad_grad_nurbs
+        from caid.op_nurbs import opNURBS, grad
+        from caid.cad_geometry import cad_geometry, cad_grad_nurbs
 
         geo = self.geo_h
         PDE = self.PDE_h

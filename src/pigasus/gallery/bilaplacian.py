@@ -78,8 +78,8 @@ class bilaplacian(basicPDE):
 
 
 if __name__ == '__main__':
-    import igakit.cad_geometry  as cg
-    from igakit.cad import line, bilinear
+    import caid.cad_geometry  as cg
+    from caid.cad_geometry import line, bilinear
     import matplotlib.pyplot    as plt
     import numpy                as np
     from __main__ import __file__ as filename
@@ -109,7 +109,7 @@ if __name__ == '__main__':
 
     #-----------------------------------
     # ...
-    from igakit.cad_geometry import square as domain
+    from caid.cad_geometry import square as domain
     geo = domain(n=[nx,ny], p=[px,py])
 
     f, u = testcase_square_Dirichlet()

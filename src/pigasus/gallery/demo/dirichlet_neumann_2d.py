@@ -4,7 +4,7 @@ import sys
 import numpy as np
 from pigasus.gallery.basicPDE import *
 
-import igakit.cad_geometry  as cg
+import caid.cad_geometry  as cg
 import matplotlib.pyplot    as pl
 import numpy                as np
 
@@ -109,7 +109,7 @@ def testcase():
 
 #-----------------------------------
 # ...
-from igakit.cad_geometry import square as domain
+from caid.cad_geometry import square as domain
 tc = testcase()
 geo = domain(n=[31,31],p=[2,2])
 PDE = basicPDE(geometry=geo, testcase=tc)

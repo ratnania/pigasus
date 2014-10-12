@@ -204,7 +204,7 @@ if __name__ == '__main__':
     print ">>> operator class test"
     from pigasus.gallery.poisson import poisson
     from pigasus.gallery.bilaplacian import bilaplacian
-    from igakit.cad_geometry import square
+    from caid.cad_geometry import square
     geo = square(n=[3,3], p=[2,2])
     PDE_1 = bilaplacian(geometry=geo)
     PDE_2 = poisson(geometry=geo, V=PDE_1.V)

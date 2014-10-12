@@ -3,7 +3,7 @@ import time
 from scipy import sparse
 from petsc4py import PETSc
 from pigasus.gallery.poisson import poisson
-from igakit.cad_geometry import square as domain
+from caid.cad_geometry import square as domain
 import sys
 import inspect
 filename = inspect.getfile(inspect.currentframe()) # script filename (usually with path)

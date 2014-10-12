@@ -38,7 +38,7 @@ try:
 except:
     py = 2
 
-from igakit.cad_geometry import circle as domain
+from caid.cad_geometry import circle as domain
 radius = 0.5
 geo = domain(radius=radius,n=[nx,ny],p=[px,px])
 #-----------------------------------

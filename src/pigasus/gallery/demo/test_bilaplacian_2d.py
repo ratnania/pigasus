@@ -8,7 +8,7 @@ except ImportError:
     PLOT=False
 # ...
 import numpy                as np
-from igakit.cad_geometry import square as domain
+from caid.cad_geometry import square as domain
 from pigasus.gallery.bilaplacian import *
 import sys
 import inspect

@@ -6,10 +6,10 @@ try:
 except ImportError:
     PLOT=False
 # ...
-from igakit.cad_geometry import square
-from igakit.cad_geometry import circle
-from igakit.cad_geometry import quart_circle
-from igakit.cad_geometry import annulus
+from caid.cad_geometry import square
+from caid.cad_geometry import circle
+from caid.cad_geometry import quart_circle
+from caid.cad_geometry import annulus
 import numpy                as np
 from time import time
 import sys
@@ -52,7 +52,7 @@ geo   = square(n=[nx,ny], p=[px,py])
 #geo   = quart_circle(n=[nx,ny], p=[px,py])
 #geo   = annulus(n=[nx,ny], p=[px,py])
 
-#from igakit.cad_geometry import cad_geometry as domain
+#from caid.cad_geometry import cad_geometry as domain
 #geo = domain("input/iter_inner.xml")
 #-----------------------------------
 

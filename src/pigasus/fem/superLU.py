@@ -33,8 +33,8 @@ class superLU(solver):
         return F
 
 if __name__ == '__main__':
-    import igakit.cad_geometry  as cg
-    from igakit.cad import bilinear
+    import caid.cad_geometry  as cg
+    from caid.cad_geometry import bilinear
     from pigasus.gallery.EllipticPDE import *
     import pylab                as pl
     import numpy                as np

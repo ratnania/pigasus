@@ -56,11 +56,11 @@ try:
 except:
     py = 2
 
-from igakit.cad_geometry import circle as domain
-from igakit.cad_geometry import cad_geometry
+from caid.cad_geometry import circle as domain
+from caid.cad_geometry import cad_geometry
 from pigasus.fem.metric import metric
-from igakit.cad_geometry import square as patch
-from igakit.cad_geometry import square
+from caid.cad_geometry import square as patch
+from caid.cad_geometry import square
 from igakit.nurbs import NURBS
 
 TYPE = None

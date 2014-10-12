@@ -265,7 +265,7 @@ class ElementsManager(object):
 if __name__ == '__main__':
     def test1D():
         print "Test 1D:"
-        from igakit.cad_geometry import line as domain
+        from caid.cad_geometry import line as domain
         n = [10]
         p = [2]
         geo = domain(n=n,p=p)
@@ -278,7 +278,7 @@ if __name__ == '__main__':
 
     def test2D():
         print "Test 2D:"
-        from igakit.cad_geometry import square as domain
+        from caid.cad_geometry import square as domain
         n = [10,10]
         p = [2,2]
         geo = domain(n=n,p=p)
@@ -291,7 +291,7 @@ if __name__ == '__main__':
 
     def test3D():
         print "Test 3D:"
-        from igakit.cad_geometry import trilinear as domain
+        from caid.cad_geometry import trilinear as domain
         n = [10,10,10]
         p = [2,2,2]
         geo = domain(n=n,p=p)
@@ -306,7 +306,7 @@ if __name__ == '__main__':
         print "Test 2D-EM:"
 #        PRINT = True
         PRINT = False
-        from igakit.cad_geometry import square as domain
+        from caid.cad_geometry import square as domain
         n = [50,50]
         p = [3,3]
         geo = domain(n=n,p=p)

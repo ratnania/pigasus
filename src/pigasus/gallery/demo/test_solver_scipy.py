@@ -1,6 +1,6 @@
 from scipy.sparse.linalg import cg, cgs, bicg, bicgstab, gmres, splu, spsolve
 from pigasus.gallery.poisson import poisson
-from igakit.cad_geometry import square as domain
+from caid.cad_geometry import square as domain
 import numpy as np
 import sys
 import inspect

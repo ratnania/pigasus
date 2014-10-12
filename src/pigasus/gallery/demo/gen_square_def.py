@@ -1,5 +1,5 @@
 import numpy as np
-from igakit.cad_geometry import square, cad_nurbs, cad_geometry
+from caid.cad_geometry import square, cad_nurbs, cad_geometry
 #from igakit.nurbs import NURBS
 
 sqr = square(n=[0,0],p=[2,2])[0]

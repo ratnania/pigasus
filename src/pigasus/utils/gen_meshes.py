@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import sys
 import numpy as np
-import igakit.cad_geometry as cg
+import caid.cad_geometry as cg
 
 # ...
 try:

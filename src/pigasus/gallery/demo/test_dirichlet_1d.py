@@ -61,7 +61,7 @@ except:
 #-----------------------------------
 
 # ...
-from igakit.cad_geometry import line as domain
+from caid.cad_geometry import line as domain
 geo = domain(n=[nx],p=[px])
 # ...
 

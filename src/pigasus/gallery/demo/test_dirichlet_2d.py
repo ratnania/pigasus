@@ -76,7 +76,7 @@ except:
     py = 2
 #-----------------------------------
 # ...
-from igakit.cad_geometry import square as domain
+from caid.cad_geometry import square as domain
 geo = domain(n=[nx,ny],p=[px,px])
 
 # ...

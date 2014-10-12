@@ -38,7 +38,7 @@ try:
 except:
     py = 2
 
-from igakit.cad_geometry import quart_circle as domain
+from caid.cad_geometry import quart_circle as domain
 geo = domain(n=[nx,ny],p=[px,py])
 #-----------------------------------
 

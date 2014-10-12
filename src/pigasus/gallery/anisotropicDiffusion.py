@@ -2,7 +2,7 @@
 #! /usr/bin/python
 
 from pigasus.gallery.parabolic import onestep
-from igakit.cad_geometry import square as domain
+from caid.cad_geometry import square as domain
 import matplotlib.pyplot    as plt
 import numpy                as np
 import sys
