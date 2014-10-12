@@ -1,0 +1,27 @@
+Using pyamg-standalone
+done.
+Using pyamg-accelerated
+done.
+--------------- elapsed times ---------------
+mls          :  0.0293970108032
+mls-accel    :  0.00431299209595
+---------------------------------------------
+----------- PyAMG Multigrid solver ----------
+multilevel_solver
+Number of Levels:     2
+Operator Complexity:  1.035
+Grid Complexity:      1.048
+Coarse Solver:        'pinv2'
+  level   unknowns     nonzeros
+    0         1024        23716 [96.58%]
+    1           49          841 [ 3.42%]
+
+---------------------------------------------
+---------------------------------------------
+mls converges with error :  4.72095472043e-10  after  12  iterationr
+final error :  4.72095472043e-10
+mlsaccel converges with error :  6.49636954756e-08  after  7  iterations
+final error :  2.64136256118e-08
+                     MG convergence factor: 0.125143
+MG with CG acceleration convergence factor: 0.0335624
+---------------------------------------------

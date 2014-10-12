@@ -1,0 +1,4 @@
+- add the ll_create_W, ll_create_WV flags as for the V-space.
+- make it possible to create a new basicPDE by giving another PDE from which we will take the V,W,... spaces as well as Graphs
+- finir la classe tracelog.py
+- trouver un moyen simple pour definir le nombre maximum de couleurs ainsi que le nombre maximum d'ojbects par couleur.

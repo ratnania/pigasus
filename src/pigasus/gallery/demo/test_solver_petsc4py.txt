@@ -1,0 +1,4 @@
+Using Petsc-cg
+Elapsed time  Petsc-cg 	 : 0.0099720954895
+Petsc cg Converges after 20 iterations with error : 8.51429926361e-11
+ final error : 3.510205784e-11
