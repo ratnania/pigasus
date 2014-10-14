@@ -29,13 +29,9 @@ class pigasus(object):
         try:
             self.fem = kwargs['fem']
         except:
-            try:
-                detail = kwargs['detail']
-            except:
-                detail = 0
             import fem      as fem
             self.fem = fem.fem()
-            self.detail = detail
+            self.fem.detail = 0
         # ...
 
         # ...

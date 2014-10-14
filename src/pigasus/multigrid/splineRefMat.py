@@ -139,7 +139,7 @@ def constructSurfaceMatrix(list_r1, list_r2, p1, p2, n1, n2, u1, u2, DirFaces=[]
 if __name__ == '__main__':
 
     import caid.cad_geometry  as cg
-    from caid.cad import line, bilinear
+    from caid.cad_geometry import line, bilinear
 
     # ...
     def geometry_1D(nx,px):

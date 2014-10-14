@@ -141,10 +141,10 @@ contains
 
         end do
 
-!#ifdef _DEBUG
-!print*,'apr_Projection_elt',apr_Projection_elt(ai_field,1:lp_con % opi_nen (ai_id, li_conelt))
-!print *,"field exact=", lp_grid % opo_elts (ai_elt) % opr_values_f(li_loc_id, 1:li_dim, 1 : li_npts)
-!#endif
+#ifdef _DEBUG
+print*,'apr_Projection_elt',apr_Projection_elt(ai_field,1:lp_con % opi_nen (ai_id, li_conelt))
+print *,"field exact=", lp_grid % opo_elts (ai_elt) % opr_values_f(li_loc_id, 1:li_dim, 1 : li_npts)
+#endif
 
 #ifdef _DEBUG
         call printlog("build_l2_projector_grad_Local : End", ai_dtllevel = mi_dtllevel_base + 1)

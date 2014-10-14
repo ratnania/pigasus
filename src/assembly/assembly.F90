@@ -137,14 +137,11 @@ contains
         ALLOCATE (self % opi_matrices_toassembly(0:ao_FEM % oi_nMatrices))
         ALLOCATE (self % opi_matrices_toassembly_tmp(0:ao_FEM % oi_nMatrices))
 
-        !> in the worst case, we will have nOperators different color
-        ALLOCATE (self % opi_operator_colors_toassembly(0:ao_FEM % oi_nOperators))
-        ALLOCATE (self % opi_operator_colors_toassembly_tmp(0:ao_FEM % oi_nOperators))
+        ALLOCATE (self % opi_operators_toassembly(0:ao_FEM % oi_nOperators))
+        ALLOCATE (self % opi_operators_toassembly_tmp(0:ao_FEM % oi_nOperators))
 
-        ALLOCATE (self % opi_field_operator_colors_toassembly(0:ao_FEM % oi_nFields))
-        ALLOCATE (self % opi_field_operator_colors_toassembly_tmp(0:ao_FEM % oi_nFields))
-        ALLOCATE (self % opi_field_l2projection_colors_toassembly(0:ao_FEM % oi_nFields))
-        ALLOCATE (self % opi_field_l2projection_colors_toassembly_tmp(0:ao_FEM % oi_nFields))
+        ALLOCATE (self % opi_fields_toassembly(0:ao_FEM % oi_nFields))
+        ALLOCATE (self % opi_fields_toassembly_tmp(0:ao_FEM % oi_nFields))
 
         ALLOCATE (self % opi_norms_toassembly(0:ao_FEM % oi_nnorms))
         ALLOCATE (self % opi_norms_toassembly_tmp(0:ao_FEM % oi_nnorms))
@@ -247,14 +244,12 @@ contains
                 DEALLOCATE (self % opi_patchs_toassembly_tmp)
                 DEALLOCATE (self % opi_elts_toassembly)
                 DEALLOCATE (self % opi_elts_toassembly_tmp)
-                DEALLOCATE (self % opi_operator_colors_toassembly)
-                DEALLOCATE (self % opi_operator_colors_toassembly_tmp)
+                DEALLOCATE (self % opi_operators_toassembly)
+                DEALLOCATE (self % opi_operators_toassembly_tmp)
                 DEALLOCATE (self % opi_matrices_toassembly)
                 DEALLOCATE (self % opi_matrices_toassembly_tmp)
-                DEALLOCATE (self % opi_field_operator_colors_toassembly)
-                DEALLOCATE (self % opi_field_operator_colors_toassembly_tmp)
-                DEALLOCATE (self % opi_field_l2projection_colors_toassembly)
-                DEALLOCATE (self % opi_field_l2projection_colors_toassembly_tmp)
+                DEALLOCATE (self % opi_fields_toassembly)
+                DEALLOCATE (self % opi_fields_toassembly_tmp)
                 DEALLOCATE (self % opi_norms_toassembly)
                 DEALLOCATE (self % opi_norms_toassembly_tmp)
                 DEALLOCATE (self % opi_spaces_toassembly)
@@ -291,7 +286,6 @@ contains
         INTEGER :: ai_grids_id
         ! LOCAL VARIABLES
         integer :: li_elt
-        integer :: li_subtype
         integer :: li_idof
         integer :: li_err
         integer :: li_flag
@@ -319,8 +313,7 @@ contains
         integer :: li_nel
         INTEGER :: li_npts
         INTEGER :: li_nmatrices
-        INTEGER :: li_noperator_colors
-        INTEGER :: li_nfield_colors
+        INTEGER :: li_noperators
         INTEGER :: li_operator
         INTEGER :: li_nfields
         INTEGER :: li_ref
@@ -332,10 +325,8 @@ contains
         INTEGER :: li_single_sp
         INTEGER :: li_single_grids_id
         INTEGER :: li_realelt
-        INTEGER :: li_op_ref
-        INTEGER :: li_color
-        INTEGER :: li_type
-        INTEGER :: li_noperators
+        INTEGER :: li_nfields_operators
+        INTEGER :: li_nfields_l2projections
         real(wp) :: lr_u
         logical :: ll_computeU
         logical :: ll_valuesOnGrid
@@ -353,79 +344,39 @@ contains
         INTEGER(KIND = MURGE_INTS_KIND) :: id
 #endif
         call printlog("Assembly_Matrix : Begin", ai_dtllevel = mi_dtllevel_base  + 1)
+!        print *, "============== Assembly_Matrix : Begin ================"
 
         CALL set_spaces_toassembly(self,ao_FEM, ai_grids_id)
         li_nspaces = self % opi_spaces_toassembly(0)
-#ifdef _DEBUG
-        call concatmsg("li_nspaces: ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_nspaces    , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                 ai_dtllevel = mi_dtllevel_base + 1)
-#endif
+!        print *, 'li_nspaces=', li_nspaces
 
         CALL set_patchs_toassembly(self,ao_FEM, ai_grids_id)
         li_npatchs = self % opi_patchs_toassembly(0)
-#ifdef _DEBUG
-        call concatmsg("li_npatchs: ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_npatchs    , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                 ai_dtllevel = mi_dtllevel_base + 1)
-#endif
+!        print *, 'li_npatchs=', li_npatchs
 
-        CALL set_operator_colors_toassembly(self,ao_FEM)
-        li_noperator_colors = self % opi_operator_colors_toassembly(0)
-#ifdef _DEBUG
-        call concatmsg("li_noperator_colors: ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_noperator_colors, ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                    ai_dtllevel = mi_dtllevel_base + 1)
-
-        call concatmsg("operators to assembly : ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(self % opi_operator_colors_toassembly(1:li_noperator_colors), ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                    ai_dtllevel = mi_dtllevel_base + 1)
-#endif
+        CALL set_operators_toassembly(self,ao_FEM)
+        li_noperators = self % opi_operators_toassembly(0)
+!        print *, 'li_noperators=', li_noperators
+!        print *, "operators to assembly :", self % opi_operators_toassembly(1:li_noperators)
 
         CALL set_matrices_toassembly(self,ao_FEM)
         li_nmatrices = self % opi_matrices_toassembly(0)
-#ifdef _DEBUG
-        call concatmsg("li_nmatrices : ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_nmatrices     , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                    ai_dtllevel = mi_dtllevel_base + 1)
+!        print *, 'li_nmatrices=', li_nmatrices
+!        print *, 'matrices to assembly: ', self % opi_matrices_toassembly(1:li_nmatrices)
 
-        call concatmsg("matrices to assembly : ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(self % opi_matrices_toassembly(1:li_nmatrices), ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                    ai_dtllevel = mi_dtllevel_base + 1)
-#endif
-
-        CALL set_field_colors_toassembly(self, ao_FEM, FIELD_OPERATOR &
-                , self % opi_field_operator_colors_toassembly)
-#ifdef _DEBUG
-        call concatmsg("li_nfields : ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_nfields     , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                    ai_dtllevel = mi_dtllevel_base + 1)
-
-!        call concatmsg("field-operators to assembly : ", ai_dtllevel = mi_dtllevel_base + 1)
-!        call concatmsg(self % opi_field_operator_colors_toassembly(1:li_nfields), ai_dtllevel = mi_dtllevel_base + 1)
-!        call printmsg(                    ai_dtllevel = mi_dtllevel_base + 1)
-#endif
-
-        CALL set_field_colors_toassembly(self, ao_FEM, PROJECTION_L2  &
-                , self % opi_field_l2projection_colors_toassembly)
-        li_nfields = self % opi_field_l2projection_colors_toassembly(0)
-#ifdef _DEBUG
-        call concatmsg("li_nfields : ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_nfields     , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                    ai_dtllevel = mi_dtllevel_base + 1)
-
-!        call concatmsg("l2projection-operators to assembly : ", ai_dtllevel = mi_dtllevel_base + 1)
-!        call concatmsg(self % opi_field_l2projection_colors_toassembly(1:li_nfields), ai_dtllevel = mi_dtllevel_base + 1)
-!        call printmsg(                    ai_dtllevel = mi_dtllevel_base + 1)
-#endif
+        CALL set_fields_toassembly(self,ao_FEM)
+        li_nfields = self % opi_fields_toassembly(0)
+!        print *, 'li_nfields=', li_nfields
 
         CALL set_norms_toassembly(self,ao_FEM)
         li_nnorms = self % opi_norms_toassembly(0)
-#ifdef _DEBUG
-        call concatmsg("li_nnorms: ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_nnorms    , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                ai_dtllevel = mi_dtllevel_base + 1)
-#endif
+!        print *, 'li_nfields=', li_nfields
+
+        ALLOCATE(lpi_fields_operators(0:li_nfields))
+        ALLOCATE(lpi_fields_l2projections(0:li_nfields))
+
+        CALL select_fields(self, ao_FEM, FIELD_OPERATOR, lpi_fields_operators)
+        CALL select_fields(self, ao_FEM, PROJECTION_L2, lpi_fields_l2projections)
 
         CALL set_flag_points_basis_assembly(self, ao_FEM)
 
@@ -446,6 +397,7 @@ contains
 
         li_index = 0
         ! LOOP THROUG PATCHS
+!        DO li_id = 0, li_npatchs-1
         li_npatchs = self % opi_patchs_toassembly(0)
 
 #ifdef _DEBUG
@@ -456,33 +408,13 @@ contains
         call concatmsg(li_npatchs, ai_dtllevel = mi_dtllevel_base + 1)
         call printmsg(ai_dtllevel = mi_dtllevel_base + 1)
 #endif
-
-!#ifdef _DEBUG
-!        call concatmsg("-- all nel: ", ai_dtllevel = mi_dtllevel_base + 1)
-!        call concatmsg(ao_FEM % opi_InfoPatch ( :, 0, INFOPATCH_NEL), ai_dtllevel = mi_dtllevel_base + 1)
-!        call printmsg(                ai_dtllevel = mi_dtllevel_base + 1)
-!#endif
-
-#ifdef _DEBUG
-        call concatmsg("-- Current Grid: ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(ai_grids_id        , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                      ai_dtllevel = mi_dtllevel_base + 1)
-#endif
-
-#ifdef _DEBUG
-        call concatmsg("-- npatchs: ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_npatchs    , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                 ai_dtllevel = mi_dtllevel_base + 1)
-#endif
-
+!        print *, '-- all nel            : ', ao_FEM % opi_InfoPatch ( :, 0, INFOPATCH_NEL)
+!        print *, '-- Current Grid       : ', ai_grids_id
+!        print *, '-- npatchs            : ', li_npatchs
         do li_ref_patch = 1, li_npatchs
 
             li_id = self % opi_patchs_toassembly(li_ref_patch)
-#ifdef _DEBUG
-        call concatmsg("-- Current Patch: ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_id    , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                 ai_dtllevel = mi_dtllevel_base + 1)
-#endif
+!            print *, '---- Current Patch    : ', li_id
 
             lp_grid => ao_FEM % opo_grids(ai_grids_id) % opo_grid ( li_id )
 
@@ -496,6 +428,7 @@ contains
                 self % opi_elts_toassembly(0) = li_nel
 !                print *, "opi_elts_toassembly = ", self % opi_elts_toassembly
             END IF
+!            print *, 'li_nel = ', li_nel
 
 #ifdef _DEBUG
             call concatmsg("number of elements is : ", ai_dtllevel = 0)
@@ -506,6 +439,7 @@ contains
             do li_ref_elt = 1, li_nel
 
                 li_elt = self % opi_elts_toassembly(li_ref_elt)
+!                print *, '------ Current elt    : ', li_elt
 
 #ifdef _DEBUG
         call concatmsg("current Element is : ", ai_dtllevel = mi_dtllevel_base + 1)
@@ -549,153 +483,51 @@ contains
             ! ********************************************************
             !   ASSEMBLING LOCAL FIELD OPERATOR
             ! ********************************************************
-                li_nfield_colors = self % opi_field_operator_colors_toassembly(0)
-#ifdef _DEBUG
-        call concatmsg("li_nfield_colors : ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_nfield_colors     , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                     ai_dtllevel = mi_dtllevel_base + 1)
-#endif
+                li_nfields_operators = lpi_fields_operators(0)
+                do li_ref = 1, li_nfields_operators
 
-                DO li_ref = 1, li_nfield_colors
-                    li_color = self % opi_field_operator_colors_toassembly(li_ref)
-                    li_nfields = ao_FEM % opo_colors(li_color) % opi_objects_toassembly (0) 
-                    li_type = ao_FEM % opi_infoColor(li_color, INFOCOLOR_TYPE)
-                    li_subtype = ao_FEM % opi_infoColor(li_color, INFOCOLOR_SUBTYPE)
+                    li_field = lpi_fields_operators(li_ref)
 
-#ifdef _DEBUG
-        call concatmsg("Assembling field of color : ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_color     , ai_dtllevel = mi_dtllevel_base + 1)
+                    li_space = ao_FEM % opi_InfoField  (li_field , INFOFIELD_SPACE)
 
-        call concatmsg(" of type ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_type    , ai_dtllevel = mi_dtllevel_base + 1)
+                    CALL build_field_operators_local(self, ao_FEM, ai_grids_id, li_id, li_elt, li_field)
+                    CALL Assembly_Field_Operator_from_elt(self, ao_FEM, li_id+1, li_elt, li_field)
 
-        call concatmsg(" and subtype ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_subtype    , ai_dtllevel = mi_dtllevel_base + 1)
+!#ifdef _DEBUG
+!                call concatmsg("self % opr_fieldh_elt= : ", ai_dtllevel = 0)
+!                call concatmsg(self % opr_fieldh_elt, ai_dtllevel = 0)
+!                call printmsg(ai_dtllevel = 0)
 
-        call concatmsg(" containing ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_nfields    , ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(" fields", ai_dtllevel = mi_dtllevel_base + 1)
-
-        call printmsg(                     ai_dtllevel = mi_dtllevel_base + 1)
-#endif
-
-                    CALL build_field_operators_local(self, ao_FEM, ai_grids_id, li_id, li_elt, li_color)
-
-                    DO li_op_ref = 1, li_nfields
-                       ! get operator-id from color
-                       li_field = ao_FEM % opo_colors(li_color) % opi_objects_toassembly (li_op_ref) 
-
-#ifdef _DEBUG
-        call concatmsg("+++ Copying Element Vector field : ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_field      , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                    ai_dtllevel = mi_dtllevel_base + 1)
-#endif
-
-                       CALL Assembly_Field_Operator_from_elt(self, ao_FEM, li_id+1, li_elt, li_field)
-                    END DO
-
-                END DO
+                end do
             ! ********************************************************
 
             ! ********************************************************
             !   ASSEMBLING LOCAL L2-PROJECTION
             ! ********************************************************
-                li_nfield_colors = self % opi_field_l2projection_colors_toassembly(0)
-#ifdef _DEBUG
-        call concatmsg("li_nfield_colors : ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_nfield_colors     , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                     ai_dtllevel = mi_dtllevel_base + 1)
-#endif
+                li_nfields_l2projections = lpi_fields_l2projections(0)
+                do li_ref = 1, li_nfields_l2projections
 
-                DO li_ref = 1, li_nfield_colors
-                    li_color = self % opi_field_l2projection_colors_toassembly(li_ref)
-                    li_nfields = ao_FEM % opo_colors(li_color) % opi_objects_toassembly (0) 
-                    li_type = ao_FEM % opi_infoColor(li_color, INFOCOLOR_TYPE)
-                    li_subtype = ao_FEM % opi_infoColor(li_color, INFOCOLOR_SUBTYPE)
+                    li_field = lpi_fields_l2projections(li_ref)
 
-#ifdef _DEBUG
-        call concatmsg("Assembling field of color : ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_color     , ai_dtllevel = mi_dtllevel_base + 1)
+                    li_space = ao_FEM % opi_InfoField  (li_field , INFOFIELD_SPACE)
 
-        call concatmsg(" of type ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_type    , ai_dtllevel = mi_dtllevel_base + 1)
-
-        call concatmsg(" and subtype ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_subtype    , ai_dtllevel = mi_dtllevel_base + 1)
-
-        call concatmsg(" containing ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_nfields    , ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(" fields", ai_dtllevel = mi_dtllevel_base + 1)
-
-        call printmsg(                     ai_dtllevel = mi_dtllevel_base + 1)
-#endif
-
-                    CALL build_field_projectors_Local(self, ao_FEM, ai_grids_id, li_id, li_elt, li_color)
-
-                    DO li_op_ref = 1, li_nfields
-                       ! get operator-id from color
-                       li_field = ao_FEM % opo_colors(li_color) % opi_objects_toassembly (li_op_ref) 
-#ifdef _DEBUG
-        call concatmsg("+++ Copying Element Vector field : ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_field      , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                    ai_dtllevel = mi_dtllevel_base + 1)
-#endif
-
-                       CALL Assembly_Projections_from_elt(self, ao_FEM, li_id+1, li_elt, li_field)
-                    END DO
+                    CALL build_field_projectors_Local(self, ao_FEM, ai_grids_id, li_id, li_elt, li_field)
+                    CALL Assembly_Projections_from_elt(self, ao_FEM, li_id+1, li_elt, li_field)
 
                 END DO
             ! ********************************************************
 
             ! ********************************************************
-            !   ASSEMBLING LOCAL OPERATORS BY COLORS 
+            !   ASSEMBLING LOCAL OPERATORS 
             ! ********************************************************
-                li_noperator_colors = self % opi_operator_colors_toassembly(0)
-#ifdef _DEBUG
-        call concatmsg("li_noperator_colors: ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_noperator_colors, ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                     ai_dtllevel = mi_dtllevel_base + 1)
-#endif
+                do li_ref = 1, li_noperators
 
-                do li_ref = 1, li_noperator_colors
+                    li_operator = self % opi_operators_toassembly(li_ref)
 
-                    li_color = self % opi_operator_colors_toassembly(li_ref)
-                    li_noperators = ao_FEM % opo_colors(li_color) % opi_objects_toassembly (0) 
-                    li_type = ao_FEM % opi_infoColor(li_color, INFOCOLOR_TYPE)
+                    li_space = ao_FEM % opi_Infooperator (li_operator, INFOOPERATOR_SPACE_1)
 
-#ifdef _DEBUG
-        call concatmsg("Assembling operator of color : ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_color     , ai_dtllevel = mi_dtllevel_base + 1)
-
-        call concatmsg(" of type ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_type    , ai_dtllevel = mi_dtllevel_base + 1)
-
-        call concatmsg(" containing ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_noperators    , ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(" operators", ai_dtllevel = mi_dtllevel_base + 1)
-
-        call printmsg(                     ai_dtllevel = mi_dtllevel_base + 1)
-#endif
-
-                    CALL build_matrix_operators_Local(self, ao_FEM, ai_grids_id, li_id, li_elt, li_color)
-
-!#ifdef _DEBUG
-!        call concatmsg("OP TO ASSEMBLY: ", ai_dtllevel = mi_dtllevel_base + 1)
-!        call concatmsg(ao_FEM % opo_colors(li_color) % opi_objects_toassembly, ai_dtllevel = mi_dtllevel_base + 1)
-!        call printmsg(                     ai_dtllevel = mi_dtllevel_base + 1)
-!#endif
-
-                    DO li_op_ref = 1, li_noperators
-                       ! get operator-id from color
-                       li_operator = ao_FEM % opo_colors(li_color) % opi_objects_toassembly (li_op_ref) 
-#ifdef _DEBUG
-        call concatmsg("+++ Copying Element Matrix operator : ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(li_operator      , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(                    ai_dtllevel = mi_dtllevel_base + 1)
-#endif
-
-                       CALL Assembly_Matrices_from_elt   (self, ao_FEM, ai_grids_id, li_id, li_elt, li_operator)
-                    END DO
+                    CALL build_matrix_operators_Local(self, ao_FEM, ai_grids_id, li_id, li_elt, li_operator)
+                    CALL Assembly_Matrices_from_elt   (self, ao_FEM, ai_grids_id, li_id, li_elt, li_operator)
 
                 end do
             ! ********************************************************
@@ -725,6 +557,9 @@ contains
 
         END DO
 
+        DEALLOCATE(lpi_fields_operators)
+        DEALLOCATE(lpi_fields_l2projections)
+
     DO li_ref = 1, li_nmatrices
         li_matrix = self % opi_matrices_toassembly(li_ref)
         CALL SPM_ASSEMBLYEND(li_matrix, ierr)
@@ -736,6 +571,8 @@ contains
     END DO
 #endif
     
+!print *, "============== Assembly_Matrix : End    ================"
+
         call printlog("Assembly_Matrix : End", ai_dtllevel = mi_dtllevel_base + 1)
 
         call printcputime()

@@ -332,16 +332,9 @@ class basicPDE(pigasus):
         #-----------------------------------
 
         # ...
-        ll_create_V = True
         try:
             V  = kwargs['V']
-            if V is not None:
-                ll_create_V = False
         except:
-            pass
-        # ...
-
-        if ll_create_V:
             #-----------------------------------
             # space declaration
             #-----------------------------------
@@ -772,13 +765,6 @@ class basicPDE(pigasus):
             self.fields    += [self.Mean_V]
         # ...
 
-        # ...
-        self.operators = []
-        for M in self.matrices:
-            for O in M.operators:
-                self.operators.append(O)
-        # ...
-
         self.forceAssembly  = False
         self.Assembled      = False
 
@@ -830,26 +816,6 @@ class basicPDE(pigasus):
         returns the vectorial space
         """
         return self.V
-    #-----------------------------------
-
-    #-----------------------------------
-    @property
-    def operator(self, flag):
-        """
-        returns the operator given a string
-        flag must be in ['mass', 'stiffness', 'advection', 'tadvection', 'D2']
-        """
-        _flag = str(flag).lower()
-        if _flag == 'mass':
-            return self.mass
-        if _flag == 'stiffness':
-            return self.stiffness
-        if _flag == 'advection':
-            return self.advection
-        if _flag == 'tadvection':
-            return self.tadvection
-        if _flag == 'D2':
-            return self.D2
     #-----------------------------------
 
     #-----------------------------------

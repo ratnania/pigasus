@@ -110,6 +110,9 @@ call concatmsg(li_nmatrices, ai_dtllevel = mi_dtllevel_base + 3)
 call concatmsg("li_nnorms = ", ai_dtllevel = mi_dtllevel_base + 3)
 call concatmsg(li_nnorms, ai_dtllevel = mi_dtllevel_base + 3)
 
+call concatmsg("self % oi_maxnparams_matrices = ", ai_dtllevel = mi_dtllevel_base + 3)
+call concatmsg(self % oi_maxnparams_matrices, ai_dtllevel = mi_dtllevel_base + 3)
+
 call concatmsg("self % oi_maxnparams_fields = ", ai_dtllevel = mi_dtllevel_base + 3)
 call concatmsg(self % oi_maxnparams_fields, ai_dtllevel = mi_dtllevel_base + 3)
 

@@ -55,8 +55,7 @@ class poisson(basicPDE):
     #: Doc comment for class attribute gallery.poisson.
     #: It can have multiple lines.
     def __init__(self, geometry, bc_dirichlet=None, bc_neumann=None,
-                 AllDirichlet=None, Dirichlet=None, metric=None,
-                 solverInfo=None, V=None, detail=0):
+                 AllDirichlet=None, Dirichlet=None, metric=None, solverInfo=None):
         """Creates an poisson PDE solver. arguments are the same as pigasus.__init__
 
         geometry:
@@ -116,10 +115,7 @@ class poisson(basicPDE):
         if solverInfo is not None:
             testcase['solverInfo']  = solverInfo
 
-        basicPDE.__init__(self, geometry=geometry, testcase=testcase \
-                          , V=V \
-                          , detail=detail \
-                         )
+        basicPDE.__init__(self, geometry=geometry, testcase=testcase)
 
         self.forceAssembly  = False
         self.Assembled      = False

@@ -32,8 +32,8 @@ include_directories(${CMAKE_BINARY_DIR}/tools
 	${CMAKE_BINARY_DIR}/grids
 	${CMAKE_BINARY_DIR}/spm)
 
-set(fem_files fem_def.F90 metric.F90 grids.F90 space.F90 field.F90 graph.F90 operator.F90 matrix.F90 norm.F90 solver.F90 color.F90 fem.F90)
-set(fem_mods fem_def.mod fem_module.mod field_module.mod graph_module.mod grids_module.mod matrix_module.mod metric_module.mod norm_module.mod operator_module.mod color_module.mod)
+set(fem_files fem_def.F90 metric.F90 grids.F90 space.F90 field.F90 graph.F90 operator.F90 matrix.F90 norm.F90 solver.F90 fem.F90)
+set(fem_mods fem_def.mod fem_module.mod field_module.mod graph_module.mod grids_module.mod matrix_module.mod metric_module.mod norm_module.mod operator_module.mod)
 add_library(fem SHARED ${fem_files})
 target_link_libraries(fem tools tracelog geometries connectivities grids spm)
 install(TARGETS fem DESTINATION lib)

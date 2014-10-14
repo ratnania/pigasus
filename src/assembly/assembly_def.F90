@@ -92,12 +92,11 @@ module assembly_def
         !> Elements to assembly
         INTEGER, DIMENSION(:), POINTER :: opi_elts_toassembly
         !> Operators to assembly
-        INTEGER, DIMENSION(:), POINTER :: opi_operator_colors_toassembly
+        INTEGER, DIMENSION(:), POINTER :: opi_operators_toassembly
         !> Matrices to assembly
         INTEGER, DIMENSION(:), POINTER :: opi_matrices_toassembly        
         !> Fields to assembly
-        INTEGER, DIMENSION(:), POINTER :: opi_field_operator_colors_toassembly
-        INTEGER, DIMENSION(:), POINTER :: opi_field_l2projection_colors_toassembly
+        INTEGER, DIMENSION(:), POINTER :: opi_fields_toassembly
         !> Norms to assembly
         INTEGER, DIMENSION(:), POINTER :: opi_norms_toassembly
         !> Spaces to assembly
@@ -109,12 +108,11 @@ module assembly_def
         !> Elements to assembly
         INTEGER, DIMENSION(:), POINTER :: opi_elts_toassembly_tmp
         !> Operators to assembly
-        INTEGER, DIMENSION(:), POINTER :: opi_operator_colors_toassembly_tmp
+        INTEGER, DIMENSION(:), POINTER :: opi_operators_toassembly_tmp
         !> Matrices to assembly
         INTEGER, DIMENSION(:), POINTER :: opi_matrices_toassembly_tmp        
         !> Fields to assembly
-        INTEGER, DIMENSION(:), POINTER :: opi_field_operator_colors_toassembly_tmp
-        INTEGER, DIMENSION(:), POINTER :: opi_field_l2projection_colors_toassembly_tmp
+        INTEGER, DIMENSION(:), POINTER :: opi_fields_toassembly_tmp
         !> Norms to assembly
         INTEGER, DIMENSION(:), POINTER :: opi_norms_toassembly_tmp
         !> Spaces to assembly

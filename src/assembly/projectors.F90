@@ -133,6 +133,10 @@ END SUBROUTINE  build_field_projectors_Local
 
         end do
 
+!#ifdef _DEBUG
+!        print *, 'ao_FEM % opo_F (ai_field) % opr_c (:)=', ao_FEM % opo_F (ai_field) % opr_c (:)
+!#endif
+
     end subroutine Assembly_Projections_from_elt
 end module projectors_module
 

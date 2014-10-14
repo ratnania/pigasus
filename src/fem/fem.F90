@@ -8,7 +8,6 @@ module fem_module
     use grids_module
     use geometries_def
     use geometries_module
-    use color_module
     use field_module
     use norm_module
     use graph_module
@@ -106,30 +105,6 @@ contains
 
         self % oi_nNorms = ai_nnorms
     end subroutine set_nnorms_fem
-    !---------------------------------------------------------------
-    subroutine set_ncolors_fem(self, ai_n)
-        implicit none
-        TYPE(FEM) :: self
-        INTEGER :: ai_n
-
-        self % oi_nColors = ai_n
-    end subroutine set_ncolors_fem     
-    !---------------------------------------------------------------
-    subroutine set_maxncolors_fem(self, ai_n)
-        implicit none
-        TYPE(FEM) :: self
-        INTEGER :: ai_n
-
-        self % oi_maxnColors = ai_n
-    end subroutine set_maxncolors_fem     
-    !---------------------------------------------------------------
-    subroutine set_maxcoloraddto_fem(self, ai_val)
-        implicit none
-        TYPE(FEM) :: self
-        INTEGER, intent(in) :: ai_val
-
-        self % oi_maxcoloraddto = ai_val
-    end subroutine set_maxcoloraddto_fem    
     !---------------------------------------------------------------
     subroutine set_maxnpatchs_fem(self, ai_val)
         implicit none
@@ -350,24 +325,6 @@ contains
 !        print *, 'set_operator_matrices_toassembly: End'
         
     end subroutine set_operator_matrices_toassembly    
-!-------------------------------------------------------------------
-    subroutine set_color_objects_fem( self, ai_color, api_values, ai_size )
-    !> for eahc operator ,we specify the matrices to assembly
-        implicit none
-        TYPE(FEM) :: self        
-        INTEGER, intent(in)  :: ai_color
-        INTEGER, intent(in)  :: ai_size
-        INTEGER , dimension(ai_size), intent(in)  :: api_values
-        ! LOCAL
-
-        PRINT *, 'color: ', ai_color
-        PRINT *, 'size : ', ai_size
-        PRINT *, 'SIZE : ', SIZE(self % opo_colors (ai_color) % opi_objects_toassembly, 1)
-
-        self % opo_colors (ai_color) % opi_objects_toassembly (0) = ai_size
-        self % opo_colors (ai_color) % opi_objects_toassembly (1:ai_size) = api_values(1:ai_size)
-        
-    end subroutine set_color_objects_fem
     !---------------------------------------------------------------
     subroutine init_space_maxnen_fem(self)
         implicit none
@@ -521,10 +478,6 @@ contains
         CALL printlog("create_fem_partone : Start", ai_dtllevel = 1)
 #endif
 
-        IF (self % oi_maxnColors == 0) THEN
-                self % oi_maxnColors = self % oi_nOperators + self % oi_nFields
-        END IF
-
         ALLOCATE ( self % opi_dim(0:self % oi_nGrids - 1))
         ALLOCATE ( self % opi_Rd(0:self % oi_nGrids - 1))
 
@@ -538,13 +491,11 @@ contains
         ALLOCATE ( self % opi_InfoGrids(0:self % oi_nGrids - 1, NPARAM_INFOGRIDS))
         ALLOCATE ( self % opi_InfoPatch(0:self % oi_nGrids - 1, 0:self % oi_maxnpatchs - 1, NPARAM_INFOPATCH))
         ALLOCATE ( self % opi_InfoNorm(0:self % oi_nnorms - 1, NPARAM_INFONORM))
-        ALLOCATE ( self % opi_InfoColor(0:self % oi_maxnColors - 1, NPARAM_INFOCOLOR))
 
         ALLOCATE ( self % opo_mappings(0:self % oi_nmappings - 1))
         ALLOCATE ( self % opo_metrics(0:self % oi_nmetrics - 1))
         ALLOCATE ( self % opo_spaces(0:self % oi_nspaces - 1))
         ALLOCATE ( self % opo_Op(0:self % oi_nOperators - 1))
-        ALLOCATE ( self % opo_Colors(0:self % oi_maxnColors - 1))
 
 #ifdef _TRACE
         CALL printlog("create_fem_partone : End", ai_dtllevel = 1)
@@ -614,11 +565,6 @@ contains
 !        print *, 'allocate_solvers'
         CALL allocate_solvers(self)
 !        print *, 'done.'
-
-!        print *, 'allocate_colors'
-        CALL allocate_colors(self)
-!        print *, 'done.'
-
 
 !        STOP
 
@@ -712,13 +658,11 @@ contains
                 DEALLOCATE ( self % opi_InfoPatch)
                 DEALLOCATE ( self % opi_InfoGrids)
                 DEALLOCATE ( self % opi_InfoNorm)
-                DEALLOCATE ( self % opi_InfoColor)
 
                 DEALLOCATE ( self % opo_mappings)
                 DEALLOCATE ( self % opo_metrics)
                 DEALLOCATE ( self % opo_spaces)
                 DEALLOCATE ( self % opo_Op)
-                DEALLOCATE ( self % opo_colors)
 
                 DEALLOCATE ( self % opi_dim)
                 DEALLOCATE ( self % opi_Rd)

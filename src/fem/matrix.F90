@@ -40,7 +40,6 @@ contains
 #endif
 
         li_type  = self % opi_InfoMatrix (ai_id, INFOMATRIX_TYPE)
-
         IF (li_type==GENERIC_MATRIX) THEN
         li_graph = self % opi_InfoMatrix (ai_id, INFOMATRIX_GRAPH)
         li_ijvassembly = self % opi_InfoMatrix (ai_id, INFOMATRIX_IJVASSEMBLY)

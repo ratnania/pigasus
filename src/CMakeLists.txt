@@ -22,7 +22,6 @@ if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
   # gfortran
   set (CMAKE_Fortran_FLAGS_RELEASE "-O3 -fPIC")
   set (CMAKE_Fortran_FLAGS_DEBUG   "-O3 -fPIC -g")
-  set (CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}  -fbounds-check")
 elseif (Fortran_COMPILER_NAME MATCHES "ifort.*")
   # ifort (untested)
   set (CMAKE_Fortran_FLAGS_RELEASE "-f77rtl -O3 -fpic")
@@ -38,13 +37,6 @@ else (Fortran_COMPILER_NAME MATCHES "gfortran.*")
   set (CMAKE_Fortran_FLAGS_RELEASE "-O2")
   set (CMAKE_Fortran_FLAGS_DEBUG   "-O0 -g")
 endif (Fortran_COMPILER_NAME MATCHES "gfortran.*")
-##########################################################################
-
-##########################################################################
-# DEBUG DETAIL FLAG
-##########################################################################
-set (CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}  -D_TRACE -D_DEBUG")
-message("CMAKE_Fortran_FLAGS:   ${CMAKE_Fortran_FLAGS}")
 ##########################################################################
 
 ##########################################################################

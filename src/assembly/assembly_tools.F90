@@ -46,16 +46,15 @@ contains
         CALL printlog("save_terms_toassembly : Start", ai_dtllevel = mi_dtllevel_base  + 2)
 
         self % opi_patchs_toassembly_tmp        = self % opi_patchs_toassembly
-        self % opi_operator_colors_toassembly_tmp     = self % opi_operator_colors_toassembly
+        self % opi_operators_toassembly_tmp     = self % opi_operators_toassembly
         self % opi_matrices_toassembly_tmp      = self % opi_matrices_toassembly
-        self % opi_field_operator_colors_toassembly_tmp     = self % opi_field_operator_colors_toassembly
-        self % opi_field_l2projection_colors_toassembly_tmp     = self % opi_field_l2projection_colors_toassembly
+        self % opi_fields_toassembly_tmp        = self % opi_fields_toassembly
         self % opi_norms_toassembly_tmp         = self % opi_norms_toassembly
         self % opi_spaces_toassembly_tmp        = self % opi_spaces_toassembly
 
-        li_n = self % opi_operator_colors_toassembly(0)
+        li_n = self % opi_operators_toassembly(0)
         DO li_i=1, li_n
-        li_ref = self % opi_operator_colors_toassembly(li_i)
+        li_ref = self % opi_operators_toassembly(li_i)
         CALL save_operator_toassembly(ao_FEM, li_ref)
         END DO 
 
@@ -75,16 +74,15 @@ contains
         CALL printlog("load_terms_toassembly : Start", ai_dtllevel = mi_dtllevel_base  + 2)
 
         self % opi_patchs_toassembly    = self % opi_patchs_toassembly_tmp
-        self % opi_operator_colors_toassembly = self % opi_operator_colors_toassembly_tmp
+        self % opi_operators_toassembly = self % opi_operators_toassembly_tmp
         self % opi_matrices_toassembly  = self % opi_matrices_toassembly_tmp
-        self % opi_field_operator_colors_toassembly = self % opi_field_operator_colors_toassembly_tmp
-        self % opi_field_l2projection_colors_toassembly = self % opi_field_l2projection_colors_toassembly_tmp
+        self % opi_fields_toassembly    = self % opi_fields_toassembly_tmp
         self % opi_norms_toassembly     = self % opi_norms_toassembly_tmp
         self % opi_spaces_toassembly    = self % opi_spaces_toassembly_tmp
 
-        li_n = self % opi_operator_colors_toassembly(0)
+        li_n = self % opi_operators_toassembly(0)
         DO li_i=1, li_n
-        li_ref = self % opi_operator_colors_toassembly(li_i)
+        li_ref = self % opi_operators_toassembly(li_i)
         CALL load_operator_toassembly(ao_FEM, li_ref)
         END DO 
 
@@ -195,118 +193,53 @@ contains
 
     end subroutine set_matrices_toassembly    
     !---------------------------------------------------------------
-    subroutine set_operator_colors_toassembly(self, ao_FEM)
+    subroutine set_operators_toassembly(self, ao_FEM)
         IMPLICIT NONE
         TYPE(ASSEMBLY) :: self
         TYPE(FEM) :: ao_FEM
         ! LOCAL
         INTEGER :: li_noperators
         INTEGER :: li_id
-        INTEGER :: li_ref
-        INTEGER :: li_color
-        INTEGER :: li_type
 
-        CALL printlog("set_operator_colors_toassembly : Start", ai_dtllevel = mi_dtllevel_base  + 2)
+        CALL printlog("set_operators_toassembly : Start", ai_dtllevel = mi_dtllevel_base  + 2)
 
-        self % opi_operator_colors_toassembly = -1 
-
-        ! ********************************************************
         li_noperators = 0
-        do li_color = 0, ao_FEM % oi_nColors 
-            li_type = ao_FEM % opi_infoColor(li_color, INFOCOLOR_TYPE)
-
-            IF (li_type == COLOR_OPERATOR) THEN
-            IF (ao_FEM % opi_InfoColor ( li_color, INFOCOLOR_TOASSEMBLY) == 1 ) THEN
+        self % opi_operators_toassembly = 0
+        DO li_id = 0, ao_FEM % oi_noperators-1
+            if ( ao_FEM % opi_InfoOperator ( li_id, INFOOPERATOR_TOASSEMBLY) == 1 ) then
                 li_noperators = li_noperators + 1
-                self % opi_operator_colors_toassembly(li_noperators) = li_color
-                self % opi_operator_colors_toassembly(0) = li_noperators
-#ifdef _DEBUG
-        call concatmsg("INSERTED COLOR : ", ai_dtllevel = mi_dtllevel_base + 2)
-        call concatmsg(li_color, ai_dtllevel = mi_dtllevel_base + 2)
-        call printmsg(                 ai_dtllevel = mi_dtllevel_base + 2)
-#endif
-            END IF
-            END IF
-        end do
-        ! ********************************************************
-        PRINT *, 'OPERATORS-COLORS TO ASSEMBLY : ', self % opi_operator_colors_toassembly
+                self % opi_operators_toassembly(li_noperators) = li_id
+            end if
+        END DO
+        self % opi_operators_toassembly(0) = li_noperators
 
-        CALL printlog("set_operator_colors_toassembly : End", ai_dtllevel = mi_dtllevel_base  + 2)
+        CALL printlog("set_operators_toassembly : End", ai_dtllevel = mi_dtllevel_base  + 2)
 
-    end subroutine set_operator_colors_toassembly
+    end subroutine set_operators_toassembly
     !---------------------------------------------------------------
-    subroutine set_field_colors_toassembly(self, ao_FEM, ai_subtype, api_field_colors_toassembly)
+    subroutine set_fields_toassembly(self, ao_FEM)
         IMPLICIT NONE
         TYPE(ASSEMBLY) :: self
         TYPE(FEM) :: ao_FEM
-        INTEGER :: ai_subtype
-        INTEGER, DIMENSION(0:), INTENT(INOUT) :: api_field_colors_toassembly
         ! LOCAL
-        INTEGER :: li_subtype
         INTEGER :: li_nfields
         INTEGER :: li_id
-        INTEGER :: li_ref
-        INTEGER :: li_color
-        INTEGER :: li_type
 
-        CALL printlog("set_field_colors_toassembly : Start", ai_dtllevel = mi_dtllevel_base  + 2)
+        CALL printlog("set_fields_toassembly : Start", ai_dtllevel = mi_dtllevel_base  + 2)
 
-        api_field_colors_toassembly = -1 
-
-        ! ********************************************************
         li_nfields = 0
-#ifdef _DEBUG
-        call concatmsg("// ao_FEM % oi_nColors: ", ai_dtllevel = mi_dtllevel_base + 2)
-        call concatmsg(ao_FEM % oi_nColors    , ai_dtllevel = mi_dtllevel_base + 2)
-        call printmsg(                 ai_dtllevel = mi_dtllevel_base + 2)
-#endif
-        do li_color = 0, ao_FEM % oi_nColors 
-            li_type = ao_FEM % opi_infoColor(li_color, INFOCOLOR_TYPE)
-            li_subtype = ao_FEM % opi_infoColor(li_color, INFOCOLOR_SUBTYPE)
-
-#ifdef _DEBUG
-        call concatmsg("// li_type: ", ai_dtllevel = mi_dtllevel_base + 2)
-        call concatmsg(li_type    , ai_dtllevel = mi_dtllevel_base + 2)
-        call printmsg(                 ai_dtllevel = mi_dtllevel_base + 2)
-#endif
-
-#ifdef _DEBUG
-        call concatmsg("// li_subtype: ", ai_dtllevel = mi_dtllevel_base + 2)
-        call concatmsg(li_subtype    , ai_dtllevel = mi_dtllevel_base + 2)
-        call printmsg(                 ai_dtllevel = mi_dtllevel_base + 2)
-#endif
-
-            IF ((li_type == COLOR_FIELD) .AND. (li_subtype == ai_subtype) ) THEN
-#ifdef _DEBUG
-        call concatmsg("// TOASSEMBLY: ", ai_dtllevel = mi_dtllevel_base + 2)
-        call concatmsg(ao_FEM % opi_InfoColor ( li_color, INFOCOLOR_TOASSEMBLY), ai_dtllevel = mi_dtllevel_base + 2)
-        call printmsg(                 ai_dtllevel = mi_dtllevel_base + 2)
-#endif
-
-            IF (ao_FEM % opi_InfoColor ( li_color, INFOCOLOR_TOASSEMBLY) == 1 ) THEN
+        self % opi_fields_toassembly = 0
+        DO li_id = 0, ao_FEM % oi_nFields-1
+            if ( ao_FEM % opi_InfoField ( li_id, INFOFIELD_TOASSEMBLY) == 1 ) then
                 li_nfields = li_nfields + 1
-                api_field_colors_toassembly(li_nfields) = li_color
-                api_field_colors_toassembly(0) = li_nfields
+                self % opi_fields_toassembly(li_nfields) = li_id
+            end if
+        END DO
+        self % opi_fields_toassembly(0) = li_nfields
 
-#ifdef _DEBUG
-        call concatmsg("INSERTED COLOR : ", ai_dtllevel = mi_dtllevel_base + 2)
-        call concatmsg(li_color, ai_dtllevel = mi_dtllevel_base + 2)
-        call printmsg(                 ai_dtllevel = mi_dtllevel_base + 2)
-#endif
-            END IF
-            END IF
-        end do
-        ! ********************************************************
+        CALL printlog("set_fields_toassembly : End", ai_dtllevel = mi_dtllevel_base  + 2)
 
-!#ifdef _DEBUG
-!        call concatmsg("FIELDS-COLORS TO ASSEMBLY : ", ai_dtllevel = mi_dtllevel_base + 2)
-!        call concatmsg(api_field_colors_toassembly, ai_dtllevel = mi_dtllevel_base + 2)
-!        call printmsg(                 ai_dtllevel = mi_dtllevel_base + 2)
-!#endif
-
-        CALL printlog("set_field_colors_toassembly : End", ai_dtllevel = mi_dtllevel_base  + 2)
-
-    end subroutine set_field_colors_toassembly
+    end subroutine set_fields_toassembly
     !---------------------------------------------------------------
     subroutine set_norms_toassembly(self, ao_FEM)
         IMPLICIT NONE
@@ -333,6 +266,40 @@ contains
         CALL printlog("set_norms_toassembly : End", ai_dtllevel = mi_dtllevel_base  + 2)
 
     end subroutine set_norms_toassembly
+    !---------------------------------------------------------------
+    subroutine select_fields(self, ao_FEM, ai_TYPE, api_fields_id)
+        !> this routine selects the fields whom TYPE is ai_TYPE
+        IMPLICIT NONE
+        TYPE(ASSEMBLY) :: self
+        TYPE(FEM) :: ao_FEM
+        INTEGER :: ai_TYPE
+        INTEGER, DIMENSION(0:), INTENT(INOUT) :: api_fields_id
+        ! LOCAL
+        INTEGER :: li_nfields
+        INTEGER :: li_field
+        INTEGER :: li_ref
+        INTEGER :: li_current
+
+        CALL printlog("select_fields : Start", ai_dtllevel = mi_dtllevel_base  + 2)
+
+        li_nfields = self % opi_fields_toassembly(0)
+
+        li_current = 0
+        DO li_ref = 1, li_nfields
+
+            li_field = self % opi_fields_toassembly(li_ref)
+
+            IF ( ao_FEM % opi_InfoField(li_field, INFOFIELD_TYPE) == ai_TYPE ) THEN
+                li_current = li_current + 1
+                api_fields_id(li_current) = li_field
+            END IF
+
+        END DO
+        api_fields_id(0) = li_current
+
+        CALL printlog("select_fields : End", ai_dtllevel = mi_dtllevel_base  + 2)
+
+    end subroutine select_fields
     !---------------------------------------------------------------
     subroutine set_flag_points_basis_assembly(self, ao_FEM)
         IMPLICIT NONE
@@ -369,19 +336,10 @@ contains
 
         ll_assembly_basis_f  = .FALSE.
         ll_assembly_points_f = .FALSE.
-        li_nfields = self % opi_field_l2projection_colors_toassembly(0)
+        li_nfields = self % opi_fields_toassembly(0)
         DO li_ref = 1, li_nfields
 
-            li_field = self % opi_field_l2projection_colors_toassembly(li_ref)
-            
-            ll_assembly_basis_f  = .TRUE.
-            ll_assembly_points_f = .TRUE.
-
-        END DO
-        li_nfields = self % opi_field_operator_colors_toassembly(0)
-        DO li_ref = 1, li_nfields
-
-            li_field = self % opi_field_operator_colors_toassembly(li_ref)
+            li_field = self % opi_fields_toassembly(li_ref)
             
             ll_assembly_basis_f  = .TRUE.
             ll_assembly_points_f = .TRUE.

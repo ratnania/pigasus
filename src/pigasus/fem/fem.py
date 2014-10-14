@@ -11,29 +11,20 @@ __date__ ="$Jan 11, 2012 6:43:48 PM$"
 import constants as _cst
 import numpy as _np
 from pigasusObject import *
-from color import color_operator, color_field, manager_operators, manager_fields
-from tracelog import *
 
 from common_obj import _singleton
 @_singleton
 class fem(pigasusObject):
 
-    def __init__(self, maxcolor_objects=4, maxncolors=None, detail=0):
+    def __init__(self):
         pigasusObject.__init__(self)
 
-        self.stdoutput          = True
-        self.detail             = detail
-        self.Initialized        = False
-        self.IJVInitialized     = False
-        self.deleted            = False
-        self._manager_operators = None
-        self._manager_fields    = None
-        self.maxcolor_objects   = maxcolor_objects
-        self.maxncolors          = 0
-        if maxncolors is not None:
-            self.maxncolors      = maxncolors
-
-        self.log                = tracelog()
+        self.stdoutput      = True
+#        self.detail         = 3
+        self.detail         = 0
+        self.Initialized    = False
+        self.IJVInitialized = False
+        self.deleted        = False
 
 #        print "==== CREATE NEW FEM ===="
 
@@ -52,8 +43,6 @@ class fem(pigasusObject):
         self.com.pyfem.set_ngrids(self.com.ngrids)
         self.com.pyfem.set_nnorms(self.com.nnorms)
         self.com.pyfem.set_nsolvers(self.com.nsolvers)
-        self.com.pyfem.set_maxncolors(self.maxncolors)
-        self.com.pyfem.set_ncolors(self.com.ncolors)
         # ...
 
         # ...
@@ -90,11 +79,6 @@ class fem(pigasusObject):
 
         self.com.pyfem.set_maxnaddto(li_maxnaddto)
         # ...
-
-        # ...
-        self.com.pyfem.set_maxcoloraddto(self.maxcolor_objects)
-        # ...
-
 
         # ...
         try:
@@ -346,17 +330,13 @@ class fem(pigasusObject):
             li_stdoutput = 1
         self.com.pyfem.init(li_stdoutput,self.detail)
         # ...
-
         # ...
-        self.log.printlog("fem initialization: set_nvalues", level=1)
         self._set_nvalues()
-        self.log.printlog("done.", level=1)
         # ...
-
         # ...
-        self.log.printlog("part 1", level=1)
+#        print "part 1"
         self.com.pyfem.create_partone()
-        self.log.printlog("done.", level=1)
+#        print 'done.'
         # ...
 
         # ...
@@ -372,9 +352,9 @@ class fem(pigasusObject):
         # ...
 
         # ...
-        self.log.printlog("part 2", level=1)
+#        print "part 2"
         self.com.pyfem.create_parttwo()
-        self.log.printlog("done.", level=1)
+#        print 'done.'
         # ...
 
         # ...
@@ -383,21 +363,19 @@ class fem(pigasusObject):
         # ...
 
         # ...
-        self.log.printlog("part 3", level=1)
+#        print "part 3"
         self.com.pyfem.create_partthree()
-        self.log.printlog("done.", level=1)
+#        print 'done.'
         # ...
 
         # ...
-        self.log.printlog("fem _set_infoGridsPart3", level=1)
         self._set_infoGridsPart3()
-        self.log.printlog("done.", level=1)
         # ...
 
         # ...
-        self.log.printlog("part 4", level=1)
+#        print "part 4"
         self.com.pyfem.create_partfour()
-        self.log.printlog("done.", level=1)
+#        print 'done.'
         # ...
 
         # ...
@@ -467,72 +445,44 @@ class fem(pigasusObject):
         self.infoData['ngrids'] = str(self.com.ngrids)
 
     def reset_toassembly(self):
-        self.log.printlog("fem reset_toassembly", level=1)
-        self.com.pyfem.reset_colors_toassembly()
         self.com.pyfem.reset_operators_toassembly()
         self.com.pyfem.reset_matrices_toassembly()
         self.com.pyfem.reset_fields_toassembly()
         self.com.pyfem.reset_norms_toassembly()
         self.com.pyfem.reset_spaces_toassembly()
-        self.log.printlog("done.", level=1)
 
     def _set_patch_toassembly(self, grids_id, list_patchs):
-        self.log.printlog("fem _set_patch_toassembly", level=1)
         for P in list_patchs:
             self.com.pyfem.set_patch_toassembly(grids_id, P)
         self.com.pyfem.pyfem_set_patchs_toassembly(grids_id)
-        self.log.printlog("done.", level=1)
 
     def _set_elts_toassembly(self, grids_id, list_elts):
-        self.log.printlog("fem _set_elts_toassembly", level=1)
         self.com.pyfem.pyfem_set_elts_toassembly(grids_id, list_elts)
-        self.log.printlog("done.", level=1)
 
     def _set_matrix_toassembly(self, list_matrices):
-        self.log.printlog("fem _set_matrix_toassembly", level=1)
         for M in list_matrices:
             self.com.pyfem.pyfem_reset_matrix(M.id)
             self.com.pyfem.set_matrix_toassembly(M.id)
-        self.log.printlog("done.", level=1)
 
     def _set_operator_matrices_toassembly(self, list_operators, list_matrices):
-        self.log.printlog("fem _set_operator_matrices_toassembly", level=1)
         for O in list_operators:
             list_OM = [data[0] for data in O.list_addto]
             list_M = [M.id for M in list_matrices if M in list_OM]
             self.com.pyfem.pyfem_set_operator_matrices_toassembly( O.id, list_M, len(list_M))
-        self.log.printlog("done.", level=1)
 
     def _set_field_toassembly(self, list_fields):
-        self.log.printlog("fem _set_field_toassembly", level=1)
         for F in list_fields:
             self.com.pyfem.set_field_toassembly(F.id)
-        self.log.printlog("done.", level=1)
 
     def _set_norm_toassembly(self, list_norms):
-        self.log.printlog("fem _set_norm_toassembly", level=1)
         for N in list_norms:
             self.com.pyfem.set_norm_toassembly(N.id)
-        self.log.printlog("done.", level=1)
 
     def _set_space_toassembly(self,list_spaces):
-        self.log.printlog("fem _set_space_toassembly", level=1)
         for V in list_spaces:
             self.com.pyfem.set_space_toassembly(V.id)
-        self.log.printlog("done.", level=1)
 
-    def _set_color_toassembly(self, color_manager):
-        self.log.printlog("fem _set_color_toassembly", level=1)
-        for C in color_manager:
-            self.com.pyfem.set_color_toassembly(C.id)
-            self.log.printlog(str(C.id))
-
-        self.log.printlog("done.", level=1)
-
-    def assembly(self, matrices=[], fields=[], norms=[] \
-                 , patchs=None, elts=None \
-                 , manager_o=None, manager_f=None \
-                ):
+    def assembly(self, matrices=[], fields=[], norms=[], patchs=None, elts=None):
         """
         This assembles the desired fields, matrices and norms over the computational grid
         """
@@ -550,47 +500,17 @@ class fem(pigasusObject):
 
 #        self.reset_toassembly()
 
-        # ... search grids_id for operators
         operators_id = []
-        if manager_o is None:
-            for M in matrices:
-                operators_id += [O.id for O in M.operators]
-        else:
-            for C in manager_o:
-                operators_id += [O.id for O in C]
-
+        for M in matrices:
+            operators_id += [O.id for O in M.operators]
         operators_id = list(_np.unique(_np.asarray(operators_id)))
         operators = [self.com.operators[id] for id in operators_id]
 
         list_grids_id_o = [self.com.spaces[O.space.id].grids.id for O in operators]
-        # ...
-
-        # ... search grids_id for fields
-        if manager_f is None:
-            list_grids_id_f = [self.com.spaces[F.space.id].grids.id for F in fields]
-        else:
-            fields_id = []
-            for C in manager_f:
-                fields_id += [F.id for F in C]
-
-            fields_id = list(_np.unique(_np.asarray(fields_id)))
-            list_fields = [self.com.fields[id] for id in fields_id]
-
-            list_grids_id_f = [self.com.spaces[F.space.id].grids.id for F in list_fields]
-            print "fields_id : ", fields_id
-            print "list_grids_id_f : ", list_grids_id_f
-        # ...
-
-        # ... search grids_id for norms
+        list_grids_id_f = [self.com.spaces[F.space.id].grids.id for F in fields]
         list_grids_id_n = [self.com.spaces[N.field.space.id].grids.id for N in norms]
-        # ...
-
-        # ... update all grids_id
         list_grids_id   = list(set(list_grids_id_o) | set(list_grids_id_f) | set(list_grids_id_n))
         list_grids_id   = list(_np.unique(_np.asarray(list_grids_id)))
-        # ...
-
-        print ">> list_grids_id : ", list_grids_id
 
         for grids_id in list_grids_id:
             # ...
@@ -607,22 +527,15 @@ class fem(pigasusObject):
             list_fields     = [F for F in fields if self.com.spaces[F.space.id].grids.id==grids_id]
             list_norms      = [N for N in norms if self.com.spaces[N.field.space.id].grids.id==grids_id]
             list_operators  = [O for O in operators if self.com.spaces[O.space.id].grids.id==grids_id]
-            print "### list_operators-id : ", [O.id for O in list_operators]
             list_matrices = []
-            print "####################################"
             for M in matrices:
-                print "M ", M.id
                 addit = False
                 # TODO a optimiser
                 for O in M.operators:
-                    print "O ", O.id
                     if O in list_operators:
-                        print "operator has been found"
                         addit = True
                 if addit :
-                    print "Matrix of id " + str(M.id) + " has been added"
                     list_matrices.append(M)
-            print "####################################"
 
             list_spaces_o   = [O.spaces[0].id for O in list_operators] + [O.spaces[1].id for O in list_operators]
             list_spaces_f   = [F.space.id for F in list_fields]
@@ -633,60 +546,16 @@ class fem(pigasusObject):
 
 #            self.evalfunc(list_operators, list_fields, list_norms, list_patchs, list_elts)
 
-            message = "---------------------------------"
-            self.log.printlog(message, level=1)
-            message = "Current Grid : "   + str(grids_id)
-            self.log.printlog(message, level=1)
-            message = "list_patchs : "    + str(list_patchs)
-            self.log.printlog(message, level=1)
-            message = "list_elts : "      + str(list_elts)
-            self.log.printlog(message, level=1)
-            message = "list_matrices : "  + str([M.id for M in list_matrices])
-            self.log.printlog(message, level=1)
-            message = "list_operators : " + str([O.id for O in list_operators])
-            self.log.printlog(message, level=1)
-            message = "list_fields : "    + str([M.id for M in list_fields])
-            self.log.printlog(message, level=1)
-            message = "list_norms : "     + str([M.id for M in list_norms])
-            self.log.printlog(message, level=1)
-            message = "list_spaces : "    + str([M.id for M in list_spaces])
-            self.log.printlog(message, level=1)
-            message = "---------------------------------"
-            self.log.printlog(message, level=1)
-
-            # ... construct operators manager
-            self.log.printlog("Creating operators manager", level=1)
-            manager = manager_o
-            if manager is None:
-                # create a new manager where each operator has a unique color
-                manager = manager_operators()
-                for O in list_operators:
-                    col = color_operator(operators=[O])
-                    manager.append(col)
-            self._manager_operators = manager
-            self.log.printlog("done.", level=1)
-            # ...
-
-            # ... construct fields manager
-            self.log.printlog("Creating fields manager", level=1)
-            manager = manager_f
-            if manager is None:
-                # create a new manager where each field has a unique color
-                manager = manager_fields()
-                for F in list_fields:
-                    col = color_field(fields=[F])
-                    manager.append(col)
-            self._manager_fields = manager
-            self.log.printlog("done.", level=1)
-            # ...
-
-            # ... update operators and fields managers. must be done after
-            # ... creating all colors
-            for manager in [self._manager_operators, self._manager_fields]:
-                self.log.printlog("Update manager", level=1)
-                manager.update()
-                self.log.printlog("done.", level=1)
-            # ...
+#            print "---------------------------------"
+#            print "Current Grid : ", grids_id
+#            print "list_patchs : ", list_patchs
+#            print "list_elts : ", list_elts
+#            print "list_matrices : ", [M.id for M in list_matrices]
+#            print "list_operators : ", [O.id for O in list_operators]
+#            print "list_fields : ", [M.id for M in list_fields]
+#            print "list_norms : ", [M.id for M in list_norms]
+#            print "list_spaces : ", [M.id for M in list_spaces]
+#            print "---------------------------------"
 
             self._set_patch_toassembly(grids_id, list_patchs)
             self._set_elts_toassembly(Gr.id, list_elts)
@@ -695,8 +564,6 @@ class fem(pigasusObject):
             self._set_field_toassembly(list_fields)
             self._set_norm_toassembly(list_norms)
             self._set_space_toassembly(list_spaces)
-            self._set_color_toassembly(self._manager_operators)
-            self._set_color_toassembly(self._manager_fields)
 
 #            self.com.pyfem.pyfem_save_terms_toassembly()
             list_spaces_id = [S.id for S in list_spaces]
@@ -706,6 +573,8 @@ class fem(pigasusObject):
 
             self.com.pyfem.pyfem_assembly(grids_id)
             self.reset_toassembly()
+
+
 
 #        elapsed = (clock() - start)
 #        print ("CPU time for assembling Fields and Matrices is :" + str (elapsed))
@@ -802,8 +671,6 @@ class fem(pigasusObject):
         """
         Evaluation of the param-functions for the given fields, norms and operators over the computational grid
         """
-        self.log.printlog("fem evalfunc", level=1)
-
         list_operators=[[]]
         list_fields=[[]]
         list_norms=[[]]
@@ -936,9 +803,6 @@ class fem(pigasusObject):
 
             # must reinitialize the current patch
             V.set_currentPatch(V.geometry[0])
-
-        self.log.printlog("done.", level=1)
-
 
 #    def evalfields(self, fields, list_operator, apr_points=None):
 #        """

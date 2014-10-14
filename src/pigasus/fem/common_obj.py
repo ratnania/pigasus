@@ -44,7 +44,6 @@ class common_obj(object):
         self.ngrids          = 0
         self.nnorms          = 0
         self.nsolvers        = 0
-        self.ncolors         = 0
 
         # ... lists
         self.fields         = []
@@ -57,7 +56,6 @@ class common_obj(object):
         self.norms          = []
         self.graphs         = []
         self.solvers        = []
-        self.colors         = []
 
         # for each grids, we store the id of related fields
         self.list_Grfields_id = [[]]

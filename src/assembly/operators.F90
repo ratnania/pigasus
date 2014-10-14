@@ -32,42 +32,23 @@ module operators_module
     end interface
     ! *******************************************
 
-#ifdef _DEBUG
-    integer, parameter, private  :: mi_dtllevel_base = 0
-#else
-    integer, parameter, private  :: mi_dtllevel_base = 2
-#endif
-
 contains
 
     SUBROUTINE build_matrix_operators_Local(self, ao_FEM, ai_grids_id, ai_id, ai_elt &
-                    , ai_color)
+                    , ai_operator)
         IMPLICIT NONE
         TYPE(ASSEMBLY) :: self
         TYPE(FEM) :: ao_FEM
         INTEGER :: ai_grids_id
         INTEGER :: ai_id
         INTEGER :: ai_elt
-        INTEGER :: ai_color
+        INTEGER :: ai_operator
         ! LOCAL
-        INTEGER :: li_operator
-        INTEGER :: li_type
-        INTEGER :: li_op_ref
+        INTEGER :: li_tensorlevel
 
-#ifdef _TRACE
-        CALL printlog("build_matrix_operators_Local: Start", ai_dtllevel = mi_dtllevel_base+1)
+        li_tensorlevel  = ao_fem % opi_InfoPatch ( ai_grids_id, ai_id, INFOPATCH_TENSOR )
 
-        call concatmsg("ai_color: ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(ai_color    , ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(               ai_dtllevel = mi_dtllevel_base + 1)
-#endif
-
-        ! get the first operator to assemble
-        li_op_ref = 1 
-        li_operator = ao_FEM % opo_colors(ai_color) % opi_objects_toassembly (li_op_ref)
-        li_type = ao_FEM % opi_InfoOperator(li_operator, INFOOPERATOR_TYPE)
-
-        select case (li_type)
+        select case ( ao_FEM % opi_InfoOperator(ai_operator, INFOOPERATOR_TYPE))
 
             ! ********************************************************
             ! MASS MATRIX CASE
@@ -76,7 +57,11 @@ contains
             ! COMPUTING THE LOCAL MATRIX
             !> \todo problem avec le id=>id+1
             call build_Mass_Local(self, ao_FEM, ai_grids_id, ai_id+1, ai_elt &
-            , ai_color, self % opr_Matrix_elt)
+            , ai_operator, self % opr_Matrix_elt)
+!            IF (li_tensorlevel==1) THEN
+!            ELSEIF (li_tensorlevel==2) THEN
+!                call build_Mass_Local_t2(self, ao_FEM, ai_grids_id, ai_id+1, ai_elt, ai_operator)
+!            END IF
             ! ********************************************************
 
             ! ********************************************************
@@ -86,7 +71,7 @@ contains
             ! COMPUTING THE LOCAL MATRIX
             !> \todo problem avec le id=>id+1
             call build_Stiffness_Local(self, ao_FEM, ai_grids_id, ai_id+1, ai_elt &
-            , ai_color, self % opr_Matrix_elt)
+            , ai_operator, self % opr_Matrix_elt)
             ! ********************************************************
 
             ! ********************************************************
@@ -96,7 +81,7 @@ contains
             ! COMPUTING THE LOCAL MATRIX
             !> \todo problem avec le id=>id+1
             call build_Advection_Local(self, ao_FEM, ai_grids_id, ai_id+1, ai_elt &
-            , ai_color, self % opr_Matrix_elt)
+            , ai_operator, self % opr_Matrix_elt)
             ! ********************************************************
 
             ! ********************************************************
@@ -106,7 +91,7 @@ contains
             ! COMPUTING THE LOCAL MATRIX
             !> \todo problem avec le id=>id+1
             call build_second_deriv_Local(self, ao_FEM, ai_grids_id, ai_id+1, ai_elt &
-            , ai_color, self % opr_Matrix_elt)
+            , ai_operator, self % opr_Matrix_elt)
             ! ********************************************************
 
 !            ! ********************************************************
@@ -116,7 +101,7 @@ contains
 !            ! COMPUTING THE LOCAL MATRIX
 !            !> \todo problem avec le id=>id+1
 !            call build_Mass_Vect_Local(self, ao_FEM, ai_grids_id, ai_id+1, ai_elt &
-!            , ai_color, self % opr_Matrix_elt)
+!            , ai_operator, self % opr_Matrix_elt)
 !            ! ********************************************************
 !
 !            ! ********************************************************
@@ -126,7 +111,7 @@ contains
 !            ! COMPUTING THE LOCAL MATRIX
 !            !> \todo problem avec le id=>id+1
 !            call build_Rotational_Local(self, ao_FEM, ai_grids_id, ai_id+1, ai_elt &
-!            , ai_color, self % opr_Matrix_elt)
+!            , ai_operator, self % opr_Matrix_elt)
 !            ! ********************************************************
 !
 !            ! ********************************************************
@@ -136,22 +121,17 @@ contains
 !            ! COMPUTING THE LOCAL MATRIX
 !            !> \todo problem avec le id=>id+1
 !            call build_rotational_scalar_Local(self, ao_FEM, ai_grids_id, ai_id+1, ai_elt &
-!            , ai_color, self % opr_Matrix_elt)
+!            , ai_operator, self % opr_Matrix_elt)
 !            ! ********************************************************
 
         case Default
 
             call printlog("Type Matrix Not Yet implemented", ai_dtllevel = 0)
             call concatmsg("The type of the matrix with id ", ai_dtllevel = 0)
-            call concatmsg(ai_color, ai_dtllevel = 0)
+            call concatmsg(ai_operator, ai_dtllevel = 0)
             call printmsg(ai_dtllevel = 0)
 
         end select
-
-#ifdef _TRACE
-        CALL printlog("build_matrix_operators_Local: End", ai_dtllevel = mi_dtllevel_base+1)
-#endif
-
 
     END SUBROUTINE build_matrix_operators_Local
     !----------------------------------------------------------------------------------------------
@@ -164,8 +144,20 @@ contains
         integer :: ai_elt
         integer :: ai_operator
         ! LOCAL
+        INTEGER :: li_tensorlevel
 
-        CALL Assembly_Matrices_from_elt_basic(self, ao_FEM, ai_id+1, ai_elt, ai_operator)
+        li_tensorlevel = ao_fem % opi_InfoPatch ( ai_grids_id, ai_id, INFOPATCH_TENSOR )
+
+        IF (li_tensorlevel==1) THEN
+
+            CALL Assembly_Matrices_from_elt_basic(self, ao_FEM, ai_id+1, ai_elt, ai_operator)
+
+        ELSE
+
+!            CALL Assembly_Matrices_from_elt_t2(self, ao_FEM, ai_id+1, ai_elt, ai_operator)
+                print *, 'Not used anymore'
+
+        END IF
 
     end subroutine Assembly_Matrices_from_elt
     !----------------------------------------------------------------------------------------------
@@ -177,6 +169,7 @@ contains
         integer :: ai_elt
         integer :: ai_operator
         ! LOCAL VARIABLES
+        integer :: li_addtoMatrix
         integer :: li_b
         integer :: li_bprime
         integer :: li_A
@@ -201,13 +194,7 @@ contains
         INTEGER(KIND=MURGE_INTS_KIND) :: ierr
 #endif      
 
-#ifdef _TRACE
-        CALL printlog("Assembly_Matrices_from_elt_basic: Begin", ai_dtllevel = mi_dtllevel_base+1)
-
-        call concatmsg("operator: ", ai_dtllevel = mi_dtllevel_base + 1)
-        call concatmsg(ai_operator, ai_dtllevel = mi_dtllevel_base + 1)
-        call printmsg(               ai_dtllevel = mi_dtllevel_base + 1)
-#endif
+!        li_addtoMatrix = ao_FEM % opi_InfoOperator (ai_operator, INFOOPERATOR_ADDTO)
 
         lp_operator     => ao_FEM % opo_Op (ai_operator)
 
@@ -220,6 +207,7 @@ contains
         li_conelt = lp_con % opi_real_elts (ai_id-1,ai_elt)
         li_conprimeelt = lp_conprime % opi_real_elts (ai_id-1,ai_elt)
 
+!print *, 'elt =', li_conelt
         ! if we do not transpose the matrix
         IF ( ao_FEM % opi_InfoOperator (ai_operator, INFOOPERATOR_TRANSPOSE) == 0 ) THEN
             do li_b = 1, lp_con % opi_nen (ai_id)
@@ -282,10 +270,6 @@ contains
 
             end do
         END IF
-
-#ifdef _TRACE
-CALL printlog("Assembly_Matrices_from_elt_basic: End", ai_dtllevel = mi_dtllevel_base+1)
-#endif
 
     end subroutine Assembly_Matrices_from_elt_basic
 

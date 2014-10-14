@@ -109,15 +109,6 @@ module fem_def
         !>  Points[id, elt,i,3,:] is the z-derivative
         real(wp), DIMENSION(:,:,:,:,:), POINTER :: opr_points
     END TYPE METRIC
-
-    TYPE, PUBLIC :: COLOR 
-        INTEGER :: oi_type
-        INTEGER :: oi_subtype
-        !>
-        INTEGER, DIMENSION (:), POINTER :: opi_objects_toassembly
-        !>
-        INTEGER, DIMENSION (:), POINTER :: opi_objects_toassembly_tmp
-    END TYPE COLOR
    
     TYPE, PUBLIC :: FEM        
     ! ...
@@ -148,8 +139,6 @@ module fem_def
         INTEGER :: oi_nmetrics
         !> number of involved grids
         INTEGER :: oi_nGrids
-        !> number of used colors
-        INTEGER :: oi_nColors
         !> the maximum number of patchs over all grids
         INTEGER :: oi_maxnpatchs
         !> the maximum number of elements over all grids
@@ -165,10 +154,6 @@ module fem_def
         INTEGER :: oi_maxaddto
         !> 
         INTEGER :: oi_maxnen        
-        !> 
-        INTEGER :: oi_maxcoloraddto
-        !> 
-        INTEGER :: oi_maxncolors
     ! ...
 
     ! ...
@@ -198,12 +183,6 @@ module fem_def
         TYPE(SPACE), DIMENSION(:), POINTER :: opo_spaces
         !> INFORMATION OF THE i^th SPACE
         INTEGER, DIMENSION (:,:), POINTER :: opi_InfoSpace
-    ! ...
-
-    ! ...
-        !> COLORS for VECTORIAL/PARALLEL ASSEMBLING
-        TYPE(COLOR), DIMENSION(:), POINTER :: opo_colors
-        INTEGER, DIMENSION (:,:), POINTER :: opi_InfoColor
     ! ...
 
     ! ...
@@ -368,32 +347,8 @@ module fem_def
     !> the higher order of derivative
     INTEGER, PARAMETER :: INFOOPERATOR_NDERIV         = 8 
     !> 
-    INTEGER, PARAMETER :: INFOOPERATOR_COLOR          = 9 
+    INTEGER, PARAMETER :: INFOOPERATOR_TOASSEMBLY     = 9 
 ! ***************************************************
-
-! ***************************************************
-!   INFOCOLOR
-! ***************************************************
-    INTEGER, PARAMETER :: NPARAM_INFOCOLOR            = 4
-
-    !> 
-    INTEGER, PARAMETER :: INFOCOLOR_TYPE              = 1
-    !> 
-    INTEGER, PARAMETER :: INFOCOLOR_N                 = 2
-    !> 
-    INTEGER, PARAMETER :: INFOCOLOR_TOASSEMBLY        = 3 
-    !> 
-    INTEGER, PARAMETER :: INFOCOLOR_SUBTYPE           = 4
-
-! ***************************************************
-
-! ***************************************************
-!   COLORTYPE 
-! ***************************************************
-    INTEGER, PARAMETER :: COLOR_OPERATOR              = 1
-    INTEGER, PARAMETER :: COLOR_FIELD                 = 2
-! ***************************************************
-
 
 ! ***************************************************
 !
