@@ -3,8 +3,8 @@ done.
 Using pyamg-accelerated
 done.
 --------------- elapsed times ---------------
-mls          :  0.0293970108032
-mls-accel    :  0.00431299209595
+mls          :  0.00618290901184
+mls-accel    :  0.00523114204407
 ---------------------------------------------
 ----------- PyAMG Multigrid solver ----------
 multilevel_solver
@@ -18,10 +18,10 @@ Coarse Solver:        'pinv2'
 
 ---------------------------------------------
 ---------------------------------------------
-mls converges with error :  4.72095472043e-10  after  12  iterationr
-final error :  4.72095472043e-10
-mlsaccel converges with error :  6.49636954756e-08  after  7  iterations
-final error :  2.64136256118e-08
-                     MG convergence factor: 0.125143
-MG with CG acceleration convergence factor: 0.0335624
+mls converges with error :  4.72122376741e-10  after  12  iterationr
+final error :  4.72122376741e-10
+mlsaccel converges with error :  6.49664870699e-08  after  7  iterations
+final error :  2.64167222318e-08
+                     MG convergence factor: 0.125144
+MG with CG acceleration convergence factor: 0.0335626
 ---------------------------------------------

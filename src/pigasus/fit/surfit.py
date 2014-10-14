@@ -7,8 +7,7 @@ from time import time
 from pigasus.fem.basicPDE import basicPDE
 from caid.cad_geometry import cad_geometry, cad_nurbs
 from caid.cad_geometry import square as patch
-from igakit.igalib import bsp
-from igakit.nurbs import NURBS
+from caid.core.bspline import bsp
 from scipy.io import mmwrite
 from scipy.sparse import coo_matrix
 from pigasus.fit.utils import *
@@ -246,7 +245,7 @@ class surfit(object):
                 srf.rational = nrb.rational
                 geo_f.append(srf)
             else:
-                srf = NURBS(nrb.knots, C, weights=nrb.weights)
+                srf = cad_nurbs(nrb.knots, C, weights=nrb.weights)
                 list_nrb.append(srf)
 
         if exportGeometry:

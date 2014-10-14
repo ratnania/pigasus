@@ -130,7 +130,7 @@ if PLOT:
     ty = np.linspace(0.,1.,200)
     uh = U(tx,ty, patch_id=0)
     nrb = geo[0]
-    P = nrb.evaluate(tx,ty)
+    P = nrb(u=tx,v=ty)
     x = P[:,:,0]
     y = P[:,:,1]
 #    u = exp ( 0.5 * ( x**2 + y**2 ) )

@@ -2,7 +2,7 @@
 #!/usr/bin/env python
 import numpy as np
 import matplotlib.pyplot as plt
-from igakit.igalib import bsp
+from caid.core.bspline import bsp
 from sys import exit as STOP
 
 # ----------------------------
@@ -145,12 +145,12 @@ if __name__ == "__main__":
     #-----------------------------------
 #    # ...
 #    def a_ext(s):
-#        S = nrb.evaluate(s)
+#        S = nrb(s)
 #        return S[:,0]
 #    # ...
 #    # ...
 #    def b_ext(s):
-#        S = nrb.evaluate(s)
+#        S = nrb(s)
 #        return S[:,1]
 #    # ...
 #    # ...

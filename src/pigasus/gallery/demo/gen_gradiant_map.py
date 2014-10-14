@@ -1,13 +1,13 @@
 #########################################
 nrb   = geo[0]
 
-from igakit.nurbs import NURBS
+from caid.cad_geometry import cad_nurbs
 C = np.zeros_like(nrb.points)
 _C = np.genfromtxt("u.txt")
 shape = list(nrb.shape)
 C = np.zeros(shape+[3])
 C[...,0] = _C
-srf = NURBS(nrb.knots, C, weights= nrb.weights)
+srf = cad_nurbs(nrb.knots, C, weights= nrb.weights)
 #print srf.points
 
 ntx = 80
@@ -89,7 +89,7 @@ Udyy =   C1 * xdv**2    - 2 * C2 * xdu * xdv + C3 * xdu**2
 
 
 # ...
-#P = srf.evaluate(tx,ty)
+#P = srf(u=tx,v=ty)
 #x = P[:,:,0]
 #y = P[:,:,1]
 

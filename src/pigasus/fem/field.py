@@ -13,6 +13,7 @@ import constants as _cst
 import numpy as _np
 from numpy import zeros, asarray, zeros_like
 from pigasusObject import *
+from caid.cad_geometry import cad_nurbs
 
 ##############################################################################
 #
@@ -378,20 +379,19 @@ class field(pigasusObject):
         nrb = geo[patch_id]
         nx = G.list_grid[patch_id].nx
 
-        from igakit.nurbs import NURBS
         knots   = nrb.knots
         weights = nrb.weights
         shape = list(nrb.shape)
         _C = self.tomatrix(patch_id)
         C = zeros(shape+[3])
         C[...,0] = _C
-        srf = NURBS(knots, C, weights=weights)
+        srf = cad_nurbs(knots, C, weights=weights)
 
         # ... defining the evaluate function
         APPEND = False
         NOUT   = 1
         if nderiv == 0:
-            EVALUATE = srf.evaluate
+            EVALUATE = srf.__call__
             APPEND = True
             NOUT   = 1
         if nderiv > 0:
@@ -763,7 +763,6 @@ class field(pigasusObject):
         # ...
 
     def plot(self, withpcolor=False, n=None):
-        from igakit.nurbs import NURBS
         from matplotlib.pyplot import contourf, pcolor
         from numpy import min, max, linspace, zeros_like
         geo = self.space.geometry
@@ -785,12 +784,12 @@ class field(pigasusObject):
             C[...,0] = x
             C[...,1] = y
             C[...,2] = z
-            srf = NURBS(nrb.knots, C, weights=nrb.weights)
+            srf = cad_nurbs(nrb.knots, C, weights=nrb.weights)
             list_t = []
             for axis in range(0, nrb.dim):
                 t = linspace(nrb.knots[axis][0],nrb.knots[axis][-1],list_n[axis])
                 list_t.append(t)
-            P = srf.evaluate(*list_t)
+            P = srf(u=list_t[0], v=list_t[1])
 
             if dim == 1:
                 x = P[...,0]
@@ -824,7 +823,6 @@ class field(pigasusObject):
 
     def export(self, filename):
         from caid.cad_geometry import cad_geometry, cad_nurbs
-        from igakit.nurbs import NURBS
         from caid.field import field as iga_field
         U = self
         geo   = U.space.geometry
@@ -1000,7 +998,6 @@ class field(pigasusObject):
         else:
             list_patchs = [geo[patch_id]]
 
-        from igakit.nurbs import NURBS
         list_P = []
         for nrb in list_patchs:
             nrb_id = geo.index(nrb)
@@ -1012,8 +1009,8 @@ class field(pigasusObject):
             C[...,0] = x
             C[...,1] = y
             C[...,2] = z
-            srf = NURBS(nrb.knots, C, weights=nrb.weights)
-            P = srf.evaluate(*uvw)
+            srf = cad_nurbs(nrb.knots, C, weights=nrb.weights)
+            P = srf(u=u,v=v,w=w)
             if patch_id is not None:
                 return P[...,-1]
             else:

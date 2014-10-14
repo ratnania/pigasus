@@ -37,7 +37,12 @@ module pyfem
 !    type(FAST_IGA)   , save, private :: mo_figa
 !#endif
 
-    integer, parameter, private  :: mi_dtllevel_base = 1 
+!#ifdef _DEBUG
+!    integer, parameter, private  :: mi_dtllevel_base = 0
+!#else
+!    integer, parameter, private  :: mi_dtllevel_base = 2
+!#endif
+    integer, parameter, private  :: mi_dtllevel_base = 2
     
 contains
 !#ifdef _FIGA
@@ -136,27 +141,6 @@ contains
 
         CALL set_ngrids_fem (mo_fem, ai_nGrids)
     end subroutine set_ngrids
-    !---------------------------------------------------------------
-    subroutine set_ncolors (ai_n)
-        implicit none
-        INTEGER :: ai_n
-
-        CALL set_ncolors_fem (mo_fem, ai_n)
-    end subroutine set_ncolors
-    !---------------------------------------------------------------
-    subroutine set_maxncolors (ai_n)
-        implicit none
-        INTEGER :: ai_n
-
-        CALL set_maxncolors_fem (mo_fem, ai_n)
-    end subroutine set_maxncolors
-    !---------------------------------------------------------------
-    subroutine set_maxcoloraddto (ai_val)
-        implicit none
-        INTEGER :: ai_val
-
-        CALL set_maxcoloraddto_fem(mo_fem, ai_val)
-    end subroutine set_maxcoloraddto
     !---------------------------------------------------------------
     subroutine set_maxnpatchs (ai_val)
         implicit none
@@ -422,36 +406,6 @@ contains
 
     end subroutine set_grids
 !----------------------------------------------------------------------------------------------
-    subroutine set_color ( ai_id, ai_type, ai_n, ai_subtype )
-        implicit none
-        integer  :: ai_id
-        integer  :: ai_type
-        integer  :: ai_n
-        integer  :: ai_subtype
-
-        CALL printlog("set_color : Start", ai_dtllevel = 1)
-
-        mo_fem % opi_InfoColor ( ai_id , : ) = -1
-
-        mo_fem % opi_InfoColor ( ai_id , INFOCOLOR_TYPE    ) = ai_type
-        mo_fem % opi_InfoColor ( ai_id , INFOCOLOR_N       ) = ai_n
-        mo_fem % opi_InfoColor ( ai_id , INFOCOLOR_SUBTYPE ) = ai_subtype
-
-        CALL printlog("set_color : End", ai_dtllevel = 1)
-
-    end subroutine set_color
-!----------------------------------------------------------------------------------------------
-    subroutine set_color_objects ( ai_color, api_values, ai_size )
-    !> gather objects (operators or fields) of the same color  
-        implicit none
-        INTEGER, intent(in)  :: ai_color
-        INTEGER, intent(in)  :: ai_size
-        INTEGER , dimension(ai_size), intent(in)  :: api_values
-
-        CALL set_color_objects_fem(mo_fem, ai_color, api_values, ai_size )
-        
-    end subroutine set_color_objects
-!----------------------------------------------------------------------------------------------
     subroutine pyfem_reset_terms_toassembly ( ai_grids_id )
         implicit none
         integer  :: ai_grids_id
@@ -536,6 +490,7 @@ contains
         INTEGER, intent(in)  :: ai_size
         INTEGER , dimension(ai_size), intent(in)  :: api_values
 
+        mo_fem % opi_InfoOperator ( ai_operator , INFOOPERATOR_TOASSEMBLY ) = 1
         CALL set_operator_matrices_toassembly(mo_fem, ai_operator, api_values, ai_size )
         
     end subroutine pyfem_set_operator_matrices_toassembly
@@ -557,16 +512,8 @@ contains
 !----------------------------------------------------------------------------------------------
     subroutine reset_operators_toassembly ( )
         implicit none
-        ! LOCAL
-        INTEGER :: li_color
-        INTEGER :: li_type
 
-        DO li_color = 1, mo_FEM % oi_ncolors
-           li_type = mo_fem % opi_InfoColor ( li_color , INFOCOLOR_TYPE )
-           IF (li_type == COLOR_OPERATOR) THEN
-              mo_fem % opi_InfoColor ( li_color , INFOCOLOR_TOASSEMBLY ) = 0
-           END IF
-        END DO
+        mo_fem % opi_InfoOperator ( : , INFOOPERATOR_TOASSEMBLY ) = 0
 
     end subroutine reset_operators_toassembly
 !----------------------------------------------------------------------------------------------
@@ -579,21 +526,6 @@ contains
 
     end subroutine pyfem_reset_matrix
 !---------------------------------------------------------------
-    subroutine set_color_toassembly ( ai_id )
-        implicit none
-        integer  :: ai_id
-
-        mo_fem % opi_InfoColor ( ai_id , INFOCOLOR_TOASSEMBLY ) = 1
-
-    end subroutine set_color_toassembly
-!----------------------------------------------------------------------------------------------
-    subroutine reset_colors_toassembly ( )
-        implicit none
-
-        mo_fem % opi_InfoColor ( : , INFOCOLOR_TOASSEMBLY ) = 0
-
-    end subroutine reset_colors_toassembly
-!---------------------------------------------------------------
     subroutine set_field_toassembly ( ai_id )
         implicit none
         integer  :: ai_id
@@ -604,15 +536,8 @@ contains
 !----------------------------------------------------------------------------------------------
     subroutine reset_fields_toassembly ( )
         implicit none
-        INTEGER :: li_color
-        INTEGER :: li_type
 
-        DO li_color = 1, mo_FEM % oi_ncolors
-           li_type = mo_fem % opi_InfoColor ( li_color , INFOCOLOR_TYPE )
-           IF (li_type == COLOR_FIELD) THEN
-              mo_fem % opi_InfoColor ( li_color , INFOCOLOR_TOASSEMBLY ) = 0
-           END IF
-        END DO
+        mo_fem % opi_InfoField ( : , INFOFIELD_TOASSEMBLY ) = 0
 
     end subroutine reset_fields_toassembly
 !----------------------------------------------------------------------------------------------
@@ -738,17 +663,6 @@ contains
         CALL printlog("pyfem_free : End", ai_dtllevel = 1)
 
     end subroutine pyfem_free
-    !---------------------------------------------------------------
-    subroutine pyfem_printlog(as_message, al_condition, ai_dtllevel )
-        implicit none
-        !> DETAIL LEVEL
-        character(len=*), intent(in) :: as_message
-        logical, optional :: al_condition
-        integer, optional :: ai_dtllevel
-
-        CALL printlog(as_message, al_condition = al_condition, ai_dtllevel = ai_dtllevel)
-
-    end subroutine pyfem_printlog
     !---------------------------------------------------------------
     subroutine pyfem_print_grid(ai_grids_id, ai_id)
         implicit none
@@ -1398,40 +1312,8 @@ contains
     subroutine pyfem_assembly(ai_grids_id)
         implicit none
         INTEGER, INTENT(IN) :: ai_grids_id
-        ! LOCAL
-!        INTEGER :: li_color
-!        INTEGER :: li_noperator_colors
-!        INTEGER :: li_noperators
-!        INTEGER :: li_ref
-!        INTEGER :: li_op_ref
-!        INTEGER :: li_operator
-!        INTEGER :: li_type
 
         CALL printlog("pyfem_assembly : Start", ai_dtllevel = 1)
-
-!        ! ********************************************************
-!        CALL set_operator_colors_toassembly(mo_ASS, mo_FEM)
-!        li_noperator_colors = mo_ASS % opi_operator_colors_toassembly(0)
-!        print *, 'li_noperator_colors=', li_noperator_colors
-!
-!        do li_ref = 1, li_noperator_colors
-!
-!            li_color = mo_ASS % opi_operator_colors_toassembly(li_ref)
-!            li_noperators = mo_FEM % opo_colors(li_color) % opi_objects_toassembly (0) 
-!            li_type = mo_FEM % opi_infoColor(li_color, INFOCOLOR_TYPE)
-!
-!            PRINT *, 'Assembling operator of color : ', li_color & 
-!                    , ' of type ', li_type &
-!            , ' containing ', li_noperators, ' operators'
-!
-!            DO li_op_ref = 1, li_noperators
-!               ! get operator-id from color
-!               li_operator = mo_FEM % opo_colors(li_color) % opi_objects_toassembly (li_op_ref) 
-!               PRINT *, 'Copying Element Matrix operator : ', li_operator
-!            END DO
-!
-!        end do
-!        ! ********************************************************
 
         CALL Assembly_Matrix(mo_ass,mo_fem, ai_grids_id)
 

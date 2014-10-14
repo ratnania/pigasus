@@ -134,9 +134,8 @@ class adaptiveMeshMA(object):
         PDE_h.plotMesh(ntx=60, nty=60)
 
     def genGeometry(self):
-        from igakit.nurbs import NURBS
         from caid.op_nurbs import opNURBS, grad
-        from caid.cad_geometry import cad_geometry, cad_grad_nurbs
+        from caid.cad_geometry import cad_geometry, cad_grad_nurbs, cad_nurbs
 
         geo = self.geo_h
         PDE = self.PDE_h
@@ -152,7 +151,7 @@ class adaptiveMeshMA(object):
             C = np.zeros_like(met.points)
             C[...,:2] = met.points[...,:2]
             C[...,2] = _C
-            srf = NURBS(met.knots, C, weights= met.weights)
+            srf = cad_nurbs(met.knots, C, weights= met.weights)
             gsrf = grad(srf)
             grad_nrb = cad_grad_nurbs(gsrf)
             print "name ", grad_nrb.__class__.__name__

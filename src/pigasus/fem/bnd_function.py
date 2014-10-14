@@ -85,7 +85,7 @@ class bnd_function(object):
             xi_bnd = xe
             self.xi_bnd = [xe]
         # ...
-        pts_bnd = self.nrb.evaluate(xi_bnd)
+        pts_bnd = self.nrb(u=xi_bnd)
 
         x_bnd = pts_bnd[0]
         self.x_bnd = [x_bnd]
@@ -139,7 +139,7 @@ class bnd_function(object):
                 xi_bnd = np.asarray(ye)
                 self.eta_bnd = [ye * np.ones_like(eta_bnd), eta_bnd]
         # ...
-        pts_bnd = self.nrb.evaluate(xi_bnd, eta_bnd)
+        pts_bnd = self.nrb(u=xi_bnd, v=eta_bnd)
         x_bnd = pts_bnd[:,0]
         y_bnd = pts_bnd[:,1]
         self.x_bnd = [x_bnd, y_bnd]

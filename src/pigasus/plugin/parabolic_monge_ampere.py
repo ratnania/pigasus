@@ -6,6 +6,7 @@ import numpy as np
 from pigasus.gallery.basicPDE import *
 import matplotlib.pyplot    as plt
 import numpy                as np
+from caid.cad_geometry import cad_nurbs
 from __main__ import __file__ as filename
 
 # ...
@@ -170,14 +171,13 @@ def plotMesh(PDE, ntx=60, nty=60):
     patch_id = 0
     nrb   = geo[patch_id]
 
-    from igakit.nurbs import NURBS
     C = np.zeros_like(nrb.points)
 
     _C = U.tomatrix(patch_id)
     shape = list(nrb.shape)
     C = np.zeros(shape+[3])
     C[...,0] = _C
-    srf = NURBS(nrb.knots, C, weights= nrb.weights)
+    srf = cad_nurbs(nrb.knots, C, weights= nrb.weights)
 
     ub = srf.knots[0][0]
     ue = srf.knots[0][-1]

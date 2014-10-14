@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import numpy as np
 from caid.cad_geometry import square as domain
-from igakit.igalib import bsp
+from caid.core.bspline import bsp
 
 # ------------------------------
 def findSpan(list_x, list_t, list_p, list_n):

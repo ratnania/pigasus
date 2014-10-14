@@ -1,6 +1,5 @@
 from caid.cad_geometry import square as domain
-from caid.cad_geometry import cad_geometry
-from igakit.nurbs import NURBS
+from caid.cad_geometry import cad_geometry, cad_nurbs
 import numpy as np
 import sys
 
@@ -35,7 +34,7 @@ _C = np.genfromtxt("u.txt")
 shape = list(nrb.shape)
 C = np.zeros(shape+[3])
 C[...,0] = _C
-srf = NURBS(nrb.knots, C, weights= nrb.weights)
+srf = cad_nurbs(nrb.knots, C, weights= nrb.weights)
 
 geo_f = cad_geometry()
 geo_f.append(srf)

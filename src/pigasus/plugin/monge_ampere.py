@@ -8,6 +8,7 @@ from pigasus.gallery.poisson_nonlin import poisson_picard as PDE_picard
 #from basicPDE_nonlin import basicPDE_picard as PDE_picard
 from pigasus.gallery.poisson import *
 from time import time
+from caid.cad_geometry import cad_geometry, cad_nurbs
 
 __all__ = ['picard', 'picardTwoGrids', 'testcase']
 
@@ -163,7 +164,6 @@ class picard(PDE_picard):
         patch_id = 0
         nrb   = geo[patch_id]
 
-        from igakit.nurbs import NURBS
         C = np.zeros_like(nrb.points)
         if self.Dirichlet:
             U = self.unknown_dirichlet
@@ -173,7 +173,7 @@ class picard(PDE_picard):
         shape = list(nrb.shape)
         C = np.zeros(shape+[3])
         C[...,0] = _C
-        srf = NURBS(nrb.knots, C, weights= nrb.weights)
+        srf = cad_nurbs(nrb.knots, C, weights= nrb.weights)
 
         ub = srf.knots[0][0]
         ue = srf.knots[0][-1]
@@ -258,9 +258,6 @@ class picard(PDE_picard):
 
     #-----------------------------------
     def transferSolution(self, geo_H, U_H, geo_h, U_h):
-        from caid.cad_geometry import cad_geometry
-        from igakit.nurbs import NURBS
-
         patch_id = 0
         nrb_H = geo_H[patch_id]
         nrb_h = geo_h[patch_id]
@@ -278,7 +275,7 @@ class picard(PDE_picard):
         C = np.zeros(shape+[3])
         _C = U_H.tomatrix(patch_id)
         C[...,0] = _C
-        srf = NURBS(nrb_H.knots, C, weights= nrb_H.weights)
+        srf = cad_nurbs(nrb_H.knots, C, weights= nrb_H.weights)
 
         geo_f = cad_geometry()
         geo_f.append(srf)

@@ -57,11 +57,10 @@ except:
     py = 2
 
 from caid.cad_geometry import circle as domain
-from caid.cad_geometry import cad_geometry
+from caid.cad_geometry import cad_geometry, cad_nurbs
 from pigasus.fem.metric import metric
 from caid.cad_geometry import square as patch
 from caid.cad_geometry import square
-from igakit.nurbs import NURBS
 
 TYPE = None
 #TYPE = "mapping"
@@ -90,7 +89,7 @@ if TYPE is not None:
     weights[2,1]    = s
     weights[1,2]    = s
 
-    srf = NURBS([U,V], C, weights=weights)
+    srf = cad_nurbs([U,V], C, weights=weights)
     geo = cad_geometry()
     geo.append(srf)
     geo._internal_faces = geo_s._internal_faces

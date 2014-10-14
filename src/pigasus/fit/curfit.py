@@ -7,7 +7,7 @@ from time import time
 from pigasus.fem.basicPDE import basicPDE
 from caid.cad_geometry import cad_geometry, cad_nurbs
 from caid.cad_geometry import square as patch
-from igakit.igalib import bsp
+from caid.core.bspline import bsp
 #from igakit.nurbs import NURBS
 from scipy.io import mmwrite
 from scipy.sparse import coo_matrix
