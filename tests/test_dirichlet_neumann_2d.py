@@ -4,7 +4,7 @@ from pigasus.utils.manager import context
 
 import sys
 import numpy as np
-from pigasus.gallery.basicPDE import *
+from pigasus.fem.basicPDE import *
 
 import caid.cad_geometry  as cg
 import matplotlib.pyplot    as pl
