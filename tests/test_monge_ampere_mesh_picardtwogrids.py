@@ -1,3 +1,7 @@
+# -*- coding: UTF-8 -*-
+#! /usr/bin/python
+from pigasus.utils.manager import context
+
 # ...
 try:
     from matplotlib import pyplot as plt
@@ -139,24 +143,26 @@ bc_neumann [0,2] = func_g
 bc_neumann [0,3] = func_g
 # ...
 
-# ...
-PDE_h = picardTwoGrids(geometry=geo_h, geometry_H=geo_H, bc_neumann=bc_neumann)
-# ...
+with context():
 
-# ...
-Errors_h, ErrorsH1_h, Errors_H, ErrorsH1_H = \
-        PDE_h.solve(  rho0, rho1, c_rho=None, u0=None \
-                    , maxiter=[maxiter_H,maxiter_h] \
-                    , rtol=[rtol_H,rtol_h] \
-                    , rtol2=[rtol2_H,rtol2_h] \
-                    , verbose=1)
-# ...
+    # ...
+    PDE_h = picardTwoGrids(geometry=geo_h, geometry_H=geo_H, bc_neumann=bc_neumann)
+    # ...
 
-# ...
-if PLOT:
-    PDE_h.plotMesh(ntx=60, nty=60)
-    plt.savefig(filename.split('.py')[0]+'.png', format='png')
-    plt.clf()
-# ...
+    # ...
+    Errors_h, ErrorsH1_h, Errors_H, ErrorsH1_H = \
+            PDE_h.solve(  rho0, rho1, c_rho=None, u0=None \
+                        , maxiter=[maxiter_H,maxiter_h] \
+                        , rtol=[rtol_H,rtol_h] \
+                        , rtol2=[rtol2_H,rtol2_h] \
+                        , verbose=1)
+    # ...
 
-np.savetxt("Errors.txt", np.asarray(Errors_h))
+    # ...
+    if PLOT:
+        PDE_h.plotMesh(ntx=60, nty=60)
+        plt.savefig(filename.split('.py')[0]+'.png', format='png')
+        plt.clf()
+    # ...
+
+    np.savetxt("Errors.txt", np.asarray(Errors_h))

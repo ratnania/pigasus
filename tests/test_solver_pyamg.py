@@ -1,3 +1,7 @@
+# -*- coding: UTF-8 -*-
+#! /usr/bin/python
+from pigasus.utils.manager import context
+
 from pigasus.gallery.poisson import poisson
 from caid.cad_geometry import square as domain
 import numpy as np
@@ -73,74 +77,76 @@ else:
     pass
 # ...
 
-PDE = poisson(geometry=geo, bc_dirichlet=bc_dirichlet, bc_neumann=bc_neumann,
-              AllDirichlet=AllDirichlet, metric=Metric)
-PDE.assembly()
-PDE.solve()
+with context():
 
-# getting scipy matrix
-A_scipy = PDE.system.get()
+    PDE = poisson(geometry=geo, bc_dirichlet=bc_dirichlet, bc_neumann=bc_neumann,
+                  AllDirichlet=AllDirichlet, metric=Metric)
+    PDE.assembly()
+    PDE.solve()
 
-b = np.ones(PDE.size)
+    # getting scipy matrix
+    A_scipy = PDE.system.get()
 
-# ----------------------------------------------
-import scipy
-from pyamg.aggregation import smoothed_aggregation_solver
+    b = np.ones(PDE.size)
 
-B = None                                # no near-null spaces guesses for SA
+    # ----------------------------------------------
+    import scipy
+    from pyamg.aggregation import smoothed_aggregation_solver
 
-# Construct solver using AMG based on Smoothed Aggregation (SA) and display info
-mls = smoothed_aggregation_solver(A_scipy, B=B)
+    B = None                                # no near-null spaces guesses for SA
 
-
-# Solve Ax=b with no acceleration ('standalone' solver)
-print "Using pyamg-standalone"
-standalone_residuals = []
-t_start = time.time()
-x = mls.solve(b, tol=tol_pyamg, accel=None, maxiter=maxiter_pyamg, residuals=standalone_residuals)
-t_end = time.time()
-mls_elapsed = t_end - t_start
-mls_err = standalone_residuals[-1]
-mls_niter = len(standalone_residuals)
-print "done."
-standalone_residuals  = np.array(standalone_residuals)/standalone_residuals[0]
-factor1 = standalone_residuals[-1]**(1.0/len(standalone_residuals))
-standalone_final_err = np.linalg.norm(b-A_scipy.dot(x))
+    # Construct solver using AMG based on Smoothed Aggregation (SA) and display info
+    mls = smoothed_aggregation_solver(A_scipy, B=B)
 
 
-# Solve Ax=b with Conjugate Gradient (AMG as a preconditioner to CG)
-print "Using pyamg-accelerated"
-accelerated_residuals = []
-t_start = time.time()
-x = mls.solve(b, tol=tol_pyamg, accel=accel, maxiter=maxiter_pyamg, residuals=accelerated_residuals)
-t_end = time.time()
-mlsaccel_elapsed = t_end - t_start
-mlsaccel_err = accelerated_residuals[-1]
-mlsaccel_niter = len(accelerated_residuals)
-print "done."
-# Compute relative residuals
-accelerated_residuals = np.array(accelerated_residuals)/accelerated_residuals[0]
-# Compute (geometric) convergence factors
-factor2 = accelerated_residuals[-1]**(1.0/len(accelerated_residuals))
-accelerated_final_err = np.linalg.norm(b-A_scipy.dot(x))
-# ----------------------------------------------
+    # Solve Ax=b with no acceleration ('standalone' solver)
+    print "Using pyamg-standalone"
+    standalone_residuals = []
+    t_start = time.time()
+    x = mls.solve(b, tol=tol_pyamg, accel=None, maxiter=maxiter_pyamg, residuals=standalone_residuals)
+    t_end = time.time()
+    mls_elapsed = t_end - t_start
+    mls_err = standalone_residuals[-1]
+    mls_niter = len(standalone_residuals)
+    print "done."
+    standalone_residuals  = np.array(standalone_residuals)/standalone_residuals[0]
+    factor1 = standalone_residuals[-1]**(1.0/len(standalone_residuals))
+    standalone_final_err = np.linalg.norm(b-A_scipy.dot(x))
 
-print "--------------- elapsed times ---------------"
-print "mls          : ", mls_elapsed
-print "mls-accel    : ", mlsaccel_elapsed
-print "---------------------------------------------"
 
-print "----------- PyAMG Multigrid solver ----------"
-print mls
-print "---------------------------------------------"
+    # Solve Ax=b with Conjugate Gradient (AMG as a preconditioner to CG)
+    print "Using pyamg-accelerated"
+    accelerated_residuals = []
+    t_start = time.time()
+    x = mls.solve(b, tol=tol_pyamg, accel=accel, maxiter=maxiter_pyamg, residuals=accelerated_residuals)
+    t_end = time.time()
+    mlsaccel_elapsed = t_end - t_start
+    mlsaccel_err = accelerated_residuals[-1]
+    mlsaccel_niter = len(accelerated_residuals)
+    print "done."
+    # Compute relative residuals
+    accelerated_residuals = np.array(accelerated_residuals)/accelerated_residuals[0]
+    # Compute (geometric) convergence factors
+    factor2 = accelerated_residuals[-1]**(1.0/len(accelerated_residuals))
+    accelerated_final_err = np.linalg.norm(b-A_scipy.dot(x))
+    # ----------------------------------------------
 
-print "---------------------------------------------"
-print "mls converges with error : ", mls_err, " after ", mls_niter, " iterationr"
-print "final error : ", standalone_final_err
-print "mlsaccel converges with error : ", mlsaccel_err, " after ", mlsaccel_niter, " iterations"
-print "final error : ", accelerated_final_err
-print "                     MG convergence factor: %g"%(factor1)
-print "MG with CG acceleration convergence factor: %g"%(factor2)
-print "---------------------------------------------"
+    print "--------------- elapsed times ---------------"
+    print "mls          : ", mls_elapsed
+    print "mls-accel    : ", mlsaccel_elapsed
+    print "---------------------------------------------"
 
-PDE.free()
+    print "----------- PyAMG Multigrid solver ----------"
+    print mls
+    print "---------------------------------------------"
+
+    print "---------------------------------------------"
+    print "mls converges with error : ", mls_err, " after ", mls_niter, " iterationr"
+    print "final error : ", standalone_final_err
+    print "mlsaccel converges with error : ", mlsaccel_err, " after ", mlsaccel_niter, " iterations"
+    print "final error : ", accelerated_final_err
+    print "                     MG convergence factor: %g"%(factor1)
+    print "MG with CG acceleration convergence factor: %g"%(factor2)
+    print "---------------------------------------------"
+
+    PDE.free()

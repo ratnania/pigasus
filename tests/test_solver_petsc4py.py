@@ -1,7 +1,15 @@
+# -*- coding: UTF-8 -*-
+#! /usr/bin/python
+from pigasus.utils.manager import context
+
+try:
+    from petsc4py import PETSc
+    with_PETSC = True
+except ImportError:
+    with_PETSC = False
 import numpy as np
 import time
 from scipy import sparse
-from petsc4py import PETSc
 from pigasus.gallery.poisson import poisson
 from caid.cad_geometry import square as domain
 import sys
@@ -70,97 +78,100 @@ else:
     pass
 # ...
 
-PDE = poisson(geometry=geo, bc_dirichlet=bc_dirichlet, bc_neumann=bc_neumann,
-              AllDirichlet=AllDirichlet, metric=Metric)
-PDE.assembly()
-PDE.solve()
+if with_PETSC:
+    with context():
 
-# getting scipy matrix
-A_scipy = PDE.system.get()
-PDE.system.save("sys.mtx")
+        PDE = poisson(geometry=geo, bc_dirichlet=bc_dirichlet, bc_neumann=bc_neumann,
+                      AllDirichlet=AllDirichlet, metric=Metric)
+        PDE.assembly()
+        PDE.solve()
 
-b = np.ones(PDE.size)
+        # getting scipy matrix
+        A_scipy = PDE.system.get()
+        PDE.system.save("sys.mtx")
 
-A = PETSc.Mat().createAIJ(size=A_scipy.shape,csr=(A_scipy.indptr, A_scipy.indices, A_scipy.data))
-# ...
+        b = np.ones(PDE.size)
 
-# Initialize ksp solver.
-ksp = PETSc.KSP().create()
-ksp.setOperators(A)
-pc = ksp.getPC()
+        A = PETSc.Mat().createAIJ(size=A_scipy.shape,csr=(A_scipy.indptr, A_scipy.indices, A_scipy.data))
+        # ...
 
-# Allow for solver choice to be set from command line with -ksp_type <solver>.
-# Recommended option: -ksp_type preonly -pc_type lu
-ksp.setFromOptions()
+        # Initialize ksp solver.
+        ksp = PETSc.KSP().create()
+        ksp.setOperators(A)
+        pc = ksp.getPC()
 
-ksptype = PETSc.KSP.Type.CG             ; pctype = None
-#ksptype = PETSc.KSP.Type.GMRES          ; pctype = None
-#ksptype = PETSc.KSP.Type.BICG           ; pctype = None
-#ksptype = PETSc.KSP.Type.BCGS           ; pctype = None
-#ksptype = PETSc.KSP.Type.BCGSL          ; pctype = None
-#ksptype = PETSc.KSP.Type.CGS            ; pctype = None
-#ksptype = PETSc.KSP.Type.STCG           ; pctype = None
-#ksptype = PETSc.KSP.Type.CGNE           ; pctype = None
-#ksptype = PETSc.KSP.Type.RICHARDSON     ; pctype = None
-#ksptype = PETSc.KSP.Type.CHEBYSHEV      ; pctype = None
-#ksptype = PETSc.KSP.Type.FGMRES         ; pctype = None
-#ksptype = PETSc.KSP.Type.CG             ; pctype = pc.Type.GAMG
-#ksptype = PETSc.KSP.Type.GMRES          ; pctype = pc.Type.GAMG
+        # Allow for solver choice to be set from command line with -ksp_type <solver>.
+        # Recommended option: -ksp_type preonly -pc_type lu
+        ksp.setFromOptions()
 
-ksp.setType(ksptype)
-if pctype is not None:
-    pc.setType(pctype)
+        ksptype = PETSc.KSP.Type.CG             ; pctype = None
+        #ksptype = PETSc.KSP.Type.GMRES          ; pctype = None
+        #ksptype = PETSc.KSP.Type.BICG           ; pctype = None
+        #ksptype = PETSc.KSP.Type.BCGS           ; pctype = None
+        #ksptype = PETSc.KSP.Type.BCGSL          ; pctype = None
+        #ksptype = PETSc.KSP.Type.CGS            ; pctype = None
+        #ksptype = PETSc.KSP.Type.STCG           ; pctype = None
+        #ksptype = PETSc.KSP.Type.CGNE           ; pctype = None
+        #ksptype = PETSc.KSP.Type.RICHARDSON     ; pctype = None
+        #ksptype = PETSc.KSP.Type.CHEBYSHEV      ; pctype = None
+        #ksptype = PETSc.KSP.Type.FGMRES         ; pctype = None
+        #ksptype = PETSc.KSP.Type.CG             ; pctype = pc.Type.GAMG
+        #ksptype = PETSc.KSP.Type.GMRES          ; pctype = pc.Type.GAMG
 
-txt = 'Using Petsc-' + str(ksp.getType())
-if pctype is not None:
-    txt += ' with ' + str(pctype) + ' preconditioner.'
-print txt
+        ksp.setType(ksptype)
+        if pctype is not None:
+            pc.setType(pctype)
 
-n,m = A.getSize()
-x0 = np.zeros(n)
+        txt = 'Using Petsc-' + str(ksp.getType())
+        if pctype is not None:
+            txt += ' with ' + str(pctype) + ' preconditioner.'
+        print txt
 
-_b = PETSc.Vec().createWithArray(b, comm=PETSc.COMM_SELF)
-_x = PETSc.Vec().createWithArray(x0, comm=PETSc.COMM_SELF)
+        n,m = A.getSize()
+        x0 = np.zeros(n)
 
-ksp.rtol = tol_petsc
-ksp.max_it = maxiter_petsc
-ksp.setConvergenceHistory()
+        _b = PETSc.Vec().createWithArray(b, comm=PETSc.COMM_SELF)
+        _x = PETSc.Vec().createWithArray(x0, comm=PETSc.COMM_SELF)
 
-# Solve!
-t_start = time.time()
-try:
-    ksp.solve(_b, _x)
-except:
-    print "PETCs-" + str(ksp.getType())+" Couldn't converge"
+        ksp.rtol = tol_petsc
+        ksp.max_it = maxiter_petsc
+        ksp.setConvergenceHistory()
 
-t_end = time.time()
-elapsed = t_end - t_start
+        # Solve!
+        t_start = time.time()
+        try:
+            ksp.solve(_b, _x)
+        except:
+            print "PETCs-" + str(ksp.getType())+" Couldn't converge"
 
-r = _b.duplicate()
-u = _x.duplicate()
-ksp.buildSolution(u)
-ksp.buildResidual(u)
-try:
-    err = ksp.getConvergenceHistory()[-1]
-except:
-    err = None
+        t_end = time.time()
+        elapsed = t_end - t_start
 
-petsc_elapsed = 'Petsc-'+ str(ksp.getType())
-if pctype is not None:
-    petsc_elapsed += ' with ' + str(pctype) + ' PC'
-petsc_elapsed += " \t : " + str(elapsed)
+        r = _b.duplicate()
+        u = _x.duplicate()
+        ksp.buildSolution(u)
+        ksp.buildResidual(u)
+        try:
+            err = ksp.getConvergenceHistory()[-1]
+        except:
+            err = None
 
-petsc_txt = 'Petsc '+ str(ksp.getType())
-if pctype is not None:
-    petsc_txt += ' with ' + str(pctype) + ' PC '
-petsc_txt += ' Converges after ' + str(ksp.getIterationNumber()) + ' iterations with error : ' + str(err)
-x = _x.getArray()
-petsc_txt += "\n final error : "+ str(np.linalg.norm(b-A_scipy * x))
+        petsc_elapsed = 'Petsc-'+ str(ksp.getType())
+        if pctype is not None:
+            petsc_elapsed += ' with ' + str(pctype) + ' PC'
+        petsc_elapsed += " \t : " + str(elapsed)
 
-if ksptype == PETSc.KSP.Type.CG:
-    petsc_cg_tol = err
+        petsc_txt = 'Petsc '+ str(ksp.getType())
+        if pctype is not None:
+            petsc_txt += ' with ' + str(pctype) + ' PC '
+        petsc_txt += ' Converges after ' + str(ksp.getIterationNumber()) + ' iterations with error : ' + str(err)
+        x = _x.getArray()
+        petsc_txt += "\n final error : "+ str(np.linalg.norm(b-A_scipy * x))
 
-print "Elapsed time ", petsc_elapsed
-print petsc_txt
+        if ksptype == PETSc.KSP.Type.CG:
+            petsc_cg_tol = err
 
-PDE.free()
+        print "Elapsed time ", petsc_elapsed
+        print petsc_txt
+
+        PDE.free()

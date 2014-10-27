@@ -1,3 +1,7 @@
+# -*- coding: UTF-8 -*-
+#! /usr/bin/python
+from pigasus.utils.manager import context
+
 from scipy.sparse.linalg import cg, cgs, bicg, bicgstab, gmres, splu, spsolve
 from pigasus.gallery.poisson import poisson
 from caid.cad_geometry import square as domain
@@ -68,33 +72,35 @@ else:
     pass
 # ...
 
-PDE = poisson(geometry=geo, bc_dirichlet=bc_dirichlet, bc_neumann=bc_neumann,
-              AllDirichlet=AllDirichlet, metric=Metric)
-PDE.assembly()
-PDE.solve()
+with context():
 
-# getting scipy matrix
-A = PDE.system.get()
+    PDE = poisson(geometry=geo, bc_dirichlet=bc_dirichlet, bc_neumann=bc_neumann,
+                  AllDirichlet=AllDirichlet, metric=Metric)
+    PDE.assembly()
+    PDE.solve()
 
-b = np.ones(PDE.size)
+    # getting scipy matrix
+    A = PDE.system.get()
 
-print "Using cg."
-x = cg(A, b, tol=tol, maxiter=maxiter)
+    b = np.ones(PDE.size)
 
-print "Using cgs."
-x = cgs(A, b, tol=tol, maxiter=maxiter)
+    print "Using cg."
+    x = cg(A, b, tol=tol, maxiter=maxiter)
 
-print "Using bicg."
-x = bicg(A, b, tol=tol, maxiter=maxiter)
+    print "Using cgs."
+    x = cgs(A, b, tol=tol, maxiter=maxiter)
 
-print "Using bicgstab."
-x = bicgstab(A, b, tol=tol, maxiter=maxiter)
+    print "Using bicg."
+    x = bicg(A, b, tol=tol, maxiter=maxiter)
 
-print "Using gmres."
-x = gmres(A, b, tol=tol, maxiter=maxiter)
+    print "Using bicgstab."
+    x = bicgstab(A, b, tol=tol, maxiter=maxiter)
 
-print "Using splu."
-op = splu(A.tocsc())
-x = op.solve(b)
+    print "Using gmres."
+    x = gmres(A, b, tol=tol, maxiter=maxiter)
 
-PDE.free()
+    print "Using splu."
+    op = splu(A.tocsc())
+    x = op.solve(b)
+
+    PDE.free()

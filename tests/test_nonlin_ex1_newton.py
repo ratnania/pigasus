@@ -1,4 +1,6 @@
+# -*- coding: UTF-8 -*-
 #! /usr/bin/python
+from pigasus.utils.manager import context
 
 # ...
 try:
@@ -54,42 +56,44 @@ def dF (U,x, y):
     return[-4 * exp(_U)]
 # ...
 
-PDE_newton = poisson_newton(  geometry=geo \
-                     , AllDirichlet=AllDirichlet )
+with context():
 
-print ">>> Solving using Newton <<<"
-# ...
-PDE = PDE_newton
-if PDE.Dirichlet:
-    U = PDE.unknown_dirichlet
-else:
-    U = PDE.unknown
-# ...
+    PDE_newton = poisson_newton(  geometry=geo \
+                         , AllDirichlet=AllDirichlet )
 
-# ...
-list_L2, list_H1 = PDE_newton.solve(F, dF, u0=None, maxiter=100, rtol=1.e-6, verbose=True)
-
-print "norm using Newton  ", PDE_newton.norm(exact=u_exact)
-
-# ...
-if PLOT:
-    fig = plt.figure()
-
-    plt.subplot(121, aspect='equal')
-    U.fast_plot() ; plt.colorbar(orientation='horizontal') ; plt.title('$u_h$')
-
-    # plot error evolution
-    plt.subplot(122)
-    plt.plot(list_L2, '-vb', label='$L^2$ norm')
-    plt.plot(list_H1, '-xr', label='$H^1$ norm')
-    plt.xlabel('N')
-    plt.semilogy()
-    plt.title('Norm evolution of $u^{n+1} - u^n$')
-    plt.legend()
+    print ">>> Solving using Newton <<<"
+    # ...
+    PDE = PDE_newton
+    if PDE.Dirichlet:
+        U = PDE.unknown_dirichlet
+    else:
+        U = PDE.unknown
     # ...
 
-    plt.savefig(filename.split('.py')[0]+'.png', format='png')
-    plt.clf()
-# ...
+    # ...
+    list_L2, list_H1 = PDE_newton.solve(F, dF, u0=None, maxiter=100, rtol=1.e-6, verbose=True)
 
-PDE.free()
+    print "norm using Newton  ", PDE_newton.norm(exact=u_exact)
+
+    # ...
+    if PLOT:
+        fig = plt.figure()
+
+        plt.subplot(121, aspect='equal')
+        U.fast_plot() ; plt.colorbar(orientation='horizontal') ; plt.title('$u_h$')
+
+        # plot error evolution
+        plt.subplot(122)
+        plt.plot(list_L2, '-vb', label='$L^2$ norm')
+        plt.plot(list_H1, '-xr', label='$H^1$ norm')
+        plt.xlabel('N')
+        plt.semilogy()
+        plt.title('Norm evolution of $u^{n+1} - u^n$')
+        plt.legend()
+        # ...
+
+        plt.savefig(filename.split('.py')[0]+'.png', format='png')
+        plt.clf()
+    # ...
+
+    PDE.free()

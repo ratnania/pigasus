@@ -1,4 +1,7 @@
+# -*- coding: UTF-8 -*-
 #! /usr/bin/python
+from pigasus.utils.manager import context
+
 # ...
 try:
     from matplotlib import pyplot as plt
@@ -275,81 +278,83 @@ tc['f'] = lambda x,y : [0.]
 tc['bc_neumann'] = bc_neumann
 # ...
 
-#    PDE_H = picard(geometry=geo_H, testcase=tc)
-#    PDE_h = picard(geometry=geo_h, testcase=tc)
-if withTwoGrids:
-    PDE_H = picard(geometry=geo_H, bc_neumann=bc_neumann)
-PDE_h = picard(geometry=geo_h, bc_neumann=bc_neumann)
+with context():
 
-# ...
-print ">>> Solving using Picard <<<"
-# ...
-if withTwoGrids:
-    if PDE_H.Dirichlet:
-        U_H = PDE_H.unknown_dirichlet
+    #    PDE_H = picard(geometry=geo_H, testcase=tc)
+    #    PDE_h = picard(geometry=geo_h, testcase=tc)
+    if withTwoGrids:
+        PDE_H = picard(geometry=geo_H, bc_neumann=bc_neumann)
+    PDE_h = picard(geometry=geo_h, bc_neumann=bc_neumann)
+
+    # ...
+    print ">>> Solving using Picard <<<"
+    # ...
+    if withTwoGrids:
+        if PDE_H.Dirichlet:
+            U_H = PDE_H.unknown_dirichlet
+        else:
+            U_H = PDE_H.unknown
+
+    if PDE_h.Dirichlet:
+        U_h = PDE_h.unknown_dirichlet
     else:
-        U_H = PDE_H.unknown
+        U_h = PDE_h.unknown
 
-if PDE_h.Dirichlet:
-    U_h = PDE_h.unknown_dirichlet
-else:
-    U_h = PDE_h.unknown
+    # ...
 
-# ...
+    # ...
+    c_rho = C0/C1
+    # ...
 
-# ...
-c_rho = C0/C1
-# ...
+    # ...
+    if withTwoGrids:
+        print "*****************************"
+        tb = time()
+        Errors_H, ErrorsH1_H = PDE_H.solve(  rho0, rho1, c_rho=None, u0=None \
+                    , maxiter=maxiter_H, rtol=rtol_H, rtol2=rtol2_h, verbose=verbose)
+        te = time()
+        print "Coarse solver converges after ", len(Errors_H) \
+                , " with final error ", Errors_H[-1] \
+                , " with final H1-error ", ErrorsH1_H[-1]
+        print "Elapsed time ", te-tb
+        print "*****************************"
 
-# ...
-if withTwoGrids:
+        PDE_H.transferSolution(geo_H, U_H, geo_h, U_h)
+        u0 = U_h.get()
+    else:
+        u0 = np.zeros(PDE_h.size)
+
     print "*****************************"
     tb = time()
-    Errors_H, ErrorsH1_H = PDE_H.solve(  rho0, rho1, c_rho=None, u0=None \
-                , maxiter=maxiter_H, rtol=rtol_H, rtol2=rtol2_h, verbose=verbose)
+    Errors_h, ErrorsH1_h = PDE_h.solve(  rho0, rho1, c_rho=None, u0=u0 \
+                , maxiter=maxiter_h, rtol=rtol_h, rtol2=rtol2_h, verbose=verbose)
     te = time()
-    print "Coarse solver converges after ", len(Errors_H) \
-            , " with final error ", Errors_H[-1] \
-            , " with final H1-error ", ErrorsH1_H[-1]
+    print "Monge-Ampere eq. converges after ", len(Errors_h) \
+            , " with final error ", Errors_h[-1] \
+            , " with final H1-error ", ErrorsH1_h[-1]
     print "Elapsed time ", te-tb
     print "*****************************"
 
-    PDE_H.transferSolution(geo_H, U_H, geo_h, U_h)
-    u0 = U_h.get()
-else:
-    u0 = np.zeros(PDE_h.size)
+    if withTwoGrids:
+        uH = U_H.get()
+    uh = U_h.get()
 
-print "*****************************"
-tb = time()
-Errors_h, ErrorsH1_h = PDE_h.solve(  rho0, rho1, c_rho=None, u0=u0 \
-            , maxiter=maxiter_h, rtol=rtol_h, rtol2=rtol2_h, verbose=verbose)
-te = time()
-print "Monge-Ampere eq. converges after ", len(Errors_h) \
-        , " with final error ", Errors_h[-1] \
-        , " with final H1-error ", ErrorsH1_h[-1]
-print "Elapsed time ", te-tb
-print "*****************************"
+    if withTwoGrids:
+        print "Error-coarse        ", np.abs(1.-PDE_H.norm(exact=PDE_H.Err_func))
+    print "Error-fine          ", np.abs(1.-PDE_h.norm(exact=PDE_h.Err_func))
 
-if withTwoGrids:
-    uH = U_H.get()
-uh = U_h.get()
+    if withTwoGrids:
+        U_H.set(uH)
+    U_h.set(uh)
+    # ...
 
-if withTwoGrids:
-    print "Error-coarse        ", np.abs(1.-PDE_H.norm(exact=PDE_H.Err_func))
-print "Error-fine          ", np.abs(1.-PDE_h.norm(exact=PDE_h.Err_func))
+    # ...
+    #    PDE_H.plotMesh(ntx=60, nty=60)
+    # ...
+    if PLOT:
+        PDE_h.plotMesh(ntx=60, nty=60)
+        plt.savefig(filename.split('.py')[0]+'.png', format='png')
+        plt.clf()
+    # ...
 
-if withTwoGrids:
-    U_H.set(uH)
-U_h.set(uh)
-# ...
-
-# ...
-#    PDE_H.plotMesh(ntx=60, nty=60)
-# ...
-if PLOT:
-    PDE_h.plotMesh(ntx=60, nty=60)
-    plt.savefig(filename.split('.py')[0]+'.png', format='png')
-    plt.clf()
-# ...
-
-np.savetxt("Errors.txt", np.asarray(Errors_h))
+    np.savetxt("Errors.txt", np.asarray(Errors_h))

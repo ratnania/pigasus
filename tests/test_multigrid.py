@@ -1,3 +1,7 @@
+# -*- coding: UTF-8 -*-
+#! /usr/bin/python
+from pigasus.utils.manager import context
+
 from pigasus.gallery.multigrid import *
 from pigasus.gallery.poisson import *
 from pigasus.utils.utils import hierarchical_geometries
@@ -81,19 +85,22 @@ else:
 
 # ...
 geo_h = list_geometry[-1]
-PDE = poisson(geometry=geo_h, bc_dirichlet=bc_dirichlet, bc_neumann=bc_neumann \
-              , AllDirichlet=AllDirichlet, Dirichlet=Dirichlet,metric=Metric)
-rhs = PDE.rhs
-# ...
 
-# ...
-MG = multigrid(PDE, list_geometry=list_geometry)
-PDE.assembly()
-# ...
+with context():
 
-# ...
-mg_residuals = MG.solve(rhs, verbose=True, accel=None)
-mg_residuals = MG.solve(rhs, verbose=True, accel='gmres')
-# ...
+    PDE = poisson(geometry=geo_h, bc_dirichlet=bc_dirichlet, bc_neumann=bc_neumann \
+                  , AllDirichlet=AllDirichlet, Dirichlet=Dirichlet,metric=Metric)
+    rhs = PDE.rhs
+    # ...
 
-PDE.free()
+    # ...
+    MG = multigrid(PDE, list_geometry=list_geometry)
+    PDE.assembly()
+    # ...
+
+    # ...
+    mg_residuals = MG.solve(rhs, verbose=True, accel=None)
+    mg_residuals = MG.solve(rhs, verbose=True, accel='gmres')
+    # ...
+
+    PDE.free()

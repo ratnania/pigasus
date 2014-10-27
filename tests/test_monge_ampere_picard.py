@@ -1,4 +1,6 @@
+# -*- coding: UTF-8 -*-
 #! /usr/bin/python
+from pigasus.utils.manager import context
 
 # ...
 try:
@@ -64,79 +66,80 @@ for data in geo.external_faces:
 # ...
 #-----------------------------------
 
-PDE = poisson_picard(  geometry=geo \
-                     , bc_dirichlet=bc_dirichlet)
+with context():
+    PDE = poisson_picard(  geometry=geo \
+                         , bc_dirichlet=bc_dirichlet)
 
-# ...
-print ">>> Solving using Picard <<<"
-# ...
-if PDE.Dirichlet:
-    U = PDE.unknown_dirichlet
-else:
-    U = PDE.unknown
-
-V = PDE.space
-V.nderiv_pts = 2
-PDE.W.nderiv_pts = 2
-# ...
-
-def func(U,x,y):
     # ...
-    D    = U.evaluate(nderiv=2, parametric=False)
+    print ">>> Solving using Picard <<<"
+    # ...
+    if PDE.Dirichlet:
+        U = PDE.unknown_dirichlet
+    else:
+        U = PDE.unknown
 
-    _U   = D[0,0,:]
-    Udx  = D[0,1,:]
-    Udy  = D[0,2,:]
-    Udxx = D[0,3,:]
-    Udxy = D[0,4,:]
-    Udyy = D[0,5,:]
+    V = PDE.space
+    V.nderiv_pts = 2
+    PDE.W.nderiv_pts = 2
+    # ...
 
-    f_values = f0(x,y)
-    _F = - np.sqrt ( Udxx**2 + Udyy**2 + 2 * Udxy**2 + 2 * f_values )
+    def func(U,x,y):
+        # ...
+        D    = U.evaluate(nderiv=2, parametric=False)
 
-    return [_F]
-# ...
-from pigasus.fem.utils import function
-F = function(func, fields=[U])
+        _U   = D[0,0,:]
+        Udx  = D[0,1,:]
+        Udy  = D[0,2,:]
+        Udxx = D[0,3,:]
+        Udxy = D[0,4,:]
+        Udyy = D[0,5,:]
 
-list_L2, list_H1 = PDE.solve(F, u0=None, maxiter=300, rtol=1.e-6, verbose=True)
+        f_values = f0(x,y)
+        _F = - np.sqrt ( Udxx**2 + Udyy**2 + 2 * Udxy**2 + 2 * f_values )
 
-u_exact = lambda x,y : [exp ( 0.5 * ( x**2 + y**2 ) )]
-print "norm using Picard  ", PDE.norm(exact=u_exact)
+        return [_F]
+    # ...
+    from pigasus.fem.utils import function
+    F = function(func, fields=[U])
 
-# ...
-if PLOT:
-    fig = plt.figure()
+    list_L2, list_H1 = PDE.solve(F, u0=None, maxiter=300, rtol=1.e-6, verbose=True)
 
-#    plt.subplot(121, aspect='equal')
-#    U.fast_plot() ; plt.colorbar(orientation='horizontal') ; plt.title('$u_h$')
-#
-#    # plot error evolution
-#    plt.subplot(122)
-#    plt.plot(list_L2, '-vb', label='$L^2$ norm')
-#    plt.plot(list_H1, '-xr', label='$H^1$ norm')
-#    plt.xlabel('N')
-#    plt.semilogy()
-#    plt.title('Norm evolution of $u^{n+1} - u^n$')
-#    plt.legend()
-#    # ...
-#
-#    plt.savefig(filename.split('.py')[0]+'.png', format='png')
-#    plt.clf()
-# ...
+    u_exact = lambda x,y : [exp ( 0.5 * ( x**2 + y**2 ) )]
+    print "norm using Picard  ", PDE.norm(exact=u_exact)
 
-    U = PDE.unknown_dirichlet
-    tx = np.linspace(0.,1.,100)
-    ty = np.linspace(0.,1.,200)
-    uh = U(tx,ty, patch_id=0)
-    nrb = geo[0]
-    P = nrb(u=tx,v=ty)
-    x = P[:,:,0]
-    y = P[:,:,1]
-#    u = exp ( 0.5 * ( x**2 + y**2 ) )
-    u = 0.
-    plt.contourf(x,y,u-uh)  ; plt.colorbar(); plt.title('$u-u_h$')
-    plt.savefig(filename.split('.py')[0]+'.png', format='png')
-    plt.clf()
+    # ...
+    if PLOT:
+        fig = plt.figure()
 
-PDE.free()
+    #    plt.subplot(121, aspect='equal')
+    #    U.fast_plot() ; plt.colorbar(orientation='horizontal') ; plt.title('$u_h$')
+    #
+    #    # plot error evolution
+    #    plt.subplot(122)
+    #    plt.plot(list_L2, '-vb', label='$L^2$ norm')
+    #    plt.plot(list_H1, '-xr', label='$H^1$ norm')
+    #    plt.xlabel('N')
+    #    plt.semilogy()
+    #    plt.title('Norm evolution of $u^{n+1} - u^n$')
+    #    plt.legend()
+    #    # ...
+    #
+    #    plt.savefig(filename.split('.py')[0]+'.png', format='png')
+    #    plt.clf()
+    # ...
+
+        U = PDE.unknown_dirichlet
+        tx = np.linspace(0.,1.,100)
+        ty = np.linspace(0.,1.,200)
+        uh = U(tx,ty, patch_id=0)
+        nrb = geo[0]
+        P = nrb(u=tx,v=ty)
+        x = P[:,:,0]
+        y = P[:,:,1]
+    #    u = exp ( 0.5 * ( x**2 + y**2 ) )
+        u = 0.
+        plt.contourf(x,y,u-uh)  ; plt.colorbar(); plt.title('$u-u_h$')
+        plt.savefig(filename.split('.py')[0]+'.png', format='png')
+        plt.clf()
+
+    PDE.free()

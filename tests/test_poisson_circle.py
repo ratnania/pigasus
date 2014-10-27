@@ -1,4 +1,6 @@
+# -*- coding: UTF-8 -*-
 #! /usr/bin/python
+from pigasus.utils.manager import context
 
 # ...
 try:
@@ -99,33 +101,35 @@ else:
     pass
 # ...
 
-PDE = poisson(geometry=geo, bc_dirichlet=bc_dirichlet, bc_neumann=bc_neumann,
-              AllDirichlet=AllDirichlet, Dirichlet=Dirichlet,metric=Metric)
+with context():
 
-# ...
+    PDE = poisson(geometry=geo, bc_dirichlet=bc_dirichlet, bc_neumann=bc_neumann,
+                  AllDirichlet=AllDirichlet, Dirichlet=Dirichlet,metric=Metric)
 
-PDE.assembly(f=f)
-PDE.solve()
-# ...
+    # ...
 
-# ...
-normU = PDE.norm(exact=u)
-print "norm U   = ", normU
-# ...
+    PDE.assembly(f=f)
+    PDE.solve()
+    # ...
 
-# ...
-if PDE.Dirichlet:
-    U = PDE.unknown_dirichlet
-else:
-    U = PDE.unknown
-U.export(filename.split('.py')[0]+".pfl")
-# ...
+    # ...
+    normU = PDE.norm(exact=u)
+    print "norm U   = ", normU
+    # ...
 
-# ...
-if PLOT:
-    PDE.plot()  ; plt.colorbar(); plt.title('$u_h$')
-    plt.savefig(filename.split('.py')[0]+'.png', format='png')
-    plt.clf()
-# ...
+    # ...
+    if PDE.Dirichlet:
+        U = PDE.unknown_dirichlet
+    else:
+        U = PDE.unknown
+    U.export(filename.split('.py')[0]+".pfl")
+    # ...
 
-PDE.free()
+    # ...
+    if PLOT:
+        PDE.plot()  ; plt.colorbar(); plt.title('$u_h$')
+        plt.savefig(filename.split('.py')[0]+'.png', format='png')
+        plt.clf()
+    # ...
+
+    PDE.free()

@@ -1,4 +1,6 @@
+# -*- coding: UTF-8 -*-
 #! /usr/bin/python
+from pigasus.utils.manager import context
 
 import sys
 import numpy as np
@@ -112,13 +114,14 @@ def testcase():
 from caid.cad_geometry import square as domain
 tc = testcase()
 geo = domain(n=[31,31],p=[2,2])
-PDE = basicPDE(geometry=geo, testcase=tc)
-# ...
+with context():
+    PDE = basicPDE(geometry=geo, testcase=tc)
+    # ...
 
-# ...
-PDE.assembly()
-PDE.solve()
-normU = PDE.norm()
-print "norm U = ", normU
-PDE.plot()  ; pl.show()
-# ...
+    # ...
+    PDE.assembly()
+    PDE.solve()
+    normU = PDE.norm()
+    print "norm U = ", normU
+    PDE.plot()  ; pl.show()
+    # ...

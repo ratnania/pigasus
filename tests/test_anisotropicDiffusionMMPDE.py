@@ -1,4 +1,6 @@
+# -*- coding: UTF-8 -*-
 #! /usr/bin/python
+from pigasus.utils.manager import context
 
 import sys
 import numpy as np
@@ -87,9 +89,9 @@ tc_I = testcase(eps, dt, alpha-1., m1, m2, s1, s2)
 # ...
 from caid.cad_geometry import square as domain
 geo = domain(n=[nx,ny],p=[px,px])
-execfile('../run_anisotropicDiffusionMMPDE.py')
-# ...
-
-# ...
-plt.savefig(filename.split('.py')[0]+'.png', format='png')
+#execfile('../run_anisotropicDiffusionMMPDE.py')
+## ...
+#
+## ...
+#plt.savefig(filename.split('.py')[0]+'.png', format='png')
 # ...
