@@ -18,6 +18,7 @@ from time import time
 import sys
 import inspect
 filename = inspect.getfile(inspect.currentframe()) # script filename (usually with path)
+sys.stdout = open(filename.split('.py')[0]+'.txt', 'w')
 
 # ... import picard from monge_ampere module
 from pigasus.utils.load import load
@@ -358,3 +359,7 @@ with context():
     # ...
 
     np.savetxt("Errors.txt", np.asarray(Errors_h))
+
+    if withTwoGrids:
+        PDE_H.free()
+    PDE_h.free()

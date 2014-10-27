@@ -447,6 +447,12 @@ class picardTwoGrids(object):
         self.PDE_h.Err_func(x,y)
     #-----------------------------------
 
+    #-----------------------------------
+    def free(self):
+        self.PDE_h.free()
+        self.PDE_H.free()
+    #-----------------------------------
+
 class testcase(object):
     def __init__(self, TEST):
         initTEST = getattr(self, 'initTEST%d' % TEST)

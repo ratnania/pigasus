@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import sys, os
 
+original_stdout = sys.stdout
+
 def main():
     import unittest
     from glob import glob
@@ -13,6 +15,7 @@ def main():
     testsuite = unittest.TestSuite()
     testloader = unittest.TestLoader()
     for testfile in testfiles:
+        sys.stdout = original_stdout
         print "======== ", testfile, " ========="
         filename = os.path.basename(testfile)
         testname = os.path.splitext(filename)[0]

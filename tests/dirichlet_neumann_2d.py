@@ -10,6 +10,10 @@ import caid.cad_geometry  as cg
 import matplotlib.pyplot    as pl
 import numpy                as np
 
+import inspect
+filename = inspect.getfile(inspect.currentframe()) # script filename (usually with path)
+sys.stdout = open(filename.split('.py')[0]+'.txt', 'w')
+
 # ...
 sin = np.sin ; cos = np.cos ; pi = np.pi
 # ...

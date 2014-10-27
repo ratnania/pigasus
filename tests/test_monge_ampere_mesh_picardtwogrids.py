@@ -18,6 +18,7 @@ from time import time
 import sys
 import inspect
 filename = inspect.getfile(inspect.currentframe()) # script filename (usually with path)
+sys.stdout = open(filename.split('.py')[0]+'.txt', 'w')
 
 # ... import picard from monge_ampere module
 from pigasus.utils.load import load
@@ -110,40 +111,40 @@ n_H = [7,7]
 nstage =  1
 #-----------------------------------
 
-
-# ...
-n_h = []
-for axis in range(0,2):
-    n = n_H[axis]
-    for i in range(0, nstage):
-        n = 2*n+1
-    n_h.append(n)
-
-print ">>>> coarse grid ", n_H, " with splines of degree ", p_H
-print ">>>> fine   grid ", n_h, " with splines of degree ", p_h
-
-geo_H = square(n=n_H, p=p_H)
-geo_h = square(n=n_h, p=p_h)
-# ...
-
-# ...
-# values of gradu.n at the boundary
-# ...
-def func_g(x,y):
-    return [x,y]
-# ...
-
-# ...
-# values of u at the boundary
-# ...
-bc_neumann={}
-bc_neumann [0,0] = func_g
-bc_neumann [0,1] = func_g
-bc_neumann [0,2] = func_g
-bc_neumann [0,3] = func_g
-# ...
-
 with context():
+
+    # ...
+    n_h = []
+    for axis in range(0,2):
+        n = n_H[axis]
+        for i in range(0, nstage):
+            n = 2*n+1
+        n_h.append(n)
+
+    print ">>>> coarse grid ", n_H, " with splines of degree ", p_H
+    print ">>>> fine   grid ", n_h, " with splines of degree ", p_h
+
+    geo_H = square(n=n_H, p=p_H)
+    geo_h = square(n=n_h, p=p_h)
+    # ...
+
+    # ...
+    # values of gradu.n at the boundary
+    # ...
+    def func_g(x,y):
+        return [x,y]
+    # ...
+
+    # ...
+    # values of u at the boundary
+    # ...
+    bc_neumann={}
+    bc_neumann [0,0] = func_g
+    bc_neumann [0,1] = func_g
+    bc_neumann [0,2] = func_g
+    bc_neumann [0,3] = func_g
+    # ...
+
 
     # ...
     PDE_h = picardTwoGrids(geometry=geo_h, geometry_H=geo_H, bc_neumann=bc_neumann)
@@ -166,3 +167,5 @@ with context():
     # ...
 
     np.savetxt("Errors.txt", np.asarray(Errors_h))
+
+    PDE_h.free()

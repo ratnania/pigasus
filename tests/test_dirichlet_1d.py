@@ -14,6 +14,7 @@ from pigasus.fem.basicPDE import *
 import sys
 import inspect
 filename = inspect.getfile(inspect.currentframe()) # script filename (usually with path)
+sys.stdout = open(filename.split('.py')[0]+'.txt', 'w')
 
 # ...
 sin = np.sin ; pi = np.pi

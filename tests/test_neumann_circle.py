@@ -14,6 +14,7 @@ from pigasus.gallery.poisson import *
 import sys
 import inspect
 filename = inspect.getfile(inspect.currentframe()) # script filename (usually with path)
+sys.stdout = open(filename.split('.py')[0]+'.txt', 'w')
 
 # ...
 sin = np.sin ; cos = np.cos ; pi = np.pi ; exp = np.exp ; sqrt = np.sqrt

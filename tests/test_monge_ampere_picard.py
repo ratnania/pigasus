@@ -15,6 +15,8 @@ from caid.cad_geometry import square
 import sys
 import inspect
 filename = inspect.getfile(inspect.currentframe()) # script filename (usually with path)
+sys.stdout = open(filename.split('.py')[0]+'.txt', 'w')
+
 from time import time
 
 exp = np.exp ; log = np.log ; sqrt = np.sqrt

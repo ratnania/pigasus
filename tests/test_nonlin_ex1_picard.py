@@ -15,6 +15,7 @@ from pigasus.gallery.poisson_nonlin import poisson_picard
 import sys
 import inspect
 filename = inspect.getfile(inspect.currentframe()) # script filename (usually with path)
+sys.stdout = open(filename.split('.py')[0]+'.txt', 'w')
 
 exp = np.exp ; log = np.log ; sqrt = np.sqrt
 
