@@ -1,0 +1,20 @@
+=======================================
+==                                   ==
+==       MG-standalone solve         ==
+==                                   ==
+=======================================
+mg elapsed time  :  0.00301885604858
+mg converges after  2  V-cycles with error :  8.23698614054e-12
+mg convergence factor: 0.000201956
+final error :  2.48468114916e-13
+=======================================
+=======================================
+==                                   ==
+==       MG-accelerated solve        ==
+==                                   ==
+=======================================
+mgaccel elapsed time  :  0.00995016098022
+mgaccel converges after  2  iterations with error :  1.94692459646e-12
+mgaccel convergence factor: 1.39532e-06
+final error :  2.48172240851e-13
+=======================================

@@ -1,0 +1,11 @@
+##########################################################################
+add_subdirectory(tools)
+add_subdirectory(tracelog)
+add_subdirectory(geometries)
+add_subdirectory(blackboxes)
+add_subdirectory(connectivities)
+add_subdirectory(grids)
+add_subdirectory(spm)
+add_subdirectory(fem)
+add_subdirectory(assembly)
+##########################################################################
