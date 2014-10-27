@@ -50,7 +50,7 @@ setup(name=NAME,
           url=URL,
           description=DESCR,
           license='LICENSE.txt',
-#          long_description=open('README.md').read(),
+          long_description=open('README.md').read(),
     packages=[  'pigasus' \
               , 'pigasus.fem' \
               , 'pigasus.gallery' \
