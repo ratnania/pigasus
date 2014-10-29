@@ -3,11 +3,11 @@
 
 import sys
 import numpy as np
-from pigasus.fem.basicPDE import *
+from pigasus.fem.basicPDE import multi_basicPDE
 
-__all__ = ['onestep']
+__all__ = ['reduced_mhd']
 
-class onestep(multi_basicPDE):
+class reduced_mhd(multi_basicPDE):
     """
     A multidimentional nonlinear Poisson class solver using Picard algorithm.
         >>> import caid.cad_geometry  as cg
@@ -35,7 +35,7 @@ class onestep(multi_basicPDE):
         """
 
         # ...
-        multi_basicPDE.__init__(self, *args, **kwargs)
+        parabolic.__init__(self, *args, **kwargs)
         # ...
 
     def solve(self, niter):
@@ -74,18 +74,18 @@ if __name__ == '__main__':
     # ...
 
     def testcase_line():
-        # ...
-        bc = {}
-
-        # ...
-        # values of u at the boundary
-        # ...
-        g1 = lambda x: 0.
-        g2 = lambda x: 0.
-
-        bc['list_faces'] = [[1,2]]
-        bc['list_g'] = [[g1, g2]]
-        # ...
+#        # ...
+#        bc = {}
+#
+#        # ...
+#        # values of u at the boundary
+#        # ...
+#        g1 = lambda x: 0.
+#        g2 = lambda x: 0.
+#
+#        bc['list_faces'] = [[1,2]]
+#        bc['list_g'] = [[g1, g2]]
+#        # ...
 
         kx = 2. * pi
         u = lambda x : [0.] # will be set for the implicit part
@@ -107,15 +107,16 @@ if __name__ == '__main__':
         Ae = lambda x : [-dt*(1.-alpha)*1.]
         Ai = lambda x : [dt*alpha*1.]
         # dictionaries for implicit and explicit parts
-        dicti = {}       ; dicte = {}
-        dicti['f'] = fi  ; dicte['f'] = fe
-        dicti['b'] = bi  ; dicte['b'] = be
-        #dicti['v'] = vi  ; dicte['v'] = ve
-        #dicti['tv'] = tvi ; dicte['tv'] = tve
-        dicti['A'] = Ai  ; dicte['A'] = Ae
-        dicti['u'] = u
+        tci = {}       ; tce = {}
+        tci['f'] = fi  ; tce['f'] = fe
+        tci['b'] = bi  ; tce['b'] = be
+        #tci['v'] = vi  ; tce['v'] = ve
+        #tci['tv'] = tvi ; tce['tv'] = tve
+        tci['A'] = Ai  ; tce['A'] = Ae
+        tci['u'] = u
+        tci['AllDirichlet'] = True ; tce['AllDirichlet'] = True
 
-        return bc, dicte, dicti
+        return tce, tci
 
     #-----------------------------------
     niter 	= 500
@@ -130,8 +131,8 @@ if __name__ == '__main__':
     from caid.cad_geometry import line
     geo1 = line(n=[nx], p=[px])
 
-    bc1, dicte1, dicti1 = testcase_line()
-    PDE1 = multi_basicPDE(geo1, dicte1, dicti1, bc=bc1)
+    tce1, tci1 = testcase_line()
+    PDE1 = multi_basicPDE(geo1, tce1, tci1)
     # ...
 
     # ...
