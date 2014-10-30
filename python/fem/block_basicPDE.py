@@ -5,6 +5,7 @@
 import numpy                as np
 from pigasus.fem.basicPDE import *
 from pigasus.utils.blockdata import *
+from scipy.sparse.linalg import cg
 
 # ...
 class block_basicPDE():
@@ -132,7 +133,67 @@ class block_basicPDE():
     def rhs(self):
         return self._rhs
 
+    #-----------------------------------
+    def solve(self, rhs=None):
+        """
+        solves the system assemblied after calling the assembly function.
+        The solution is therefor stored in self.U_V (Homogeneous Dirichlet bc)
+        or self.U_W (Dirichlet bc). The user can get it using the function get
 
+        rhs:
+           Can be either a list of field objects, a list of numpy arrays or a
+           numpy array.
+           If not given, self.rhs
+           will be used as rhs.
+        """
+#        from pigasus.utils.utils import process_diagnostics
+#        print ">> solve"
+#        process_diagnostics(30)
+        # ...
+        lpr_rhs = None
+        if rhs is None:
+            lpr_rhs = self.rhs.get()
+        else:
+            # ... TODO concatenation using is not optimal => use numpy
+            from common_obj import isNumpyArray, isField
+            if isNumpyArray(rhs[0]):
+                L = []
+                for F in rhs:
+                    L += list(F)
+                lpr_rhs = np.asarray(L)
+            if isField(rhs[0]):
+                L = []
+                for F in rhs:
+                    L += list(F.get())
+                lpr_rhs = np.asarray(L)
+            if isNumpyArray(rhs):
+                lpr_rhs = rhs
+        # ...
+
+        tol = 1.e-7
+        maxiter = 1000
+        A = self.system.get()
+        print A.shape, lpr_rhs.shape
+        X = cg(A, lpr_rhs, tol=tol, maxiter=maxiter)[0]
+
+#        print "###"
+#
+#        print "*****"
+#        print _b
+#        print "*****"
+#        print X
+#        print "*****"
+
+        ind_b = 0
+        for i in range(0, self.size[0]):
+            PDE = self._list_PDE[i][0]
+            if PDE is None:
+                PDE = self._list_PDE[0][i]
+            U = PDE.unknown
+            U.set(X[ind_b:ind_b+U.size])
+            ind_b += U.size
+        # ...
+    #-----------------------------------
 
 
 if __name__ == "__main__":
@@ -166,11 +227,19 @@ if __name__ == "__main__":
     PDEs = block_basicPDE(size, dict_testcases, geometry=geo)
     PDEs.assembly()
 
-    rhs = PDEs.rhs.get()
-    system = PDEs.system
-    matrix = system.get()
+#    rhs = PDEs.rhs.get()
+#    system = PDEs.system
+#    matrix = system.get()
+#
+#    Y = matrix.dot(rhs)
+#    print Y.shape
 
-    Y = matrix.dot(rhs)
-    print Y.shape
+    rhs = PDEs.rhs.get()
+    PDEs.solve(rhs)
+
+    for i in range(0, PDEs.size[0]):
+        PDE = PDEs._list_PDE[i][0]
+        print PDE.unknown.get()
+
 
     PDEs.free()
