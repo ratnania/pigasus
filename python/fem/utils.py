@@ -168,9 +168,12 @@ class function(object):
         self.func = func
         self.dim = self.space.dim
 #        print "========"
-#        print "dim ", self.dim
+#        print "dim    ", self.dim
+#        print "fields ", self.fields
 
     def __call__(self, xyz):
+#        print ">>>"
+#        print "__CALL__ with ", len(xyz), " arguments"
         arglist = []
         if self.fields is not None:
             for F in self.fields:
@@ -184,4 +187,5 @@ class function(object):
             arglist.append(x)
         f = asarray(self.func(*arglist))
         _f = asarray([x[:] - x[:] + u for u in f])
+#        print "<<<"
         return _f

@@ -355,8 +355,10 @@ class field(pigasusObject):
 
     def evaluate(self, patch_id=None, sites=None, elts=None, fmt=True, nderiv=0,
                  operator=None, parametric=False):
+#        print "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
         V   = self.space
         geo = V.geometry
+#        print geo
         G   = V.grids
 
         if operator == "grad":

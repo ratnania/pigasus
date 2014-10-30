@@ -223,29 +223,54 @@ class oper(pigasusObject):
         self.nderiv = 0
         return
 
-    def evalfunc(self, ai_patch, apr_points, elts):
+    def evalfunc(self, ai_patch, apr_points, elts=None):
         """
         Evaluation of the param-function over a given list of points
         """
-        # test if we are in the non linear case
-        if len(self.func_arguments) == 0:
-#                            print "classic"
-            if not self.paramevalfunc :
-                lpr_val = self._evalfunc_std(ai_patch, apr_points, elts)
-            else:
-                lpr_parampts = self.space.get_parametricPoints(ai_patch_id=ai_patch)
-                lpr_val = self._evalfunc_std(ai_patch, lpr_parampts, elts)
-#                            print "lpr_val.shape = ", lpr_val.shape
-#                            print "lpr_val = ", lpr_val
-        else:
-#            print "non classic"
-            lpr_val = self._evalfunc_generic(ai_patch,apr_points, elts)
-#                        list_matrices[li_matrix].append(lpr_val)
-#                            print "lpr_val = ", lpr_val
-#                            print "lpr_val.shape = ", lpr_val.shape
-#                        elapsed = (clock() - start)
-#                        print ("CPU time for evaluating Fields and Matrices is :" + str (elapsed))
-        return lpr_val
+        V = self.space
+
+        lpr_pts = V.get_points()
+        list_pts = []
+        for i in range(0, V.dim):
+            list_pts.append(lpr_pts[i,0,:])
+        lpr_pts = list_pts
+
+#        print "=============================="
+#        print "%%% patch-id ", V.currentPatchID
+#        print "%%% lpr_pts.shape ", len(lpr_pts)
+#        print "%%% id-space ", id(V)
+#        print "%%% id-field ", id(self)
+        values  = self.func(lpr_pts)
+#        print "%%% values.len ", len(values)
+#        print "%%% values.shape ", values.shape
+        return values
+#        pvalues = self.pfunc(V.get_sites())
+#        n,m = values.shape
+#        v = _np.zeros((1,m))
+#        for i in range(0,n):
+#            v += values[i,:] * pvalues[i,:]
+#
+#        return v
+
+#        # test if we are in the non linear case
+#        if len(self.func_arguments) == 0:
+##                            print "classic"
+#            if not self.paramevalfunc :
+#                lpr_val = self._evalfunc_std(ai_patch, apr_points, elts)
+#            else:
+#                lpr_parampts = self.space.get_parametricPoints(ai_patch_id=ai_patch)
+#                lpr_val = self._evalfunc_std(ai_patch, lpr_parampts, elts)
+##                            print "lpr_val.shape = ", lpr_val.shape
+##                            print "lpr_val = ", lpr_val
+#        else:
+##            print "non classic"
+#            lpr_val = self._evalfunc_generic(ai_patch,apr_points, elts)
+##                        list_matrices[li_matrix].append(lpr_val)
+##                            print "lpr_val = ", lpr_val
+##                            print "lpr_val.shape = ", lpr_val.shape
+##                        elapsed = (clock() - start)
+##                        print ("CPU time for evaluating Fields and Matrices is :" + str (elapsed))
+#        return lpr_val
 
     def _evalfunc_std(self, ai_patch, apr_points, elts=None):
         """
