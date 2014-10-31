@@ -89,7 +89,7 @@ def verification(a,b, list_G, list_F):
         R += kron(F,G)
         A += a[i]*G ; B += b[i]*F
     AoB = kron(A,B)
-    print "norm Error ", norm(AoB-R, 'fro')
+    print("norm Error ", norm(AoB-R, 'fro'))
 # ...
 
 # ...
@@ -107,8 +107,8 @@ x0 = np.random.random(2*s)
 #print "b ", b
 # ...
 
-print "============"
-print "Initial ", cost(x0)
+print("============")
+print("Initial ", cost(x0))
 a = x0[:s]
 b = x0[s:]
 verification(a,b, list_G, list_F)

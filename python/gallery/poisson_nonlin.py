@@ -4,7 +4,7 @@
 import sys
 import numpy as np
 from scipy.sparse.linalg import spsolve
-from poisson import *
+from .poisson import *
 from pigasus.fem.basicPDE import *
 from numpy import abs
 
@@ -131,10 +131,10 @@ class poisson_picard(poisson):
 
             i += 1
             if verbose:
-                print i, ": ","   |F(x)| = ", list_Err[-1],"   |DF(x)| = ", list_ErrH1[-1]
+                print(i, ": ","   |F(x)| = ", list_Err[-1],"   |DF(x)| = ", list_ErrH1[-1])
         if verbose:
             te = time()
-            print ">> Elapsed time ", te-tb
+            print(">> Elapsed time ", te-tb)
 
         list_Err   = np.asarray(list_Err[1:])
         list_ErrH1 = np.asarray(list_ErrH1[1:])
@@ -324,9 +324,9 @@ class poisson_newton(poisson):
 
             i += 1
             if verbose:
-                print i, ": ","   |F(x)| = ", list_Err[-1],"   |DF(x)| = ", list_ErrH1[-1]
+                print(i, ": ","   |F(x)| = ", list_Err[-1],"   |DF(x)| = ", list_ErrH1[-1])
         te = time()
-        print ">> Elapsed time ", te-tb
+        print(">> Elapsed time ", te-tb)
 
         list_Err   = np.asarray(list_Err[1:])
         list_ErrH1 = np.asarray(list_ErrH1[1:])
@@ -364,7 +364,7 @@ if __name__ == '__main__':
 
 
     # ...
-    print ">>> Solving using Picard <<<"
+    print(">>> Solving using Picard <<<")
     # ...
     PDE = PDE_picard
     if PDE.Dirichlet:
@@ -374,7 +374,7 @@ if __name__ == '__main__':
     # ...
     PDE_picard.solve(F, u0=None, maxiter=100, rtol=1.e-6, verbose=True)
 
-    print ">>> Solving using Newton <<<"
+    print(">>> Solving using Newton <<<")
     # ...
     PDE = PDE_newton
     if PDE.Dirichlet:
@@ -384,6 +384,6 @@ if __name__ == '__main__':
     # ...
     PDE_newton.solve(F, dF, u0=None, maxiter=100, rtol=1.e-6, verbose=True)
 
-    print "norm using Picard  ", PDE_picard.norm(exact=u_exact)
-    print "norm using Newton  ", PDE_newton.norm(exact=u_exact)
+    print("norm using Picard  ", PDE_picard.norm(exact=u_exact))
+    print("norm using Newton  ", PDE_newton.norm(exact=u_exact))
     # ...

@@ -121,8 +121,8 @@ with context():
             n = 2*n+1
         n_h.append(n)
 
-    print ">>>> coarse grid ", n_H, " with splines of degree ", p_H
-    print ">>>> fine   grid ", n_h, " with splines of degree ", p_h
+    print(">>>> coarse grid ", n_H, " with splines of degree ", p_H)
+    print(">>>> fine   grid ", n_h, " with splines of degree ", p_h)
 
     geo_H = square(n=n_H, p=p_H)
     geo_h = square(n=n_h, p=p_h)

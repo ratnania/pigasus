@@ -210,7 +210,7 @@ if __name__ == '__main__':
         m = 1
         nnz = n
 
-        I = np.array(range(0,n))
+        I = np.array(list(range(0,n)))
         J = np.array([0]*nnz)
         V = randv(nnz)
 
@@ -301,11 +301,11 @@ if __name__ == '__main__':
     list_matrices += [matrices6]
     list_matrices += [matrices7]
     for i,matrices in enumerate(list_matrices):
-        print "============= Test "+ str(i+1) +" ==========="
+        print("============= Test "+ str(i+1) +" ===========")
 
         A = BlockMatrix(matrices)
         A.assembly()
 
         Adense = assembly_dense(A.matrices)
 
-        print "Assembling error = ", np.sum(A.todense()-Adense)
+        print("Assembling error = ", np.sum(A.todense()-Adense))

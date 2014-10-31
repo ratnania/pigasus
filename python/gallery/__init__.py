@@ -4,4 +4,4 @@
 
 """
 
-import poisson
+from . import poisson

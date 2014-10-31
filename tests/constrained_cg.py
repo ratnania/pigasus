@@ -12,8 +12,8 @@ A = mmread("A.mtx")
 mean = np.genfromtxt("mean.txt")
 
 if withpyAMG:
-    print "Conditionning number ", condest(A)
-print "Determinant          ", det(A.todense())
+    print("Conditionning number ", condest(A))
+print("Determinant          ", det(A.todense()))
 
 
 n = A.shape[0]
@@ -31,7 +31,7 @@ x = np.zeros(N)
 x1 = cg(A, b, tol=1.e-12)[0]
 x2 = cg(lin, b, tol=1.e-12)[0]
 
-print "|A*x1 - b|    ", np.linalg.norm(A*x1 - b)
-print "mean(x1)      ", np.dot(mean, x1)
-print "|L x2 - b|    ", np.linalg.norm(lin.matvec(x2) - b)
-print "mean(x2)      ", np.dot(mean, x2)
+print("|A*x1 - b|    ", np.linalg.norm(A*x1 - b))
+print("mean(x1)      ", np.dot(mean, x1))
+print("|L x2 - b|    ", np.linalg.norm(lin.matvec(x2) - b))
+print("mean(x2)      ", np.dot(mean, x2))

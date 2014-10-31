@@ -7,7 +7,7 @@
 __author__="root"
 __date__ ="$Dec 21, 2011 8:49:00 AM$"
 
-from connectivity import *
+from .connectivity import *
 
 class connectivity_3D(connectivity):
     def __init__(self, geometry, ai_ndof=1):

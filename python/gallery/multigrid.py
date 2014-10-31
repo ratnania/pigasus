@@ -28,8 +28,8 @@ class multigrid(object):
         self.initialized = False
 
         if list_geometry is None:
-            print "You must give list_geometry."
-            print "Pigasus will stop."
+            print("You must give list_geometry.")
+            print("Pigasus will stop.")
             sys.exit(0)
 
         # ...
@@ -53,13 +53,13 @@ class multigrid(object):
 
         # ...
         if verbose:
-            print "initializing MG "
+            print("initializing MG ")
         A_h = self.PDE_h.system
         self.MG.initialize(A_h, list_A=list_A \
               , list_DirFaces=list_DirFaces \
               , GalerkinCoarseGrid=GalerkinCoarseGrid)
         if verbose:
-            print "done."
+            print("done.")
         # ...
 
     def solve(self, rhs, verbose=False, maxiter=200, tol=1.e-10 \
@@ -85,16 +85,16 @@ class multigrid(object):
             mg_residuals= np.array(mg_residuals)/mg_residuals[0]
 
             if verbose:
-                print "======================================="
-                print "==                                   =="
-                print "==       MG-standalone solve         =="
-                print "==                                   =="
-                print "======================================="
-                print "mg elapsed time  : ", mg_elapsed
-                print "mg converges after ", self.MG.nloop, " V-cycles with error : ",mg_residuals[-1]
-                print "mg convergence factor: %g"%(mg_factor)
-                print "final error : ", np.linalg.norm(b-self.MG.A.dot(x))
-                print "======================================="
+                print("=======================================")
+                print("==                                   ==")
+                print("==       MG-standalone solve         ==")
+                print("==                                   ==")
+                print("=======================================")
+                print("mg elapsed time  : ", mg_elapsed)
+                print("mg converges after ", self.MG.nloop, " V-cycles with error : ",mg_residuals[-1])
+                print("mg convergence factor: %g"%(mg_factor))
+                print("final error : ", np.linalg.norm(b-self.MG.A.dot(x)))
+                print("=======================================")
         else:
             t_start = time.time()
             x = self.MG.solve(b, tol=tol, maxiter=maxiter \
@@ -110,16 +110,16 @@ class multigrid(object):
             mg_residuals= np.array(mg_residuals)/mg_residuals[0]
 
             if verbose:
-                print "======================================="
-                print "==                                   =="
-                print "==       MG-accelerated solve        =="
-                print "==                                   =="
-                print "======================================="
-                print "mgaccel elapsed time  : ", mgaccel_elapsed
-                print "mgaccel converges after ", len(mg_residuals), " iterations with error : ", mg_residuals[-1]
-                print "mgaccel convergence factor: %g"%(mgaccel_factor)
-                print "final error : ", np.linalg.norm(b-self.MG.A.dot(x))
-                print "======================================="
+                print("=======================================")
+                print("==                                   ==")
+                print("==       MG-accelerated solve        ==")
+                print("==                                   ==")
+                print("=======================================")
+                print("mgaccel elapsed time  : ", mgaccel_elapsed)
+                print("mgaccel converges after ", len(mg_residuals), " iterations with error : ", mg_residuals[-1])
+                print("mgaccel convergence factor: %g"%(mgaccel_factor))
+                print("final error : ", np.linalg.norm(b-self.MG.A.dot(x)))
+                print("=======================================")
 
         return mg_residuals
         # ...

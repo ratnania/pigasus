@@ -45,15 +45,15 @@ def get_bounds(nrb,ai_d):
     return [tmin,tmax]
 # -------------------------------------------
 
-from quadratures import *
-from pigasusObject import *
+from .quadratures import *
+from .pigasusObject import *
 class boundary_grid(pigasusObject):
     def __init__(self,ai_current_grids, ai_id, nrb \
     , api_k=None, tensorlevel=1, as_type="lobatto", faces=None):
         pigasusObject.__init__(self)
 
         if api_k is None:
-            print "boundary_grid : api_k must be given"
+            print("boundary_grid : api_k must be given")
             import sys
             sys.exit(2)
 
@@ -68,7 +68,7 @@ class boundary_grid(pigasusObject):
         self.dirmaxnpts = 0
 
         if faces is None:
-            self.faces = range(0, 2*self.dim)
+            self.faces = list(range(0, 2*self.dim))
         else:
             self.faces = faces
 
@@ -90,7 +90,7 @@ class boundary_grid(pigasusObject):
         if self.tensorlevel in [1]:
             self.gen_grid(api_k, as_type)
         else:
-            print "boundary_grid : Not yet implemented"
+            print("boundary_grid : Not yet implemented")
             import sys
             sys.exit(2)
 
@@ -138,7 +138,7 @@ class boundary_grid(pigasusObject):
         if self.dim==3:
             self.gen_grid_3D(api_k, as_type)
         if self.dim not in [1,2,3]:
-            print "gen_grid : dimension not done yet"
+            print("gen_grid : dimension not done yet")
 
     def save_grid(self):
         if self.dim==1:
@@ -148,10 +148,10 @@ class boundary_grid(pigasusObject):
         if self.dim==3:
             self.save_grid_3D()
         if self.dim not in [1,2,3]:
-            print "save_grid : dimension not done yet"
+            print("save_grid : dimension not done yet")
 
     def gen_grid_1D(self, ai_k, as_type):
-        print "boundary_grid : gen_grid_1D not done yet"
+        print("boundary_grid : gen_grid_1D not done yet")
 
     def gen_grid_2D(self, api_k, as_type):
 
@@ -194,10 +194,10 @@ class boundary_grid(pigasusObject):
         self.w  = list_w
 
     def gen_grid_3D(self, api_k, as_type):
-        print "boundary_grid : gen_grid_3D not done yet"
+        print("boundary_grid : gen_grid_3D not done yet")
 
     def save_grid_1D(self):
-        print "boundary_grid : save_grid_1D not done yet"
+        print("boundary_grid : save_grid_1D not done yet")
 
     def save_grid_2D(self):
         li_curelt = 0
@@ -247,11 +247,11 @@ class boundary_grid(pigasusObject):
 #        , self.n[li_direction], self.maxnptsx[li_direction]+1 )
 
     def save_grid_3D(self):
-        print "boundary_grid : save_grid_3D not done yet"
+        print("boundary_grid : save_grid_3D not done yet")
 
     def get_real_elts_1D(self):
         # default
-        print "boundary_grid : get_real_elts_1D : not done yet"
+        print("boundary_grid : get_real_elts_1D : not done yet")
 
     def get_real_elts_2D(self):
         # default
@@ -264,7 +264,7 @@ class boundary_grid(pigasusObject):
         li_un = len(np.unique(self.patch.knots[li_d]))
         ll_isperiodic = (li_un == li_n + li_p + 1)
         if ll_isperiodic :
-            print "get_real_elts_2D : is incompatible with periodic obundary condition"
+            print("get_real_elts_2D : is incompatible with periodic obundary condition")
         else:
             list_u = np.unique(self.patch.knots[li_d])
             li_nel = len(list_u)-1
@@ -277,7 +277,7 @@ class boundary_grid(pigasusObject):
         li_un = len(np.unique(self.patch.knots[li_d]))
         ll_isperiodic = (li_un == li_n + li_p + 1)
         if ll_isperiodic :
-            print "get_real_elts_2D : is incompatible with periodic obundary condition"
+            print("get_real_elts_2D : is incompatible with periodic obundary condition")
         else:
             list_u = np.unique(self.patch.knots[li_d])
             li_nel = len(list_u)-1
@@ -321,7 +321,7 @@ class boundary_grid(pigasusObject):
 
     def get_real_elts_3D(self):
         # default
-        print "boundary_grid : get_real_elts_3D : not done yet"
+        print("boundary_grid : get_real_elts_3D : not done yet")
 
     def get_real_elts(self):
         if self.dim==1:
@@ -331,7 +331,7 @@ class boundary_grid(pigasusObject):
         if self.dim==3:
             return self.get_real_elts_3D()
         if self.dim not in [1,2,3]:
-            print "boundary_grid : get_real_elts : dimension not done yet"
+            print("boundary_grid : get_real_elts : dimension not done yet")
 
 
 if __name__ == '__main__':

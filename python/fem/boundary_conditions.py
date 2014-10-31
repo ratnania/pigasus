@@ -37,7 +37,7 @@ def _indices_face_1D(nrb, ai_face, shift):
         list_ind.append([li_i])
         return list_ind
 
-    print "Error _indices_face_1D: you gave a wrong face id. Given face ", ai_face
+    print("Error _indices_face_1D: you gave a wrong face id. Given face ", ai_face)
 
     import sys
     sys.exit(1)
@@ -78,7 +78,7 @@ def _indices_face_2D(nrb, ai_face, shift):
             list_ind.append([li_i,li_j])
         return list_ind
 
-    print "Error _indices_face_2D: you gave a wrong face id. Given face ", ai_face
+    print("Error _indices_face_2D: you gave a wrong face id. Given face ", ai_face)
     import sys
     sys.exit(1)
 
@@ -138,7 +138,7 @@ def _indices_face_3D(nrb, ai_face, shift):
                 list_ind.append([li_i,li_j,li_k])
         return list_ind
 
-    print "Error : you gave a wrong face id"
+    print("Error : you gave a wrong face id")
     import sys
     sys.exit(1)
 
@@ -206,7 +206,7 @@ class boundary_conditions(object):
             pbase_id = pf_base[0] ; fbase_id = pf_base[1]
             p_id = pf[0] ; f_id = pf[1]
             if ( pbase_id == p_id ) and (fbase_id > f_id) :
-                print "Error indices for faces: fbase_id must be smaller than or equal to f_id"
+                print("Error indices for faces: fbase_id must be smaller than or equal to f_id")
                 import sys; sys.exit(0)
 
         self.list_duplicated_ind = []

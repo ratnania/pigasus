@@ -73,7 +73,7 @@ class adaptiveMeshMA(object):
         # ...
         if withTwoGrids:
             if verbose:
-                print "*****************************"
+                print("*****************************")
                 tb = time()
 
             Errors_H, ErrorsH1_H = PDE_H.solve(  rho0, rho1, c_rho=c_rho, u0=None \
@@ -81,11 +81,11 @@ class adaptiveMeshMA(object):
 
             if verbose:
                 te = time()
-                print "Coarse solver converges after ", len(Errors_H) \
+                print("Coarse solver converges after ", len(Errors_H) \
                         , " with final error ", Errors_H[-1] \
-                        , " with final H1-error ", ErrorsH1_H[-1]
-                print "Elapsed time ", te-tb
-                print "*****************************"
+                        , " with final H1-error ", ErrorsH1_H[-1])
+                print("Elapsed time ", te-tb)
+                print("*****************************")
 
             PDE_H.transferSolution(geo_H, U_H, geo_h, U_h)
             u0 = U_h.get()
@@ -95,7 +95,7 @@ class adaptiveMeshMA(object):
 
         # ...
         if verbose:
-            print "*****************************"
+            print("*****************************")
             tb = time()
 
         Errors_h, ErrorsH1_h = PDE_h.solve(  rho0, rho1, c_rho=None, u0=u0 \
@@ -103,11 +103,11 @@ class adaptiveMeshMA(object):
 
         if verbose:
             te = time()
-            print "Monge-Ampere eq. converges after ", len(Errors_h) \
+            print("Monge-Ampere eq. converges after ", len(Errors_h) \
                     , " with final error ", Errors_h[-1] \
-                    , " with final H1-error ", ErrorsH1_h[-1]
-            print "Elapsed time ", te-tb
-            print "*****************************"
+                    , " with final H1-error ", ErrorsH1_h[-1])
+            print("Elapsed time ", te-tb)
+            print("*****************************")
         # ...
 
         # ...
@@ -117,8 +117,8 @@ class adaptiveMeshMA(object):
 
         if verbose:
             if withTwoGrids:
-                print "Error-coarse        ", np.abs(1.-PDE_H.norm(exact=PDE_H.Err_func))
-            print "Error-fine          ", np.abs(1.-PDE_h.norm(exact=PDE_h.Err_func))
+                print("Error-coarse        ", np.abs(1.-PDE_H.norm(exact=PDE_H.Err_func)))
+            print("Error-fine          ", np.abs(1.-PDE_h.norm(exact=PDE_h.Err_func)))
 
         if withTwoGrids:
             U_H.set(uH)
@@ -154,7 +154,7 @@ class adaptiveMeshMA(object):
             srf = cad_nurbs(met.knots, C, weights= met.weights)
             gsrf = grad(srf)
             grad_nrb = cad_grad_nurbs(gsrf)
-            print "name ", grad_nrb.__class__.__name__
+            print("name ", grad_nrb.__class__.__name__)
             geo_f.append(grad_nrb)
             geo_f[-1].set_orientation(met.orientation)
             geo_f[-1].set_rational(met.rational)

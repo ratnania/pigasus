@@ -4,7 +4,7 @@
 import sys
 import numpy as np
 from scipy.sparse.linalg import spsolve
-from basicPDE import *
+from .basicPDE import *
 
 __all__ = ['basicPDE_picard']
 
@@ -127,7 +127,7 @@ class basicPDE_picard(basicPDE):
             err = np.linalg.norm(U_values-U_old_values)
             list_Err.append(err)
             if verbose:
-                print i, ": ","   |F(x)| = ", list_Err[-1]
+                print(i, ": ","   |F(x)| = ", list_Err[-1])
             i += 1
         list_Err = np.asarray(list_Err[1:])
     #-----------------------------------
@@ -168,7 +168,7 @@ if __name__ == '__main__':
                                  , testcase=tc )
 
     # ...
-    print ">>> Solving using Picard <<<"
+    print(">>> Solving using Picard <<<")
     # ...
     PDE = PDE_picard
     if PDE.Dirichlet:
@@ -178,5 +178,5 @@ if __name__ == '__main__':
     # ...
     PDE_picard.solve(F, u0=None, maxiter=100, rtol=1.e-6, verbose=True)
 
-    print "norm using Picard  ", PDE_picard.norm(exact=u_exact)
+    print("norm using Picard  ", PDE_picard.norm(exact=u_exact))
     # ...

@@ -257,7 +257,7 @@ def verification(list_Ax, list_Ay, X, F):
         _F += Ax * X * Ay.transpose()
 #    print "F   ", F
 #    print "_F  ", _F
-    print(np.allclose(F, _F))
+    print((np.allclose(F, _F)))
 #    assert(np.allclose(F, _F))
 # ...
 
@@ -508,7 +508,7 @@ def testcase_poisson(scale=False):
     # ...
 
     if scale:
-        print "MUST IMPROVED: WE HAVE TO MULTIPLY BY ONE MATRIX FOR ALL MATRICES"
+        print("MUST IMPROVED: WE HAVE TO MULTIPLY BY ONE MATRIX FOR ALL MATRICES")
         shift = 0
         list_Ay = []
         for A in list_A:
@@ -616,53 +616,53 @@ if __name__=="__main__":
     # ...
 
     # ...
-    print "============================="
-    print "  nx, ny  ", nx, ny
-    print "  size    ", S.shape
-    print "  nnz     ", S.nnz
-    print "============================="
+    print("=============================")
+    print("  nx, ny  ", nx, ny)
+    print("  size    ", S.shape)
+    print("  nnz     ", S.nnz)
+    print("=============================")
     # ...
 
 #    import sys ; sys.exit(0)
 
     # ...
-    print "============================="
-    print ">>> using  the global system"
+    print("=============================")
+    print(">>> using  the global system")
     y = F.transpose().reshape(nx*ny)
     tb = time()
     Xg,it = gmres(S, y)
     Xg = Xg.reshape((ny,nx))
     Xg = Xg.transpose()
     te = time()
-    print "Elapsed time ", te-tb
+    print("Elapsed time ", te-tb)
     # ...
 
     # ...
     if CIRCULANT:
-        print "============================="
-        print ">>> using circulant fast solver"
+        print("=============================")
+        print(">>> using circulant fast solver")
         list_eigenAy  = computeEigenValues(list_Ay)
         tb = time()
         X = csolve(list_Ax, list_eigenAy, F)
         te = time()
-        print "Elapsed time ", te-tb
-        print "Internal verification "
+        print("Elapsed time ", te-tb)
+        print("Internal verification ")
         verification(list_Ax, list_Ay, X, F)
     else:
-        print "============================="
-        print ">>> using circulant preconditioner solver"
+        print("=============================")
+        print(">>> using circulant preconditioner solver")
         tb = time()
         y = F.transpose().reshape(nx*ny)
         x,it = gmres(S, y, M=Precond)
         X = x.reshape((ny,nx))
         X = X.transpose()
         te = time()
-        print "Elapsed time ", te-tb
+        print("Elapsed time ", te-tb)
     # ...
 
     # ...
-    print "============================="
-    print "Is everything OK?"
-    print np.allclose(Xg,X, rtol=1e-07) \
-            , " with error ", np.linalg.norm(Xg-X)/np.linalg.norm(X)
+    print("=============================")
+    print("Is everything OK?")
+    print(np.allclose(Xg,X, rtol=1e-07) \
+            , " with error ", np.linalg.norm(Xg-X)/np.linalg.norm(X))
 

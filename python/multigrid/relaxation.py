@@ -255,7 +255,7 @@ def schwarz(A, x, b, iterations=1, subdomain=None, subdomain_ptr=None,
     elif sweep == 'backward':
         row_start,row_stop,row_step = subdomain_ptr.shape[0]-2,-1,-1
     elif sweep == 'symmetric':
-        for iter in xrange(iterations):
+        for iter in range(iterations):
             schwarz(A, x, b, iterations=1, subdomain=subdomain, subdomain_ptr=subdomain_ptr,
                 inv_subblock=inv_subblock, inv_subblock_ptr=inv_subblock_ptr, sweep='forward')
             schwarz(A, x, b, iterations=1, subdomain=subdomain, subdomain_ptr=subdomain_ptr,
@@ -266,7 +266,7 @@ def schwarz(A, x, b, iterations=1, subdomain=None, subdomain_ptr=None,
 
     ##
     # Call C code, need to make sure that subdomains are sorted and unique
-    for iter in xrange(iterations):
+    for iter in range(iterations):
         amg_core.overlapping_schwarz_csr(A.indptr, A.indices, A.data,
                                      x, b, inv_subblock, inv_subblock_ptr,
                                      subdomain, subdomain_ptr,
@@ -326,7 +326,7 @@ def gauss_seidel(A, x, b, iterations=1, sweep='forward'):
     elif sweep == 'backward':
         row_start,row_stop,row_step = len(x)-1,-1,-1
     elif sweep == 'symmetric':
-        for iter in xrange(iterations):
+        for iter in range(iterations):
             gauss_seidel(A, x, b, iterations=1, sweep='forward')
             gauss_seidel(A, x, b, iterations=1, sweep='backward')
         return
@@ -335,7 +335,7 @@ def gauss_seidel(A, x, b, iterations=1, sweep='forward'):
 
 
     if sparse.isspmatrix_csr(A):
-        for iter in xrange(iterations):
+        for iter in range(iterations):
             amg_core.gauss_seidel(A.indptr, A.indices, A.data, x, b,
                                         row_start, row_stop, row_step)
     else:
@@ -344,7 +344,7 @@ def gauss_seidel(A, x, b, iterations=1, sweep='forward'):
             raise ValueError('BSR blocks must be square')
         row_start = row_start / R
         row_stop  = row_stop  / R
-        for iter in xrange(iterations):
+        for iter in range(iterations):
             amg_core.bsr_gauss_seidel(A.indptr, A.indices, numpy.ravel(A.data),
                                         x, b, row_start, row_stop, row_step, R)
 
@@ -407,7 +407,7 @@ def jacobi(A, x, b, iterations=1, omega=1.0):
     [omega] = type_prep(A.dtype, [omega])
 
     if sparse.isspmatrix_csr(A):
-        for iter in xrange(iterations):
+        for iter in range(iterations):
             amg_core.jacobi(A.indptr, A.indices, A.data, x, b, temp,
                                row_start, row_stop, row_step, omega)
     else:
@@ -416,7 +416,7 @@ def jacobi(A, x, b, iterations=1, omega=1.0):
             raise ValueError('BSR blocks must be square')
         row_start = row_start / R
         row_stop  = row_stop  / R
-        for iter in xrange(iterations):
+        for iter in range(iterations):
             amg_core.bsr_jacobi(A.indptr, A.indices, numpy.ravel(A.data),
                      x, b, temp, row_start, row_stop, row_step, R, omega)
 
@@ -492,7 +492,7 @@ def block_jacobi(A, x, b, Dinv=None, blocksize=1, iterations=1, omega=1.0):
     # Create uniform type, and convert possibly complex scalars to length 1 arrays
     [omega] = type_prep(A.dtype, [omega])
 
-    for iter in xrange(iterations):
+    for iter in range(iterations):
         amg_core.block_jacobi(A.indptr, A.indices, numpy.ravel(A.data),
                               x, b, numpy.ravel(Dinv), temp,
                               row_start, row_stop, row_step,
@@ -563,7 +563,7 @@ def block_gauss_seidel(A, x, b, iterations=1, sweep='forward', blocksize=1, Dinv
     elif sweep == 'backward':
         row_start,row_stop,row_step = len(x)/blocksize-1,-1,-1
     elif sweep == 'symmetric':
-        for iter in xrange(iterations):
+        for iter in range(iterations):
             block_gauss_seidel(A, x, b, iterations=1, sweep='forward', blocksize=blocksize, Dinv=Dinv)
             block_gauss_seidel(A, x, b, iterations=1, sweep='backward',blocksize=blocksize, Dinv=Dinv)
         return
@@ -571,7 +571,7 @@ def block_gauss_seidel(A, x, b, iterations=1, sweep='forward', blocksize=1, Dinv
         raise ValueError("valid sweep directions are 'forward', 'backward', and 'symmetric'")
 
 
-    for iter in xrange(iterations):
+    for iter in range(iterations):
         amg_core.block_gauss_seidel(A.indptr, A.indices, numpy.ravel(A.data),
                                     x, b, numpy.ravel(Dinv),
                                     row_start, row_stop, row_step, blocksize)
@@ -711,14 +711,14 @@ def gauss_seidel_indexed(A, x, b,  indices, iterations=1, sweep='forward'):
     elif sweep == 'backward':
         row_start,row_stop,row_step = len(indices)-1,-1,-1
     elif sweep == 'symmetric':
-        for iter in xrange(iterations):
+        for iter in range(iterations):
             gauss_seidel_indexed(A, x, b, indices, iterations=1, sweep='forward')
             gauss_seidel_indexed(A, x, b, indices, iterations=1, sweep='backward')
         return
     else:
         raise ValueError('valid sweep directions are \'forward\', \'backward\', and \'symmetric\'')
 
-    for iter in xrange(iterations):
+    for iter in range(iterations):
         amg_core.gauss_seidel_indexed(A.indptr, A.indices, A.data,
                                             x, b, indices,
                                             row_start, row_stop, row_step)
@@ -872,14 +872,14 @@ def gauss_seidel_ne(A, x, b, iterations=1, sweep='forward', omega=1.0, Dinv=None
     elif sweep == 'backward':
         row_start,row_stop,row_step = len(x)-1,-1,-1
     elif sweep == 'symmetric':
-        for iter in xrange(iterations):
+        for iter in range(iterations):
             gauss_seidel_ne(A, x, b, iterations=1, sweep='forward', omega=omega, Dinv=Dinv)
             gauss_seidel_ne(A, x, b, iterations=1, sweep='backward', omega=omega, Dinv=Dinv)
         return
     else:
         raise ValueError("valid sweep directions are 'forward', 'backward', and 'symmetric'")
 
-    for i in xrange(iterations):
+    for i in range(iterations):
         amg_core.gauss_seidel_ne(A.indptr, A.indices, A.data,
                                            x, b, row_start,
                                            row_stop, row_step, Dinv, omega)
@@ -952,7 +952,7 @@ def gauss_seidel_nr(A, x, b, iterations=1, sweep='forward', omega=1.0, Dinv=None
     elif sweep == 'backward':
         col_start,col_stop,col_step = len(x)-1,-1,-1
     elif sweep == 'symmetric':
-        for iter in xrange(iterations):
+        for iter in range(iterations):
             gauss_seidel_nr(A, x, b, iterations=1, sweep='forward', omega=omega, Dinv=Dinv)
             gauss_seidel_nr(A, x, b, iterations=1, sweep='backward', omega=omega, Dinv=Dinv)
         return
@@ -963,7 +963,7 @@ def gauss_seidel_nr(A, x, b, iterations=1, sweep='forward', omega=1.0, Dinv=None
     # Calculate initial residual
     r = b - A*x
 
-    for i in xrange(iterations):
+    for i in range(iterations):
         amg_core.gauss_seidel_nr(A.indptr, A.indices, A.data,
                                            x, r, col_start,
                                            col_stop, col_step, Dinv, omega)

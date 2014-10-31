@@ -196,7 +196,7 @@ if __name__ == '__main__':
             assert(np.allclose(P,Q))
             assert(np.allclose(P,R))
 
-        print "test1D1: OK"
+        print("test1D1: OK")
     # ...
 
     # ...
@@ -225,7 +225,7 @@ if __name__ == '__main__':
         P = np.asarray(nrb.points[:,0])
 
         assert(np.allclose(P,R))
-        print "test1D2: OK"
+        print("test1D2: OK")
     # ...
 
     # ...
@@ -268,7 +268,7 @@ if __name__ == '__main__':
 
             assert(np.allclose(tV, Q))
 
-        print "test2D1: OK"
+        print("test2D1: OK")
     # ...
 
     # ...
@@ -311,7 +311,7 @@ if __name__ == '__main__':
 
             assert(np.allclose(P, Q))
 
-        print "test2D2: OK"
+        print("test2D2: OK")
     # ...
 
     # ...
@@ -332,14 +332,14 @@ if __name__ == '__main__':
         n1,n2   = nrb.shape
         p1,p2   = nrb.degree
 
-        print "DirFaces ", DirFaces
+        print("DirFaces ", DirFaces)
         H,[n,m]  = constructSurfaceMatrix(list_r1, list_r2, p1, p2, n1, n2, u1, u2, DirFaces=DirFaces)
-        print "shape ", H.shape
+        print("shape ", H.shape)
 
         Px      = nrb.points[:,:,0].copy()
         Py      = nrb.points[:,:,1].copy()
 
-        print "test2D3: OK"
+        print("test2D3: OK")
     # ...
 
     test1D1()

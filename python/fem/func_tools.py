@@ -35,7 +35,7 @@ def internal_func (func, ai_dim):
     elif ai_dim == 3:
         return lo_func_3D
     else :
-        print "func_tools : Not yet implemented"
+        print("func_tools : Not yet implemented")
         import sys; sys.exit(0)
 
 #def internal_arg_func (func, ai_dim):

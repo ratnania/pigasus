@@ -7,7 +7,7 @@
 __author__="abdelkaderratnani"
 __date__ ="$Jan 20, 2012 7:41:03 PM$"
 
-from boundary_conditions import *
+from .boundary_conditions import *
 class boundary_conditions_1D(boundary_conditions):
     def all_dirichlet(self, geometry, list_interior_ind=[[]]):
         """

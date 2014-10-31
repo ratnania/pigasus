@@ -66,7 +66,7 @@ with context():
     PDE_newton = poisson_newton(  geometry=geo \
                          , AllDirichlet=AllDirichlet )
 
-    print ">>> Solving using Newton <<<"
+    print(">>> Solving using Newton <<<")
     # ...
     PDE = PDE_newton
     if PDE.Dirichlet:
@@ -78,7 +78,7 @@ with context():
     # ...
     list_L2, list_H1 = PDE_newton.solve(F, dF, u0=None, maxiter=40, rtol=1.e-6, verbose=True)
 
-    print "norm using Newton  ", PDE_newton.norm(exact=u_exact)
+    print("norm using Newton  ", PDE_newton.norm(exact=u_exact))
 
     # ...
     if PLOT:

@@ -119,7 +119,7 @@ class curfit(object):
 
     def fit(self, xyzk, uk=None):
         if (not self.postAssembly) and (uk is None):
-            print "You must run updateMatrix before!"
+            print("You must run updateMatrix before!")
             return
 
         if (not self.postAssembly) and (uk is not None):
@@ -262,7 +262,7 @@ class curfit(object):
             fs          = None
             list_vals   = []
 #            print "Constraint ", constraint
-            for key, value in constraint.iteritems():
+            for key, value in constraint.items():
 #                print key
 #                print value
 

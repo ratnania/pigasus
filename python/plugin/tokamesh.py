@@ -16,7 +16,7 @@ try:
     import Pycluster
     CLUSTER = "Pycluster"
 except ImportError:
-    print "Pycluster could not be found. scipy.cluster.vq.kmeans2 will be used, even if it is deprecated. "
+    print("Pycluster could not be found. scipy.cluster.vq.kmeans2 will be used, even if it is deprecated. ")
     from scipy.cluster.vq import *
     CLUSTER = "scipy"
 # ...
@@ -87,7 +87,7 @@ def points_to_geo_approx(x, y, z=None, n=15, p=3, alpha=1.):
     # ...
 
     # ...
-    list_Q = zip(list_x, list_y)
+    list_Q = list(zip(list_x, list_y))
     uk = compute_uk(list_Q, method=method)
     U1       = []
     U1      += list(uk)
@@ -134,7 +134,7 @@ def points_to_geo_approx(x, y, z=None, n=15, p=3, alpha=1.):
 # ------------------------------------------------------
 def create_wall(R_wall, Z_wall):
     zz = np.zeros_like(R_wall)
-    list_P = zip(R_wall, Z_wall, zz)
+    list_P = list(zip(R_wall, Z_wall, zz))
     list_crv = []
     for P,Q in zip(list_P[:-1], list_P[1:]):
         points = np.zeros((2,2))
@@ -176,7 +176,7 @@ def multilevel_intersection(  c0, c1 \
         list_P, list_t, list_s, ierr = intersect_crv(c0, c1, npts=npts)
         if len(list_t) > 0:
             if verbose:
-                print ">>> level : ", level
+                print(">>> level : ", level)
             t_new = np.asarray(list_t)
             s_new = np.asarray(list_s)
             if len(t_new) == len(t_old):
@@ -192,7 +192,7 @@ def multilevel_intersection(  c0, c1 \
             level += 1
         else:
             if verbose:
-                print "--- notfound : ", i_notfound
+                print("--- notfound : ", i_notfound)
             i_notfound += 1
 
         npts *= npts
@@ -308,8 +308,8 @@ class fluxAtWall():
                         i_opt = i
                         j_opt = j
             if M_opt is None:
-                print "No optimal point has been found."
-                print M_opt, j_opt, i_opt
+                print("No optimal point has been found.")
+                print(M_opt, j_opt, i_opt)
                 raise
             return self.distances[j_opt,i_opt]
 #        if self._nt == 4:
@@ -494,7 +494,7 @@ def clustering(x,y,cost,ngroup=2):
         z = whiten(cost)
 
         # let scipy do its magic (k==3 groups)
-        res, labels = kmeans2(array(zip(x,y,z)),ngroup)
+        res, labels = kmeans2(array(list(zip(x,y,z))),ngroup)
 
     if CLUSTER == "Pycluster":
         points = np.zeros((x.shape[0], 2))
@@ -524,7 +524,7 @@ class container():
         # including the wall
         crv_wall = geo_wall[0]
 
-        list_id_flux = range(0, geo_flux.npatchs)
+        list_id_flux = list(range(0, geo_flux.npatchs))
 
         # ...
         prog = progress(len(list_id_flux), "Creating Fluxes objects")
@@ -564,26 +564,26 @@ class container():
     @property
     def n_xpoint(self):
         if self._n_xpoint is None:
-            print "Warning n_xpoint is None"
+            print("Warning n_xpoint is None")
 
         return self._n_xpoint
 
     @property
     def ngroup(self):
         if self._ngroup is None:
-            print "Warning ngroup is None"
+            print("Warning ngroup is None")
         return self._ngroup
 
     @property
     def dmin(self):
         if self._dmin is None:
-            print "Warning dmin is None"
+            print("Warning dmin is None")
         return self._dmin
 
     @property
     def dmax(self):
         if self._dmax is None:
-            print "Warning dmax is None"
+            print("Warning dmax is None")
         return self._dmax
 
     @property
@@ -603,9 +603,9 @@ class container():
                     , verbose=False):
 
         if verbose:
-            print " "
-            print "gen_centers called with ngroup=" \
-                    + str(ngroup) + " and n_intersection="+ str(n_intersection)
+            print(" ")
+            print("gen_centers called with ngroup=" \
+                    + str(ngroup) + " and n_intersection="+ str(n_intersection))
 
         if dmax and dmin:
             raise("dmax and dmin can not be True.")
@@ -621,18 +621,18 @@ class container():
 
         list_M     = [fw.center for fw in _list_fw]
         list_cost  = [fw.cost for fw in _list_fw]
-        x,y,z = zip(*list_M)
+        x,y,z = list(zip(*list_M))
         x = asarray(x)
         y = asarray(y)
         cost = np.asarray(list_cost)
 
         list_group = clustering(x,y,cost,ngroup=ngroup)
         if verbose:
-            print " "
-            print "---------------"
-            print "centers ", list_M
-            print "cost    ", cost
-            print "groups  ", list_group
+            print(" ")
+            print("---------------")
+            print("centers ", list_M)
+            print("cost    ", cost)
+            print("groups  ", list_group)
 
         # for each group we put the flux surface that minimize the intersection
         # distance
@@ -645,8 +645,8 @@ class container():
 
             list_dist = [fw.cost for fw in list_fw_group]
             if verbose:
-                print "\n>>> i_group ", i_group
-                print "list_dist     ", list_dist
+                print("\n>>> i_group ", i_group)
+                print("list_dist     ", list_dist)
 
             if dmin:
                 d_opt = np.min(np.asarray(list_dist))
@@ -656,8 +656,8 @@ class container():
                 i_opt = np.argmax(np.asarray(list_dist))
 
             if verbose:
-                print "d_opt ", d_opt
-                print "i_opt " , i_opt
+                print("d_opt ", d_opt)
+                print("i_opt " , i_opt)
 
             fw_opt = list_fw_group[i_opt]
             list_fw_opt.append(fw_opt)
@@ -679,7 +679,7 @@ class container():
         # including the wall
         crv_wall = geo_wall[0]
 
-        list_id_flux = range(0, geo_flux.npatchs)
+        list_id_flux = list(range(0, geo_flux.npatchs))
 
         # ...
         prog = progress(len(list_id_flux), "Computing intersections with the Wall")
@@ -689,7 +689,7 @@ class container():
 
             crv_flux = geo_flux[id_patch]
             if verbose:
-                print "\n<<< patch " + str(id_patch) + " >>>"
+                print("\n<<< patch " + str(id_patch) + " >>>")
 
             fw = fluxAtWall(crv_wall, crv_flux \
                             , nlevel=nlevel \
@@ -699,7 +699,7 @@ class container():
                             , geo_flux=geo_flux)
 
             if verbose:
-                print "n_intersection ", fw.n_intersect
+                print("n_intersection ", fw.n_intersect)
             fw.intersect()
             fw.compute_distance(eps=eps)
 

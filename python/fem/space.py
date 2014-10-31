@@ -10,14 +10,14 @@ __date__ ="$Jan 12, 2012 8:56:37 AM$"
 
 # ...
 import numpy as _np
-import common_obj as _com
-import constants as _cst
-from pigasusObject import *
-from ElementsManager import ElementsManager
-import connectivity_1D as con_1D
-import connectivity_2D as con_2D
-import connectivity_3D as con_3D
-import boundary_conditions as bc
+from . import common_obj as _com
+from . import constants as _cst
+from .pigasusObject import *
+from .ElementsManager import ElementsManager
+from . import connectivity_1D as con_1D
+from . import connectivity_2D as con_2D
+from . import connectivity_3D as con_3D
+from . import boundary_conditions as bc
 from numpy import zeros, asarray
 # ...
 
@@ -53,7 +53,7 @@ class space(pigasusObject):
             self.geometry = cg.cad_geometry(file=as_file)
         else :
             if geometry is None:
-                print "SERIOUS ERROR while constructing the space"
+                print("SERIOUS ERROR while constructing the space")
                 import sys
                 sys.exit(2)
             self.geometry = geometry
@@ -93,7 +93,7 @@ class space(pigasusObject):
         self.boundary_conditions = bc.boundary_conditions(self.geometry)
 
         if self.dim not in [1,2,3] :
-            print "Error space: dimension not implemented yet"
+            print("Error space: dimension not implemented yet")
 
         # setting the maxnen for the space
         self.maxnen = max (self.connectivity.list_nen)
@@ -251,7 +251,7 @@ class space(pigasusObject):
     , profile="volume", metric = None \
     , list_nodes=None, list_w=None, list_faces=None ):
         if space is None:
-            import grids as gr
+            from . import grids as gr
             if list_nodes is None:
                 if metric is not None:
                     self.metric_id = metric.id
@@ -299,7 +299,7 @@ class space(pigasusObject):
         APPEND = False
         # ...
 
-        from utils import evaluator
+        from .utils import evaluator
         X = evaluator(srf.dim, _sites, EVALUATE, APPEND, nx=nx, npts=npts,
                       fmt=True)
         return X
@@ -385,7 +385,7 @@ class space(pigasusObject):
             if lo_grid.dim == 2:
                 list_localnel = [lo_grid.nx, lo_grid.ny]
             else:
-                print "get_dir_nel : Not yet implemented"
+                print("get_dir_nel : Not yet implemented")
             list_nel.append(_np.array(list_localnel))
         return _np.array(list_nel)
 
@@ -393,7 +393,7 @@ class space(pigasusObject):
         nel = self.grids.list_grid[ai_patch].nel
         li_dim = self.dim
         if li_dim not in [1,2] :
-            print "to_meshGridFormat not yet implemented for dimension = ", li_dim
+            print("to_meshGridFormat not yet implemented for dimension = ", li_dim)
         if li_dim == 1 :
             return self._to_meshGridFormat_1D(ai_patch, apr_values)
         if li_dim == 2 :
@@ -498,7 +498,7 @@ class space(pigasusObject):
 
                 self.com.pyfem.set_space_weights(self.id,li_patch_id, li_d+1 \
                 , lpr_t, li_n)
-                print "lpr_t=", lpr_t
+                print("lpr_t=", lpr_t)
 #                list_t.append(lpr_t)
 #            if self.dim == 1 :
 #                lpr_weights = _np.array(list_t[0])

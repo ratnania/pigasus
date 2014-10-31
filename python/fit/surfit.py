@@ -164,7 +164,7 @@ class surfit(object):
 
     def fit(self, xyzk, uvk=None):
         if (not self.postAssembly) and (uvk is None):
-            print "You must run updateMatrix before!"
+            print("You must run updateMatrix before!")
             return
 
         if (not self.postAssembly) and (uvk is not None):
@@ -356,7 +356,7 @@ class surfit(object):
             ib          = 0
             ie          = -1
 #            print "Constraint ", constraint
-            for key, value in constraint.iteritems():
+            for key, value in constraint.items():
 #                print key
 #                print value
 

@@ -165,7 +165,7 @@ def __polyval__(alpha,beta,x):
     P[:,0] = 1
     P[:,1] = (x-alpha[0])*P[:,0]
 
-    for k in xrange(1,N):
+    for k in range(1,N):
          P[:,k+1] = (x-alpha[k])*P[:,k] - beta[k]*P[:,k-1]
 
     return P
@@ -183,7 +183,7 @@ def __jacobi__(N,a,b,x):
     P[:,0] = 1
     P[:,1] = (x-alpha[0])*P[:,0]
 
-    for k in xrange(1,N):
+    for k in range(1,N):
          P[:,k+1] = (x-alpha[k])*P[:,k] - beta[k]*P[:,k-1]
 
     return P

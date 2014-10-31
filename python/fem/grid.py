@@ -8,10 +8,10 @@ __author__="ARA"
 __all__ = ['grid']
 __date__ ="$Jan 13, 2012 11:48:35 AM$"
 
-import common_obj as _com
+from . import common_obj as _com
 import numpy as _np
-from pigasusObject import *
-from quadratures import *
+from .pigasusObject import *
+from .quadratures import *
 
 class grid(pigasusObject):
     def __init__(self,ai_current_grids, ai_id, ao_patch \
@@ -20,7 +20,7 @@ class grid(pigasusObject):
         pigasusObject.__init__(self)
 
         if api_k is None:
-            print "grid : api_k must be given"
+            print("grid : api_k must be given")
             import sys
             sys.exit(2)
 
@@ -55,7 +55,7 @@ class grid(pigasusObject):
                 self._gen_maxnpts(list_nodes=list_nodes)
                 self._gen_grid_from_list(list_nodes, list_w)
         else:
-            print "grid : Not yet implemented"
+            print("grid : Not yet implemented")
             import sys
             sys.exit(2)
 
@@ -68,7 +68,7 @@ class grid(pigasusObject):
 
     def _gen_nx(self):
         if self.tensorlevel == 0:
-            print "tensorlevel = 0 not yet imlpemented!!"
+            print("tensorlevel = 0 not yet imlpemented!!")
             import sys; sys.exit(0)
         else:
             li_d = 0
@@ -110,7 +110,7 @@ class grid(pigasusObject):
             self.maxnpts = 1
 
             if self.tensorlevel == 0:
-                print "tensorlevel = 0 not yet imlpemented!!"
+                print("tensorlevel = 0 not yet imlpemented!!")
                 import sys; sys.exit(0)
             else:
                 if self.tensorlevel == 1:
@@ -219,7 +219,7 @@ class grid(pigasusObject):
         if self.dim==3:
             self._save_grid_3D()
         if self.dim not in [1,2,3]:
-            print "save_grid : dimension not done yet"
+            print("save_grid : dimension not done yet")
 
     def _save_grid_1D(self):
         self.com.pyfem.pyfem_create_from_tensor_product_1d(self.current_grids \

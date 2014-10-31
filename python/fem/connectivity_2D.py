@@ -7,7 +7,7 @@
 __author__ = "ARA"
 __date__ = "$Dec 21, 2011 8:48:42 AM$"
 
-from connectivity import *
+from .connectivity import *
 from numpy import array
 
 class connectivity_2D(connectivity):

@@ -25,7 +25,7 @@ def main():
                         'test_anisotropicDiffusionMMPDE' \
                        ]:
             continue
-        print "======== ", testfile, " ========="
+        print("======== ", testfile, " =========")
         module = __import__(testname)
         cases = testloader.loadTestsFromModule(module)
         testsuite.addTests(cases)

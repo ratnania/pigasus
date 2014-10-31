@@ -10,7 +10,7 @@ __date__ ="$Feb 11, 2012 11:51:45 PM$"
 
 from scipy.sparse.linalg import splu
 import numpy as np
-from pigasusObject import *
+from .pigasusObject import *
 
 class fast_iga(pigasusObject):
     def __init__(self, matrices=[[]], useSPLU=True):
@@ -195,10 +195,10 @@ class fast_iga(pigasusObject):
                         if (li_P_V!=0) and (li_P_W!=0) and (li_P_X!=0):
                             lpr_out[li_P_W-1,li_P_X-1] = apr_values[li_P_V-1]
         else:
-            print "Error : you must verify spaces dimensions"
-            print "lpi_nV =", lpi_nV
-            print "lpi_nW =", lpi_nW
-            print "lpi_nX =", lpi_nX
+            print("Error : you must verify spaces dimensions")
+            print("lpi_nV =", lpi_nV)
+            print("lpi_nW =", lpi_nW)
+            print("lpi_nX =", lpi_nX)
 
         return lpr_out
 
@@ -234,10 +234,10 @@ class fast_iga(pigasusObject):
                         if (li_P_V!=0) and (li_P_W!=0) and (li_P_X!=0):
                             lpr_out[li_P_V-1] = apr_values[li_P_W-1,li_P_X-1]
         else:
-            print "Error : you must verify spaces dimensions"
-            print "lpi_nV =", lpi_nV
-            print "lpi_nW =", lpi_nW
-            print "lpi_nX =", lpi_nX
+            print("Error : you must verify spaces dimensions")
+            print("lpi_nV =", lpi_nV)
+            print("lpi_nW =", lpi_nW)
+            print("lpi_nX =", lpi_nX)
 
         return lpr_out
 
@@ -277,10 +277,10 @@ class fast_iga(pigasusObject):
                     if (li_P_V!=0) and (li_P_W!=0) and (li_P_X!=0):
                         lpr_out[li_P_W-1,li_P_X-1] = apr_values[li_P_V-1]
         else:
-            print "Error : you must verify spaces dimensions"
-            print "lpi_nV =", lpi_nV
-            print "lpi_nW =", lpi_nW
-            print "lpi_nX =", lpi_nX
+            print("Error : you must verify spaces dimensions")
+            print("lpi_nV =", lpi_nV)
+            print("lpi_nW =", lpi_nW)
+            print("lpi_nX =", lpi_nX)
         return lpr_out
 
     def comptensor_211(self, V, W, X, ai_patch, apr_values):
@@ -319,10 +319,10 @@ class fast_iga(pigasusObject):
                     if (li_P_V!=0) and (li_P_W!=0) and (li_P_X!=0):
                         lpr_out[li_P_V-1] = apr_values[li_P_W-1,li_P_X-1]
         else:
-            print "Error : you must verify spaces dimensions"
-            print "lpi_nV =", lpi_nV
-            print "lpi_nW =", lpi_nW
-            print "lpi_nX =", lpi_nX
+            print("Error : you must verify spaces dimensions")
+            print("lpi_nV =", lpi_nV)
+            print("lpi_nW =", lpi_nW)
+            print("lpi_nX =", lpi_nX)
         return lpr_out
 
 

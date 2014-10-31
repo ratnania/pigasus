@@ -4,7 +4,7 @@
 __author__="ARA"
 __all__ = ['pigasusObject']
 
-import common_obj as com
+from . import common_obj as com
 
 class pigasusObject(object):
     def __init__(self, *args, **kwargs):

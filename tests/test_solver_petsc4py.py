@@ -125,7 +125,7 @@ if with_PETSC:
         txt = 'Using Petsc-' + str(ksp.getType())
         if pctype is not None:
             txt += ' with ' + str(pctype) + ' preconditioner.'
-        print txt
+        print(txt)
 
         n,m = A.getSize()
         x0 = np.zeros(n)
@@ -142,7 +142,7 @@ if with_PETSC:
         try:
             ksp.solve(_b, _x)
         except:
-            print "PETCs-" + str(ksp.getType())+" Couldn't converge"
+            print("PETCs-" + str(ksp.getType())+" Couldn't converge")
 
         t_end = time.time()
         elapsed = t_end - t_start
@@ -171,7 +171,7 @@ if with_PETSC:
         if ksptype == PETSc.KSP.Type.CG:
             petsc_cg_tol = err
 
-        print "Elapsed time ", petsc_elapsed
-        print petsc_txt
+        print("Elapsed time ", petsc_elapsed)
+        print(petsc_txt)
 
         PDE.free()

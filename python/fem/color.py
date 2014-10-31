@@ -25,7 +25,7 @@ class myList:
     def n(self):
         return len(self._list)
 
-    def next(self):
+    def __next__(self):
         if self.n == 0:
             raise StopIteration
         self._currentElt += 1
@@ -46,7 +46,7 @@ class myList:
     def reset(self):
         self._list = []
 
-from pigasusObject import *
+from .pigasusObject import *
 class color(myList, pigasusObject):
     def __new__(typ, *args, **kwargs):
         obj = object.__new__(typ)
@@ -65,7 +65,7 @@ class color(myList, pigasusObject):
         if self.is_compatible(obj):
             myList.append(self,obj)
         else:
-            print "Warning: Incompatible object with the current color: will not append the current object."
+            print("Warning: Incompatible object with the current color: will not append the current object.")
 
     def is_compatible(self, obj):
         """
@@ -92,7 +92,7 @@ class color_operator(color):
         self.id = self.com.ncolors
         self.com.ncolors += 1
         self.com.colors.append(self)
-        print "### new color_operator \n"
+        print("### new color_operator \n")
 
     def is_compatible(self, oper):
         if oper is None:
@@ -108,7 +108,7 @@ class color_operator(color):
             return False
 
     def update(self):
-        from constants import COLOR_OPERATOR
+        from .constants import COLOR_OPERATOR
         color.update(self, COLOR_OPERATOR)
 
 class color_field(color):
@@ -125,7 +125,7 @@ class color_field(color):
         self.id = self.com.ncolors
         self.com.ncolors += 1
         self.com.colors.append(self)
-        print "### new color_field \n"
+        print("### new color_field \n")
 
     def is_compatible(self, F):
         if F is None:
@@ -140,13 +140,13 @@ class color_field(color):
             return False
 
     def update(self):
-        from constants import COLOR_FIELD
+        from .constants import COLOR_FIELD
         if self._type is not None:
             color.update(self, COLOR_FIELD, self._type)
         else:
             raise("Found a color_field with subtype equal to None.")
 
-import common_obj as com
+from . import common_obj as com
 class manager(color):
     def __init__(self, colors=[]):
         self.com = com.common_obj()
@@ -188,20 +188,20 @@ if __name__ == '__main__':
     # --------------------------------------
     # basic class test
     # --------------------------------------
-    print ">>> basic class test"
+    print(">>> basic class test")
     blue = color([2,22,222])
     blue.append(1)
     blue.append(11)
     blue.append(111)
-    print "blue.n = ", blue.n
+    print("blue.n = ", blue.n)
     for obj in blue:
-        print obj
+        print(obj)
     # --------------------------------------
 
     # --------------------------------------
     # operator class test
     # --------------------------------------
-    print ">>> operator class test"
+    print(">>> operator class test")
     from pigasus.gallery.poisson import poisson
     from pigasus.gallery.bilaplacian import bilaplacian
     from caid.cad_geometry import square
@@ -229,15 +229,15 @@ if __name__ == '__main__':
     green.append(S_2)
     green.append(S_3)
     green.append(S_4)
-    print "green.n = ", green.n
+    print("green.n = ", green.n)
     for obj in green:
-        print id(obj)
+        print(id(obj))
     # --------------------------------------
 
     # --------------------------------------
     # field class test
     # --------------------------------------
-    print ">>> field class test"
+    print(">>> field class test")
 
     F_1 = PDE_1.rhs
     F_2 = PDE_2.rhs
@@ -250,8 +250,8 @@ if __name__ == '__main__':
     white.append(U_3)
     white.append(U_4)
 
-    print "white.n = ", white.n
+    print("white.n = ", white.n)
     for obj in white:
-        print id(obj)
+        print(id(obj))
     # --------------------------------------
 

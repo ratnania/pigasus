@@ -393,7 +393,7 @@ class picardTwoGrids(object):
 
         # ...
         if verbose > 0:
-            print "*****************************"
+            print("*****************************")
             tb = time()
 
         Errors_H, ErrorsH1_H = PDE_H.solve(  rho0, rho1 \
@@ -403,11 +403,11 @@ class picardTwoGrids(object):
 
         if verbose > 0:
             te = time()
-            print "Coarse solver converges after ", len(Errors_H) \
+            print("Coarse solver converges after ", len(Errors_H) \
                     , " with final error ", Errors_H[-1] \
-                    , " with final H1-error ", ErrorsH1_H[-1]
-            print "Elapsed time ", te-tb
-            print "*****************************"
+                    , " with final H1-error ", ErrorsH1_H[-1])
+            print("Elapsed time ", te-tb)
+            print("*****************************")
         # ...
 
         # ...
@@ -417,7 +417,7 @@ class picardTwoGrids(object):
 
         # ...
         if verbose > 0:
-            print "*****************************"
+            print("*****************************")
             tb = time()
 
         Errors_h, ErrorsH1_h = PDE_h.solve(  rho0, rho1 \
@@ -428,11 +428,11 @@ class picardTwoGrids(object):
 
         if verbose > 0:
             te = time()
-            print "Monge-Ampere eq. converges after ", len(Errors_h) \
+            print("Monge-Ampere eq. converges after ", len(Errors_h) \
                     , " with final error ", Errors_h[-1] \
-                    , " with final H1-error ", ErrorsH1_h[-1]
-            print "Elapsed time ", te-tb
-            print "*****************************"
+                    , " with final H1-error ", ErrorsH1_h[-1])
+            print("Elapsed time ", te-tb)
+            print("*****************************")
         # ...
 
         return Errors_h, ErrorsH1_h, Errors_H, ErrorsH1_H

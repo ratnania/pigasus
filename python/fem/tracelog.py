@@ -5,7 +5,7 @@ __author__="ARA"
 __all__ = ['tracelog']
 __date__ ="$Mai 09, 2014 10:34:00 PM$"
 
-import common_obj as com
+from . import common_obj as com
 class tracelog:
     def __init__(self):
         self._com = com.common_obj()

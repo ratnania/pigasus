@@ -244,7 +244,7 @@ def coarse_matrix(pigasusObject):
         self.DirFaces   = DirFaces
 
         if self.npatchs > 1:
-            print "Multipatchs not yet implemented. STOP!"
+            print("Multipatchs not yet implemented. STOP!")
             import sys; sys.exit(0)
 
 #        for i in range(0, self.npatchs):
@@ -313,7 +313,7 @@ class splineRefMat(object):
             return M
 
         if self.dim ==3:
-            print "Not done yet"
+            print("Not done yet")
             import sys; sys.exit(1)
 
     # ...
@@ -465,7 +465,7 @@ if __name__ == '__main__':
             assert(np.allclose(P,Q))
             assert(np.allclose(P,R))
 
-        print "test1D1: OK"
+        print("test1D1: OK")
     # ...
 
     # ...
@@ -495,7 +495,7 @@ if __name__ == '__main__':
         P = np.asarray(nrb.points[:,0])
 
         assert(np.allclose(P,R))
-        print "test1D2: OK"
+        print("test1D2: OK")
     # ...
 
     # ...
@@ -539,7 +539,7 @@ if __name__ == '__main__':
 
             assert(np.allclose(tV, Q))
 
-        print "test2D1: OK"
+        print("test2D1: OK")
     # ...
 
     # ...
@@ -586,7 +586,7 @@ if __name__ == '__main__':
 
             assert(np.allclose(P, Q))
 
-        print "test2D2: OK"
+        print("test2D2: OK")
     # ...
 
     # ...
@@ -616,7 +616,7 @@ if __name__ == '__main__':
         assert(np.allclose(np.array(H1.shape), np.array((44,24))))
         assert(np.allclose(np.array(H2.shape), np.array((54,34))))
 
-        print "test2D3: OK"
+        print("test2D3: OK")
     # ...
 
     test1D1()

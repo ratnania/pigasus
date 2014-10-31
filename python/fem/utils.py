@@ -114,7 +114,7 @@ def evaluator(dim, sites, EVALUATE, APPEND, nx=None, npts=None, elts=None, fmt=T
 
 class assembler(object):
     def __init__(self, pdes=None, attributs={}):
-        import fem      as fem
+        from . import fem      as fem
         self.fem = fem.fem()
         self.pdes = pdes
 

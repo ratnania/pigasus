@@ -8,9 +8,9 @@ __author__="ARA"
 __all__ = ['oper']
 __date__ ="$Jan 11, 2012 3:32:21 PM$"
 
-from pigasusObject import *
-import common_obj as _com
-import constants as _cst
+from .pigasusObject import *
+from . import common_obj as _com
+from . import constants as _cst
 import numpy as _np
 ##############################################################################
 #
@@ -75,9 +75,9 @@ class oper(pigasusObject):
         """
         this sets the param-function of the current operator
         """
-        import func_tools as ft
+        from . import func_tools as ft
         if len(self.func_arguments) == 0 :
-            from utils import function
+            from .utils import function
             self.func = function(func, space=self.space)
         else:
             raise("Not used anymore. Dead code")
@@ -167,7 +167,7 @@ class oper(pigasusObject):
                 raise("Not yet implemented")
             return func
         else :
-            print"oper _set_default_func : type not implemented yet"
+            print("oper _set_default_func : type not implemented yet")
             import sys; sys.exit(1)
 
     def _set_nparam(self):
@@ -193,7 +193,7 @@ class oper(pigasusObject):
             if li_dim == 2 :
                 self.nparam = 9
             if li_dim not in [1,2] :
-                print "Matrix : _set_nparam , attention popur le moment on gere que le 1D et 2D"
+                print("Matrix : _set_nparam , attention popur le moment on gere que le 1D et 2D")
                 raise("Not yet implemented")
                 self.nparam = 3
             return
@@ -201,7 +201,7 @@ class oper(pigasusObject):
             self.nparam = 0
             return
         else :
-            print"MATRIX-_set_nparam : type not implemented yet"
+            print("MATRIX-_set_nparam : type not implemented yet")
             import sys; sys.exit(1)
 
     def _set_nderiv(self):
@@ -324,37 +324,37 @@ class oper(pigasusObject):
         pass
 
     def __radd__(self, other):
-        print "TODO"
+        print("TODO")
         pass
 #        return self.__add__(other)
 
     def __rmul__(self, other):
-        print "TODO"
+        print("TODO")
         pass
 #        return self.__mul__(other)
 
     def __pos__(self):
-        print "TODO"
+        print("TODO")
         pass
 #        self.__mul__(1.0)
 
     def __neg__(self):
-        print "TODO"
+        print("TODO")
         pass
 #        self.__mul__(-1.0)
 
     def __sub__(self, other):
-        print "TODO"
+        print("TODO")
         pass
 #        return self.__add__(-other)
 
     def __isub__(self, other):
-        print "TODO"
+        print("TODO")
         pass
 #        return self.__iadd__(-other)
 
     def __iadd__(self, other):
-        print "TODO"
+        print("TODO")
         pass
 #        if _com.isFloat(other):
 #            self.com.pyfem.matrix_add_scal (self.id, other, self.id)
@@ -365,7 +365,7 @@ class oper(pigasusObject):
 #        return self
 
     def __imul__(self, other):
-        print "TODO"
+        print("TODO")
         pass
 #        if _com.isFloat(other):
 #            self.com.pyfem.matrix_mult_scal (self.id, other, self.id)
@@ -376,7 +376,7 @@ class oper(pigasusObject):
 #        return self
 
     def __add__(self, other):
-        print "TODO"
+        print("TODO")
         pass
 #        if _com.isFloat(other):
 #            M = matrix.__new__(matrix)
@@ -392,7 +392,7 @@ class oper(pigasusObject):
 #        print "Not yet implemented in __add__"
 
     def __mul__(self, other):
-        print "TODO"
+        print("TODO")
         pass
 #        if _com.isNumpyArray(other):
 #            import field as fi
@@ -422,7 +422,7 @@ class oper(pigasusObject):
 ##############################################################################
 
 if __name__ == '__main__':
-    import fem      as fem
+    from . import fem      as fem
     fe = fem.fem()
 
-    print "done"
+    print("done")

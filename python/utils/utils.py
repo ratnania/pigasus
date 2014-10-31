@@ -27,11 +27,11 @@ def hierarchical_geometries(geo, nlevel, domain):
 def process_diagnostics(sleep=None):
     def wait(sleep):
         import time
-        print "Goes to sleep for "+str(sleep)+"s."
+        print("Goes to sleep for "+str(sleep)+"s.")
         time.sleep(sleep)  # Delay
     import os
     pid = os.getpid()
-    print pid
+    print(pid)
     os.system("ps -p "+str(pid)+" -o %cpu,%mem,cmd")
     if sleep is not None:
         wait(sleep)

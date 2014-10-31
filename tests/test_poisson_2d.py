@@ -110,7 +110,7 @@ with context():
 
     # ...
     normU = PDE.norm(exact=u)
-    print "norm U   = ", normU
+    print("norm U   = ", normU)
     # ...
 
     U = PDE.unknown

@@ -30,7 +30,7 @@ class EllipticPDEMG(pigasus):
         try:
             self.PDE_H = self.testcase['PDE_H']
         except:
-            print "PDE_H must be specified"
+            print("PDE_H must be specified")
             sys.exit(0)
         # ...
 
@@ -38,7 +38,7 @@ class EllipticPDEMG(pigasus):
         try:
             self.PDE_h = self.testcase['PDE_h']
         except:
-            print "PDE_h must be specified"
+            print("PDE_h must be specified")
             sys.exit(0)
         # ...
 
@@ -118,11 +118,11 @@ class EllipticPDEMG(pigasus):
         from scipy.sparse import csr_matrix
         dim = self.geometry_h.dim
         if dim ==1:
-            from splineRefMat import constructCurveMatrix as constructMatrix
+            from .splineRefMat import constructCurveMatrix as constructMatrix
         if dim ==2:
-            from splineRefMat import constructSurfaceMatrix as constructMatrix
+            from .splineRefMat import constructSurfaceMatrix as constructMatrix
         if dim ==3:
-            print "initInterpolation: Not yet implemented for 3D"
+            print("initInterpolation: Not yet implemented for 3D")
 
         nrb_H = self.geometry_H[0]
         nrb_h = self.geometry_h[0]

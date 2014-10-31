@@ -193,7 +193,7 @@ class multilevel_solver:
             try:
                 A_H = list_A[i].get()
             except:
-                print "Galerkin coarse grid operator has been initialized"
+                print("Galerkin coarse grid operator has been initialized")
                 A_H = coarse_matrix(geo_H, geo_h, DirFaces=self.DirFaces)
                 A_h = self.levels[ilvl-1].A.get()
                 A_H.construct(A_h)

@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import numpy as np
 import pigasus.fem.common_obj as _com
-from solver import *
+from .solver import *
 from scipy.sparse.linalg import spsolve as slv
 
 __author__ = ['ARA']
@@ -97,5 +97,5 @@ if __name__ == '__main__':
     size = PDE.V.size
     rhs = np.random.random(size)
     F = sl.solve(rhs)
-    print F.get()
+    print(F.get())
     # ...

@@ -8,9 +8,9 @@ __author__="root"
 __date__ ="$Mar 28, 2012 11:47:08 AM$"
 
 if __name__ == "__main__":
-    print "Hello World";
+    print("Hello World");
 
-from connectivity import *
+from .connectivity import *
 
 class connectivity_vect(connectivity):
     def __init__(self, spaces, ai_ndof):

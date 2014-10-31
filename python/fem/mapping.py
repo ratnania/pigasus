@@ -8,10 +8,10 @@ __author__="ARA"
 __date__ ="$Jan 12, 2012 9:32:06 AM$"
 __all__ = "mapping"
 
-import common_obj as _com
+from . import common_obj as _com
 import numpy as _np
-from common_obj import *
-from pigasusObject import *
+from .common_obj import *
+from .pigasusObject import *
 
 class mapping(pigasusObject):
     def __init__(self, geometry, tensor=True, al_storeddata=False):

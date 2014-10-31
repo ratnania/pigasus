@@ -8,11 +8,11 @@ __author__="ARA"
 __all__ = ['fem']
 __date__ ="$Jan 11, 2012 6:43:48 PM$"
 
-import constants as _cst
+from . import constants as _cst
 import numpy as _np
-from pigasusObject import *
+from .pigasusObject import *
 
-from common_obj import _singleton
+from .common_obj import _singleton
 @_singleton
 class fem(pigasusObject):
 

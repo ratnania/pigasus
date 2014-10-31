@@ -8,8 +8,8 @@ __author__="ARA"
 __all__ = ['grids']
 __date__ ="$Jan 13, 2012 4:22:57 PM$"
 
-import common_obj as _com
-from pigasusObject import *
+from . import common_obj as _com
+from .pigasusObject import *
 
 class grids(pigasusObject):
     def __init__(self, profile, api_k=None, ao_geometry=None    \
@@ -18,12 +18,12 @@ class grids(pigasusObject):
         pigasusObject.__init__(self)
 
         if api_k is None:
-            print "grids : api_k must be given"
+            print("grids : api_k must be given")
             import sys
             sys.exit(2)
 
         if ao_geometry is None:
-            print "grids : SERIOUS ERROR while constructing the grid"
+            print("grids : SERIOUS ERROR while constructing the grid")
             import sys
             sys.exit(2)
 
@@ -47,21 +47,21 @@ class grids(pigasusObject):
         for li_id in range(0,self.geometry.npatchs):
             lo_patch = self.geometry[li_id]
             if profile=="volume":
-                import grid as gr
+                from . import grid as gr
                 if list_nodes is None:
                     lo_grid = gr.grid(self.id, li_id, lo_patch, api_k, tensorlevel, as_type)
                 else:
                     lo_grid = gr.grid(self.id, li_id, lo_patch, api_k, tensorlevel, as_type \
                     , list_nodes = list_nodes[li_id], list_w = list_w[li_id])
             if profile=="boundary":
-                import boundary_grid as gr
+                from . import boundary_grid as gr
                 lo_grid = gr.boundary_grid(self.id, li_id, lo_patch, api_k,
                                            tensor, as_type, faces=list_faces[li_id])
             if profile=="surface":
-                print "surface grid not yet validated"
+                print("surface grid not yet validated")
                 import sys; sys.exit(0)
             if profile=="vertex":
-                print "vertex grid not yet validated"
+                print("vertex grid not yet validated")
                 import sys; sys.exit(0)
             self.list_grid.append(lo_grid)
 
@@ -105,7 +105,7 @@ class grids(pigasusObject):
 
     def get_sites(self, patch_id=None):
         if patch_id is None:
-            list_patchs = range(0, self.npatchs)
+            list_patchs = list(range(0, self.npatchs))
         else:
             list_patchs = [patch_id]
         list_x = []
@@ -139,15 +139,15 @@ class grids(pigasusObject):
 
     def print_grids(self, ai_id=None):
         if ai_id is not None:
-            print "******"
-            print "Grid id =", ai_id
-            print "******"
+            print("******")
+            print("Grid id =", ai_id)
+            print("******")
             self.com.pyfem.pyfem_print_grid(self.id, ai_id)
         else:
             for li_id in range(0,self.npatchs):
-                print "******"
-                print "Grid id =", li_id
-                print "******"
+                print("******")
+                print("Grid id =", li_id)
+                print("******")
                 self.com.pyfem.pyfem_print_grid(self.id, li_id)
 
     def save_grids(self):
@@ -168,7 +168,7 @@ class grids(pigasusObject):
 
     def set_patchs_toassembly(self, list_patchs):
         if list_patchs is None:
-            self._patchs_toassembly = range(0, self.npatchs)
+            self._patchs_toassembly = list(range(0, self.npatchs))
         else:
             self._patchs_toassembly = list_patchs
 

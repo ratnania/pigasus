@@ -123,5 +123,5 @@ if __name__ == '__main__':
     plt.savefig(filename.split('.py')[0]+'.png', format='png')
 
     normU = PDE.norm()
-    print "norm U   = ", normU
+    print("norm U   = ", normU)
     # ...

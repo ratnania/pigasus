@@ -175,7 +175,7 @@ def evalBasis2D(nrb, list_uk, list_vk \
         list_basis.append(C[0,:,0]) # le premier indice de C est la taille de uk
     if verbose:
         te = time()
-        print "elapsed time basis evaluation ", te-tb
+        print("elapsed time basis evaluation ", te-tb)
     return list_basis
 # ...
 
@@ -218,7 +218,7 @@ def addContributions2D(nrb, list_uk, list_vk \
 
     if verbose:
         te = time()
-        print "elapsed time discrete Mass ", te-tb
+        print("elapsed time discrete Mass ", te-tb)
     return rows, cols, data
 # ...
 

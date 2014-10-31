@@ -8,11 +8,11 @@ __author__="ARA"
 __all__ = ['field']
 __date__ ="$Jan 11, 2012 3:24:13 PM$"
 
-import common_obj as _com
-import constants as _cst
+from . import common_obj as _com
+from . import constants as _cst
 import numpy as _np
 from numpy import zeros, asarray, zeros_like
-from pigasusObject import *
+from .pigasusObject import *
 from caid.cad_geometry import cad_nurbs
 
 ##############################################################################
@@ -56,7 +56,7 @@ class field(pigasusObject):
         self.pfunc          = None
 
         if space is None:
-            print "field: you must specify the space"
+            print("field: you must specify the space")
             import sys; sys.exit(0)
 
         self.space = space
@@ -121,9 +121,9 @@ class field(pigasusObject):
         this sets the param-function of the current field
         """
         li_dim = self.space.dim
-        import func_tools as ft
+        from . import func_tools as ft
         if (self.operator in _cst.list_FIELD_OPERATORS) or (len(self.func_arguments) == 0) :
-            from utils import function
+            from .utils import function
             self.func = function(func, space=self.space)
         else:
             raise("Not used anymore. Dead code")
@@ -133,7 +133,7 @@ class field(pigasusObject):
         this sets the param-function of the current field
         """
         if (self.operator in _cst.list_FIELD_OPERATORS) or (len(self.func_arguments) == 0) :
-            from utils import function
+            from .utils import function
             self.pfunc = function(func, space=self.space)
         else:
             raise("Not used anymore. Dead code")
@@ -185,8 +185,8 @@ class field(pigasusObject):
             elif ai_operator in [_cst.GRAD, _cst.CURL]:
                 li_nparam = li_dim
             else:
-                print "field: nparam not yet defined"
-                print "for data : ", ai_type, ai_operator
+                print("field: nparam not yet defined")
+                print("for data : ", ai_type, ai_operator)
 
         if (ai_type == _cst.FIELD_OPERATOR):
 
@@ -403,7 +403,7 @@ class field(pigasusObject):
 #        print "======================="
 #        print "INPUT"
 
-        from utils import evaluator
+        from .utils import evaluator
         D = evaluator(nrb.dim, _sites, EVALUATE, APPEND, nx=nx, npts=npts,
                          elts=elts, fmt=fmt)
 #        print "OUTPUT"
@@ -464,7 +464,7 @@ class field(pigasusObject):
                 if ndim == 1:
                     xyzdu  = P[:,1,:]
                     Udu    = xyz_arrays[0,1,:]
-                    print "Physical evaluation not yet implemented"
+                    print("Physical evaluation not yet implemented")
 
                 if ndim == 2:
                     xyzdu  = P[:,1,:]
@@ -494,7 +494,7 @@ class field(pigasusObject):
                     Udv    = xyz_arrays[0,2,:]
                     Udw    = xyz_arrays[0,3,:]
 
-                    print "Physical evaluation not yet implemented"
+                    print("Physical evaluation not yet implemented")
             # ...
 
             # ...
@@ -659,7 +659,7 @@ class field(pigasusObject):
             lpr_P = _np.asarray(nrb.points).reshape(lpi_shape).transpose()
             X = lpr_P[0,:]
         else :
-            print "Warning fast_plot: not yet implemented with the exact evaluation points, ie average knots images"
+            print("Warning fast_plot: not yet implemented with the exact evaluation points, ie average knots images")
         # ...
 
         list_faces_dir = V.list_faces_dir
@@ -667,7 +667,7 @@ class field(pigasusObject):
         list_faces_duplicata  = V.list_faces_duplicata
 
         if len(list_faces_duplicated) > 0 :
-            print "Warning fast_plot: not yet implemented with duplicated faces boundary conditions"
+            print("Warning fast_plot: not yet implemented with duplicated faces boundary conditions")
 
         lpr_val = _np.zeros(lpi_n)
 
@@ -747,7 +747,7 @@ class field(pigasusObject):
             X = nrb.points[:,:,0]
             Y = nrb.points[:,:,1]
         else :
-            print "Warning fast_plot: not yet implemented with the exact evaluation points, ie average knots images"
+            print("Warning fast_plot: not yet implemented with the exact evaluation points, ie average knots images")
         # ...
 
         lpr_val = self.tomatrix(li_patch_id)
@@ -815,7 +815,7 @@ class field(pigasusObject):
         if coef :
             self.com.pyfem.pyfem_reset_field(self.id)
         if values :
-            print "Field reset : not implemente yet"
+            print("Field reset : not implemente yet")
 
     def save(self, filename):
         _np.savetxt(filename, self.get())
@@ -901,14 +901,14 @@ class field(pigasusObject):
         m = 1
         nnz = n
 
-        I = array(range(0,n))
+        I = array(list(range(0,n)))
         J = array([0]*nnz)
         V = self.get()
 
         return sparse.coo_matrix((V,(I,J)),shape=(n,m)).tocsr()
 
     def riseFromBoundary(self, patch_id, list_faces, g=None, list_g=None):
-        import bnd_function as bf
+        from . import bnd_function as bf
         V = self.space
         nrb = V.geometry[patch_id]
         size = asarray(nrb.shape).prod()

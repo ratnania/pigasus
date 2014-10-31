@@ -291,7 +291,7 @@ while (list_Err[-1] > rtol) and (i < maxiter):
     list_Err.append(err)
 
     if verbose:
-        print i, ": ","   |F(x)| = ", list_Err[-1]
+        print(i, ": ","   |F(x)| = ", list_Err[-1])
     i += 1
 # ...
 

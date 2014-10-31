@@ -8,10 +8,10 @@ __author__="ARA"
 __all__ = ['matrix']
 __date__ ="$Jan 11, 2012 3:32:21 PM$"
 
-from pigasusObject import *
+from .pigasusObject import *
 #from graph import *
-import common_obj as _com
-import constants as _cst
+from . import common_obj as _com
+from . import constants as _cst
 from numpy import zeros
 ##############################################################################
 #
@@ -255,7 +255,7 @@ class matrix(pigasusObject):
             x = self.com.pyfem.matrix_mult_array2(self.id, other, n )
             return x
         if _com.isField(other):
-            import field as fi
+            from . import field as fi
             F = fi.field.__new__(fi.field)
             n,m = self.shape
             F.set(self.com.pyfem.matrix_mult_array(self.id, other.id, m ))
@@ -273,7 +273,7 @@ class matrix(pigasusObject):
             M.set(other * self.get ())
             return M
 
-        print "Not yet implemented in __mul__"
+        print("Not yet implemented in __mul__")
 
 ##############################################################################
 
@@ -281,7 +281,7 @@ if __name__ == '__main__':
 #    import fem      as fem
 #    fe = fem.fem()
 
-    print "test Matrix class"
+    print("test Matrix class")
     M = matrix()
 
 #    fe.initialize()

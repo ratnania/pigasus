@@ -24,7 +24,7 @@ class common_obj(object):
             self.pyfem = co.pyfem
             self.initialize()
         except:
-            print "Error while importing pyfem. Pigasus will stop immediatly"
+            print("Error while importing pyfem. Pigasus will stop immediatly")
             raise
 
     def reset(self):

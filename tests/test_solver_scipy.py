@@ -84,22 +84,22 @@ with context():
 
     b = np.ones(PDE.size)
 
-    print "Using cg."
+    print("Using cg.")
     x = cg(A, b, tol=tol, maxiter=maxiter)
 
-    print "Using cgs."
+    print("Using cgs.")
     x = cgs(A, b, tol=tol, maxiter=maxiter)
 
-    print "Using bicg."
+    print("Using bicg.")
     x = bicg(A, b, tol=tol, maxiter=maxiter)
 
-    print "Using bicgstab."
+    print("Using bicgstab.")
     x = bicgstab(A, b, tol=tol, maxiter=maxiter)
 
-    print "Using gmres."
+    print("Using gmres.")
     x = gmres(A, b, tol=tol, maxiter=maxiter)
 
-    print "Using splu."
+    print("Using splu.")
     op = splu(A.tocsc())
     x = op.solve(b)
 

@@ -7,7 +7,7 @@
 __author__="root"
 __date__ ="$Dec 22, 2011 10:57:22 AM$"
 
-from boundary_conditions import *
+from .boundary_conditions import *
 class boundary_conditions_2D(boundary_conditions):
     def all_dirichlet(self, geometry, list_interior_ind=[[]]):
         """
@@ -47,4 +47,4 @@ class boundary_conditions_2D(boundary_conditions):
 
             self.list_Dirichlet_ind.append(list_Dirichlet_ind)
 
-            print "list_Dirichlet_ind=", list_Dirichlet_ind
+            print("list_Dirichlet_ind=", list_Dirichlet_ind)

@@ -6,16 +6,16 @@ import numpy as np
 from scipy.sparse.linalg import cg as ConjugateGradient
 from caid.cad_geometry import cad_geometry
 
-from constants import *
-from field import *
-from norm import *
-from grids import *
-from matrix import *
-from space import *
-from graph import *
-from oper import *
-from pigasusClass import pigasus
-from solver import *
+from .constants import *
+from .field import *
+from .norm import *
+from .grids import *
+from .matrix import *
+from .space import *
+from .graph import *
+from .oper import *
+from .pigasusClass import pigasus
+from .solver import *
 
 from numpy import zeros
 
@@ -190,7 +190,7 @@ class basicPDE(pigasus):
             try:
                 func_dw   = self.testcase['dw']
             except:
-                print "Warning: You should give the (div w) term. Pigasus is not yet smart enough!"
+                print("Warning: You should give the (div w) term. Pigasus is not yet smart enough!")
                 # ...
                 if self.dim == 1:
                     def func_dw(x):
@@ -351,9 +351,9 @@ class basicPDE(pigasus):
             self.list_DirFaces_V = list_DirFaces_V
 
             if verbose:
-                print "* DirFaces_V      ", self.list_DirFaces_V
-                print "* DuplicatedFaces ", list_DuplicatedFaces
-                print "* DuplicataFaces  ", list_DuplicataFaces
+                print("* DirFaces_V      ", self.list_DirFaces_V)
+                print("* DuplicatedFaces ", list_DuplicatedFaces)
+                print("* DuplicataFaces  ", list_DuplicataFaces)
 
             V = space(geometry=self.geometry)
             V.dirichlet(faces=list_DirFaces_V)
@@ -587,7 +587,7 @@ class basicPDE(pigasus):
                 #-----------------------------------
                 # boundary space declaration
                 #-----------------------------------
-                for key, func_g in self.bc_neumann.iteritems():
+                for key, func_g in self.bc_neumann.items():
                     patch_id    = int(key[0])
                     face_id     = int(key[1])
 
@@ -1129,7 +1129,7 @@ class basicPDE(pigasus):
                 nrb = self.geometry[i]
                 list_faces  = []
                 list_g      = []
-                for key, func in self.bc_dirichlet.iteritems():
+                for key, func in self.bc_dirichlet.items():
                     patch_id = key[0] ; face = key[1]
                     if i == patch_id:
                         list_faces.append(face) ; list_g.append(func)
@@ -1198,7 +1198,7 @@ class basicPDE(pigasus):
         """
         updates the term F_V and save the Neumann contribution into T_V
         """
-        from common_obj import isNumpyArray, isField
+        from .common_obj import isNumpyArray, isField
         if self.Neumann:
             if rhs is None:
                 lpr_rhs = self.F_V.get()
@@ -1299,7 +1299,7 @@ class basicPDE(pigasus):
             lpr_rhs = self.F_V.get()
 #            print "%"
         else:
-            from common_obj import isNumpyArray, isField
+            from .common_obj import isNumpyArray, isField
             if isNumpyArray(rhs):
                 lpr_rhs = rhs
             if isField(rhs):
@@ -1524,7 +1524,7 @@ if __name__ == '__main__':
     import caid.cad_geometry  as cg
     import pylab                as pl
     import numpy                as np
-    from utils import assembler
+    from .utils import assembler
 
     # ...
     sin = np.sin ; cos = np.cos ; exp = np.exp ; sqrt = np.sqrt ; pi = np.pi
@@ -1792,12 +1792,12 @@ if __name__ == '__main__':
 
     # ...
     normU1 = PDE1.norm()
-    print "norm U-1D   = ", normU1
+    print("norm U-1D   = ", normU1)
     # ...
 
     # ...
     normU2 = PDE2.norm()
-    print "norm U-2D   = ", normU2
+    print("norm U-2D   = ", normU2)
     # ...
 
 

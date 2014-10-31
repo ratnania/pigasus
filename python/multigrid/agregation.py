@@ -388,7 +388,7 @@ class agregation(object):
 #                raise ValueError('AMLI cycles require acceleration (accel) to be fgmres, or no acceleration')
 
             # Acceleration is being used
-            if isinstance(accel, basestring):
+            if isinstance(accel, str):
                 from pyamg import krylov
                 from scipy.sparse.linalg import isolve
 
@@ -498,11 +498,11 @@ class agregation(object):
     #-----------------------------------
     def constructInterpolationMatrix(self, geo_H, geo_h, list_DirFaces=None):
         if self.dim ==1:
-            from splineRefMat import constructCurveMatrix as constructMatrix
+            from .splineRefMat import constructCurveMatrix as constructMatrix
         if self.dim ==2:
-            from splineRefMat import constructSurfaceMatrix as constructMatrix
+            from .splineRefMat import constructSurfaceMatrix as constructMatrix
         if self.dim ==3:
-            print "initInterpolation: Not yet implemented for 3D"
+            print("initInterpolation: Not yet implemented for 3D")
 
         patch_id = 0
         nrb_H = geo_H[patch_id]

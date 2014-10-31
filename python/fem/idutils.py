@@ -87,7 +87,7 @@ def print_id_1D(id):
     n, = id.shape
     for i in range(0,n):
         id_[i] = id[i]
-    print id_.transpose()
+    print(id_.transpose())
 
 def print_id_2D(id):
     id_ = np.zeros_like(id)
@@ -95,8 +95,8 @@ def print_id_2D(id):
     for j in range(0,m):
         for i in range(0,n):
             id_[i,j] = id[i,-j-1]
-    print id_.transpose()
-    print id.transpose().reshape(id.size)
+    print(id_.transpose())
+    print(id.transpose().reshape(id.size))
 # ...
 
 # ...
@@ -119,20 +119,20 @@ def get_ij_1D(n, f):
 
 def get_ij_2D(n, f):
     if f==0:
-        list_i = range(0, n[0])
+        list_i = list(range(0, n[0]))
         list_j = [0] * n[0]
 
     if f==1:
         list_i = [0] * n[1]
-        list_j = range(0, n[1])
+        list_j = list(range(0, n[1]))
 
     if f==2:
-        list_i = range(0, n[0])
+        list_i = list(range(0, n[0]))
         list_j = [n[1] - 1] * n[0]
 
     if f==3:
         list_i = [n[0] - 1] * n[1]
-        list_j = range(0, n[1])
+        list_j = list(range(0, n[1]))
 
     return list_i, list_j
 
@@ -188,8 +188,8 @@ def updateDuplicated(n_m, n_s, list_id, p_m, f_m, p_s, f_s):
 def computeLocalID(list_n, DirFaces, DuplicatedFaces, DuplicataFaces):
     dim       = len(list_n[0])
     npatchs   = len(list_n)
-    AllFaces  = range(0,2 * dim)
-    AllPatchs = range(0,npatchs)
+    AllFaces  = list(range(0,2 * dim))
+    AllPatchs = list(range(0,npatchs))
 
     BasePatchs = [0]
     DuplicatedPatchs = list(np.unique(np.array([data[0] for data in DuplicatedFaces])))
@@ -259,12 +259,12 @@ if __name__ == '__main__':
         ID = computeGlobalID(list_id)
 
         if PRINT :
-            print "--------------  FINAL ------------------"
+            print("--------------  FINAL ------------------")
             for i,id in enumerate(list_id):
-                print "...... patch id : ", i, " ......"
+                print("...... patch id : ", i, " ......")
                 print_id(id)
-            print "--------------  ID ------------------"
+            print("--------------  ID ------------------")
             print(ID)
 
         t_end = time()
-        print "Elapsed time ", t_end - t_start
+        print("Elapsed time ", t_end - t_start)

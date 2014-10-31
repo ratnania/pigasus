@@ -29,7 +29,7 @@ class pigasus(object):
         try:
             self.fem = kwargs['fem']
         except:
-            import fem      as fem
+            from . import fem      as fem
             self.fem = fem.fem()
             self.fem.detail = 0
         # ...
@@ -71,19 +71,19 @@ class pigasus(object):
             F.reset()
 
     def initialize(self):
-        print "Not yet implemented"
+        print("Not yet implemented")
 
     def assembly(self):
-        print "Not yet implemented"
+        print("Not yet implemented")
 
     def solve(self):
-        print "Not yet implemented"
+        print("Not yet implemented")
 
     def plot(self):
-        print "Not yet implemented"
+        print("Not yet implemented")
 
     def norm(self):
-        print "Not yet implemented"
+        print("Not yet implemented")
 
     def __del__(self):
         self.fem.__del__()
@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
     # ------------------------------
     def test1():
-        import fem      as fem
+        from . import fem      as fem
         fe = fem.fem()
         PDE = pigasus(fem=fe)
     # ------------------------------
@@ -107,7 +107,7 @@ if __name__ == '__main__':
 
     # ------------------------------
     def test3():
-        import fem      as fem
+        from . import fem      as fem
         from caid.cad_geometry import line, circle, bilinear
         import caid.cad_geometry as cg
 
@@ -122,6 +122,6 @@ if __name__ == '__main__':
         PDE3 = pigasus(fem=fe, geometry=geo3)
     # ------------------------------
 
-    test1() ; print "test1- OK"
-    test2() ; print "test2- OK"
-    test3() ; print "test3- OK"
+    test1() ; print("test1- OK")
+    test2() ; print("test2- OK")
+    test3() ; print("test3- OK")

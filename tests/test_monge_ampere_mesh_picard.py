@@ -244,8 +244,8 @@ for axis in range(0,2):
     n_h.append(n)
 
 if withTwoGrids:
-    print ">>>> coarse grid ", n_H, " with splines of degree ", p_H
-print ">>>> fine   grid ", n_h, " with splines of degree ", p_h
+    print(">>>> coarse grid ", n_H, " with splines of degree ", p_H)
+print(">>>> fine   grid ", n_h, " with splines of degree ", p_h)
 
 if withTwoGrids:
     geo_H = square(n=n_H, p=p_H)
@@ -288,7 +288,7 @@ with context():
     PDE_h = picard(geometry=geo_h, bc_neumann=bc_neumann)
 
     # ...
-    print ">>> Solving using Picard <<<"
+    print(">>> Solving using Picard <<<")
     # ...
     if withTwoGrids:
         if PDE_H.Dirichlet:
@@ -309,40 +309,40 @@ with context():
 
     # ...
     if withTwoGrids:
-        print "*****************************"
+        print("*****************************")
         tb = time()
         Errors_H, ErrorsH1_H = PDE_H.solve(  rho0, rho1, c_rho=None, u0=None \
                     , maxiter=maxiter_H, rtol=rtol_H, rtol2=rtol2_h, verbose=verbose)
         te = time()
-        print "Coarse solver converges after ", len(Errors_H) \
+        print("Coarse solver converges after ", len(Errors_H) \
                 , " with final error ", Errors_H[-1] \
-                , " with final H1-error ", ErrorsH1_H[-1]
-        print "Elapsed time ", te-tb
-        print "*****************************"
+                , " with final H1-error ", ErrorsH1_H[-1])
+        print("Elapsed time ", te-tb)
+        print("*****************************")
 
         PDE_H.transferSolution(geo_H, U_H, geo_h, U_h)
         u0 = U_h.get()
     else:
         u0 = np.zeros(PDE_h.size)
 
-    print "*****************************"
+    print("*****************************")
     tb = time()
     Errors_h, ErrorsH1_h = PDE_h.solve(  rho0, rho1, c_rho=None, u0=u0 \
                 , maxiter=maxiter_h, rtol=rtol_h, rtol2=rtol2_h, verbose=verbose)
     te = time()
-    print "Monge-Ampere eq. converges after ", len(Errors_h) \
+    print("Monge-Ampere eq. converges after ", len(Errors_h) \
             , " with final error ", Errors_h[-1] \
-            , " with final H1-error ", ErrorsH1_h[-1]
-    print "Elapsed time ", te-tb
-    print "*****************************"
+            , " with final H1-error ", ErrorsH1_h[-1])
+    print("Elapsed time ", te-tb)
+    print("*****************************")
 
     if withTwoGrids:
         uH = U_H.get()
     uh = U_h.get()
 
     if withTwoGrids:
-        print "Error-coarse        ", np.abs(1.-PDE_H.norm(exact=PDE_H.Err_func))
-    print "Error-fine          ", np.abs(1.-PDE_h.norm(exact=PDE_h.Err_func))
+        print("Error-coarse        ", np.abs(1.-PDE_H.norm(exact=PDE_H.Err_func)))
+    print("Error-fine          ", np.abs(1.-PDE_h.norm(exact=PDE_h.Err_func)))
 
     if withTwoGrids:
         U_H.set(uH)

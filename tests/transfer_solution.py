@@ -47,5 +47,5 @@ geo_f.refine(list_t = [tx,ty], list_p=[px-px_in, py-py_in])
 u = geo_f[0].points[...,0]
 import pylab as pl
 pl.contourf(u) ; pl.colorbar() ; pl.show()
-print u.shape
+print(u.shape)
 np.savetxt("u_ini.txt", u)

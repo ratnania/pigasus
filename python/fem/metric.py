@@ -8,9 +8,9 @@ __author__="ARA"
 __all__ = ['metric']
 __date__ ="$Jul 24, 2012 4:22:12 PM$"
 
-import common_obj as _com
+from . import common_obj as _com
 import numpy as np
-from pigasusObject import *
+from .pigasusObject import *
 import sys
 from numpy import zeros, asarray
 
@@ -52,7 +52,7 @@ class metric(pigasusObject):
                 self.type = "cad_geometry"
             else:
                 self.type = "cad_mapping"
-                import mapping as mp
+                from . import mapping as mp
                 self.mapping = mp.mapping(geometry)
 
         # this must be the last thing to do
@@ -145,7 +145,7 @@ class metric(pigasusObject):
         APPEND = False
         # ...
 
-        from utils import evaluator
+        from .utils import evaluator
         lpr_pts = evaluator(srf.dim, sites, EVALUATE, APPEND, nx=nx, npts=k,
                       fmt=True)
 

@@ -28,9 +28,9 @@ NPTS = 200
 # ----------------------------
 
 # ----------------------------
-T       = range(-p,0) + range(0,N) + range(N,N+p+1)
+T       = list(range(-p,0)) + list(range(0,N)) + list(range(N,N+p+1))
 T       = np.asarray(T, dtype=np.double) / N
-Interv  = range(0,N+1)
+Interv  = list(range(0,N+1))
 Interv  = np.asarray(Interv, dtype=np.double) / N
 # ----------------------------
 
@@ -53,7 +53,7 @@ def genGrid(Interv, p, type="legendre"):
 def plotBasis():
     X = np.linspace(xb,xe,NPTS)
     M = assembleM(X, T, p, N)
-    list_i = range(0,N)
+    list_i = list(range(0,N))
     for i in list_i:
         B = M[:,i]
         plt.plot(X, B)

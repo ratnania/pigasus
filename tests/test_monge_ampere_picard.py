@@ -73,7 +73,7 @@ with context():
                          , bc_dirichlet=bc_dirichlet)
 
     # ...
-    print ">>> Solving using Picard <<<"
+    print(">>> Solving using Picard <<<")
     # ...
     if PDE.Dirichlet:
         U = PDE.unknown_dirichlet
@@ -107,7 +107,7 @@ with context():
     list_L2, list_H1 = PDE.solve(F, u0=None, maxiter=300, rtol=1.e-6, verbose=True)
 
     u_exact = lambda x,y : [exp ( 0.5 * ( x**2 + y**2 ) )]
-    print "norm using Picard  ", PDE.norm(exact=u_exact)
+    print("norm using Picard  ", PDE.norm(exact=u_exact))
 
     # ...
     if PLOT:

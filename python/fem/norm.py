@@ -8,10 +8,10 @@ __author__="ARA"
 __all__ = ['norm']
 __date__ ="$Feb 14, 2012 11:40:06 AM$"
 
-import common_obj as _com
-import constants as _cst
+from . import common_obj as _com
+from . import constants as _cst
 import numpy as _np
-from pigasusObject import *
+from .pigasusObject import *
 
 class norm(pigasusObject):
     def __init__ ( self, field = None, type = None, func = None, paramevalfunc = False, exact = None ):
@@ -35,7 +35,7 @@ class norm(pigasusObject):
 
         self._set_nparam()
 
-        from utils import function
+        from .utils import function
         if func is not None:
             self.func = function(func, space=self.space)
         else:
@@ -101,7 +101,7 @@ class norm(pigasusObject):
 
         li_dim = self.space.dim
         if li_dim not in [2]:
-            print "setEvalNorm: Not yet implemetend for the desired dimension"
+            print("setEvalNorm: Not yet implemetend for the desired dimension")
 
         lpi_shape = lpr_pts.shape[0:-1]
         lpr_val = _np.zeros((1,lpi_shape[0],lpi_shape[1]))
@@ -126,7 +126,7 @@ class norm(pigasusObject):
             self.nparam = li_dim**2
             return
         else :
-            print"NORM-_set_nparam : type not implemented yet"
+            print("NORM-_set_nparam : type not implemented yet")
             import sys; sys.exit(1)
 
     def evalfunc(self, ai_patch, apr_points, elts=None, type="param"):
@@ -169,10 +169,10 @@ class norm(pigasusObject):
             if li_dim == 3:
                 func = lambda x,y,z : [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
         else :
-            print"NORM-defaultFuncParam : type not implemented yet"
+            print("NORM-defaultFuncParam : type not implemented yet")
             import sys; sys.exit(1)
 
-        from utils import function
+        from .utils import function
         self.func = function(func, space=self.space)
 
     def defaultFuncExact(self):
@@ -187,7 +187,7 @@ class norm(pigasusObject):
         else :
             raise("type not implemented yet")
 
-        from utils import function
+        from .utils import function
         self.exact = function(exact, space=self.space)
 
 
@@ -195,5 +195,5 @@ class norm(pigasusObject):
         """
         this sets the param-function of the current field
         """
-        from utils import function
+        from .utils import function
         self.exact = function(exact, space=self.space)

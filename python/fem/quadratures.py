@@ -95,7 +95,7 @@ class quadratures:
             # ...
             # left
             # ...
-            import qd_radau as qr
+            from . import qd_radau as qr
             x, w = qr.radau_left(k)
             x = x[::-1] ; w = w[::-1]
             i = 0
@@ -124,7 +124,7 @@ class quadratures:
             # ...
             # right
             # ...
-            import qd_radau as qr
+            from . import qd_radau as qr
             x, w = qr.radau_right(k)
             x = x[::-1] ; w = w[::-1]
             i = N-2
@@ -142,11 +142,11 @@ class quadratures:
         if as_type == "legendre":
             x, w = self.gauss_legendre(k)
         if as_type == "radau_left":
-            import qd_radau as qr
+            from . import qd_radau as qr
             x, w = qr.radau_left(k)
             x = x[::-1] ; w = w[::-1]
         if as_type == "radau_right":
-            import qd_radau as qr
+            from . import qd_radau as qr
             x, w = qr.radau_right(k)
             x = x[::-1] ; w = w[::-1]
 #        grid = np.linspace(a, b, N)

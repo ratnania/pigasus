@@ -34,7 +34,7 @@ def get_elements1D(nrb):
     # find for each spline the elements where it lives
     list_supports = []
     for i in range(0, nx):
-        list_i = range(i, i + px + 1)
+        list_i = list(range(i, i + px + 1))
 
         list_elt = []
         for _i in list_i:
@@ -79,8 +79,8 @@ def get_elements2D(nrb):
     list_supports = []
     for j in range(0, ny):
         for i in range(0, nx):
-            list_i = range(i, i + px + 1)
-            list_j = range(j, j + py + 1)
+            list_i = list(range(i, i + px + 1))
+            list_j = list(range(j, j + py + 1))
 
             list_elt = []
             for _j in list_j:
@@ -130,9 +130,9 @@ def get_elements3D(nrb):
     for k in range(0, nz):
         for j in range(0, ny):
             for i in range(0, nx):
-                list_i = range(i, i + px + 1)
-                list_j = range(j, j + py + 1)
-                list_k = range(k, k + pz + 1)
+                list_i = list(range(i, i + px + 1))
+                list_j = list(range(j, j + py + 1))
+                list_k = list(range(k, k + pz + 1))
 
                 list_elt = []
                 for _k in list_k:
@@ -235,7 +235,7 @@ class ElementsManager(object):
             if dim == 2:
                 return ids.transpose().reshape(ids.size)
             if dim == 3:
-                print "Not yet Implemented"
+                print("Not yet Implemented")
 
         self.LocalID = LocalID
         self.ID = ID
@@ -264,7 +264,7 @@ class ElementsManager(object):
 # ---------------------------------------------------------
 if __name__ == '__main__':
     def test1D():
-        print "Test 1D:"
+        print("Test 1D:")
         from caid.cad_geometry import line as domain
         n = [10]
         p = [2]
@@ -273,11 +273,11 @@ if __name__ == '__main__':
         t_start = time()
         list_supports = get_elements(geo)
         t_end = time()
-        print "Elapsed time : ", t_end - t_start
+        print("Elapsed time : ", t_end - t_start)
 #        print "Supports ", list_supports
 
     def test2D():
-        print "Test 2D:"
+        print("Test 2D:")
         from caid.cad_geometry import square as domain
         n = [10,10]
         p = [2,2]
@@ -286,11 +286,11 @@ if __name__ == '__main__':
         t_start = time()
         list_supports = get_elements(geo)
         t_end = time()
-        print "Elapsed time : ", t_end - t_start
+        print("Elapsed time : ", t_end - t_start)
 #        print "Supports ", list_supports
 
     def test3D():
-        print "Test 3D:"
+        print("Test 3D:")
         from caid.cad_geometry import trilinear as domain
         n = [10,10,10]
         p = [2,2,2]
@@ -299,11 +299,11 @@ if __name__ == '__main__':
         t_start = time()
         list_supports = get_elements(geo)
         t_end = time()
-        print "Elapsed time : ", t_end - t_start
+        print("Elapsed time : ", t_end - t_start)
 #        print "Supports ", list_supports
 
     def test2D_EM():
-        print "Test 2D-EM:"
+        print("Test 2D-EM:")
 #        PRINT = True
         PRINT = False
         from caid.cad_geometry import square as domain
@@ -321,7 +321,7 @@ if __name__ == '__main__':
         DuplicataFaces  = [[1,1],[2,2],[3,3],[3,2]]
 
         list_n = [nrb.shape for nrb in geo]
-        from idutils import computeLocalID, computeGlobalID, print_id
+        from .idutils import computeLocalID, computeGlobalID, print_id
         list_id = computeLocalID(list_n, DirFaces, DuplicatedFaces, DuplicataFaces)
         ID = computeGlobalID(list_id)
 
@@ -331,10 +331,10 @@ if __name__ == '__main__':
         list_supports = EM.supports
         EM.InitializeIDsupports(list_id, ID)
         t_end = time()
-        print "Elapsed time : ", t_end - t_start
+        print("Elapsed time : ", t_end - t_start)
 
         t_start = time()
-        nodelist = range(0, (n[0]+2*p[0]+1)/2)
+        nodelist = list(range(0, (n[0]+2*p[0]+1)/2))
         EM.setNodeList(nodelist)
         list_patchs = EM.GetLocalPatchs()
 #        print "listpatchs = ", list_patchs
@@ -343,23 +343,23 @@ if __name__ == '__main__':
 #            print "patch ", i, " elements ", list_elts
 
         t_end = time()
-        print "Elapsed time : ", t_end - t_start
+        print("Elapsed time : ", t_end - t_start)
 
         if PRINT :
-            print "--------------  FINAL ------------------"
+            print("--------------  FINAL ------------------")
             for i,id in enumerate(list_id):
-                print "...... patch id : ", i, " ......"
+                print("...... patch id : ", i, " ......")
                 print_id(id)
-                print "...... supports ................"
-                print list_supports[i]
-            print "--------------  ID ------------------"
+                print("...... supports ................")
+                print(list_supports[i])
+            print("--------------  ID ------------------")
             print(ID)
-            print "--------------  I DATA --------------"
+            print("--------------  I DATA --------------")
             for I,data in enumerate(EM.IDsupports):
 #                print "I ", I, " data ", data
-                print "<<< I ", I+1, " >>>"
+                print("<<< I ", I+1, " >>>")
                 for [ipatch, elts] in data:
-                    print "patch ", ipatch, " elements ", elts
+                    print("patch ", ipatch, " elements ", elts)
 
     if True:
 #    if False:

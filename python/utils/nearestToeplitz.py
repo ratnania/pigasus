@@ -16,7 +16,7 @@ verbose = True
 
 MAXITER = 150
 FREQ    = 10
-list_iters = range(0,MAXITER,FREQ)[1:]
+list_iters = list(range(0,MAXITER,FREQ))[1:]
 # ----------------
 
 norm = lambda M: np.linalg.norm(M, 'fro')
@@ -98,18 +98,18 @@ if COST in [2]:
 # ...
 b = np.ones(n)
 
-print "###############################################"
-print "        Solving ", n, "x" , n ," Problem"
-print "###############################################"
+print("###############################################")
+print("        Solving ", n, "x" , n ," Problem")
+print("###############################################")
 
-print "----- stand-alone     cg ----"
+print("----- stand-alone     cg ----")
 for maxiter in list_iters:
     x,niter = cg(M, b, maxiter=maxiter)
-    print "Error after ", maxiter, " iterations : ", np.linalg.norm(M*x-b)
+    print("Error after ", maxiter, " iterations : ", np.linalg.norm(M*x-b))
 
-print "----- preconditionned cg ----"
+print("----- preconditionned cg ----")
 for maxiter in list_iters:
     x,niter = cg(M, b, M=P, maxiter=maxiter)
-    print "Error after ", maxiter, " iterations : ", np.linalg.norm(M*x-b)
+    print("Error after ", maxiter, " iterations : ", np.linalg.norm(M*x-b))
 # ...
 

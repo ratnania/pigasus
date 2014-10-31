@@ -156,7 +156,7 @@ with context():
     PDE.assembly()
     PDE.solve()
     normU = PDE.norm()
-    print "norm U = ", normU
+    print("norm U = ", normU)
     # ...
 
     # ...

@@ -20,7 +20,7 @@ class block_basicPDE():
 
         # TODO PDEs with different spaces
         if not same_space:
-            print "block_basicPDE: NOT YET IMPLEMENTED when same_space=False"
+            print("block_basicPDE: NOT YET IMPLEMENTED when same_space=False")
         self._size          = size
         self._dict_PDE      = {}
         self._list_PDE      = []
@@ -35,7 +35,7 @@ class block_basicPDE():
         #     the result is also a dictionary of PDEs
         iteration = 0
         V = None
-        for keys, tc in dict_testcases.iteritems():
+        for keys, tc in dict_testcases.items():
             i = keys[0] ; j = keys[1]
             if (iteration == 0):
                 PDE = basicPDE(geometry=geo, testcase=tc)
@@ -55,7 +55,7 @@ class block_basicPDE():
         # ...
 
         # ... then, initialize the PDEs (double) list with the PDEs dictionary
-        for keys, PDE in self._dict_PDE.iteritems():
+        for keys, PDE in self._dict_PDE.items():
             i = keys[0] ; j = keys[1]
             self._list_PDE[i][j] = PDE
         # ...
@@ -136,7 +136,7 @@ class block_basicPDE():
         # TODO take into account the case where a PDE is not specified and we
         # have to put a zero matrix
         self._dict_system = {}
-        for keys, PDE in self._dict_PDE.iteritems():
+        for keys, PDE in self._dict_PDE.items():
 #            print ">>> Assembly PDE ", keys
             PDE.assembly()
             i = keys[0] ; j = keys[1]
@@ -149,7 +149,7 @@ class block_basicPDE():
                 line.append(None)
             matrices.append(line)
 
-        for keys, system in self._dict_system.iteritems():
+        for keys, system in self._dict_system.items():
             i = keys[0] ; j = keys[1]
             matrices[i][j] = system.get()
 
@@ -172,7 +172,7 @@ class block_basicPDE():
 #        print "<<< done."
 
     def free(self):
-        for keys, PDE in self._dict_PDE.iteritems():
+        for keys, PDE in self._dict_PDE.items():
             PDE.free()
 
 
@@ -308,7 +308,7 @@ if __name__ == "__main__":
 #    for U in PDEs.unknowns:
 #        print U.get()
 
-    print PDEs.norms()
+    print(PDEs.norms())
 
 
     PDEs.free()

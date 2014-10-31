@@ -7,10 +7,10 @@
 __author__="ARA"
 __all__ = ['graph']
 
-import common_obj as _com
-import constants as _cst
+from . import common_obj as _com
+from . import constants as _cst
 import numpy as _np
-from pigasusObject import *
+from .pigasusObject import *
 
 class graph(pigasusObject):
     def __init__(self, spaces=None):
@@ -25,7 +25,7 @@ class graph(pigasusObject):
             directly into fortran
             """
             self.spaces = [-1,-1]
-            print "graph: Not yet implemented"
+            print("graph: Not yet implemented")
             import sys; sys.exit(0)
 
 
