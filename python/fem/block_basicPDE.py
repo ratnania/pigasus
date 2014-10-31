@@ -5,6 +5,7 @@
 import numpy                as np
 from pigasus.fem.basicPDE import *
 from pigasus.utils.blockdata import *
+#from pigasusClass import pigasus
 from scipy.sparse.linalg import cg
 
 # ...
@@ -15,6 +16,8 @@ class block_basicPDE():
         a block of basicPDEs. size must a list of two integers, describing the
         number of rows and columns of the block PDEs
         """
+#        pigasus.__init__(self)
+
         # TODO PDEs with different spaces
         if not same_space:
             print "block_basicPDE: NOT YET IMPLEMENTED when same_space=False"
@@ -25,6 +28,7 @@ class block_basicPDE():
         self._dict_system   = {}
         self._list_rhs      = []
         self._list_unknown  = []
+        self._list_norm     = []
         self._dict_testcases= dict_testcases
 
         # ... first, we create PDEs correponsing to the testcases dictionary
@@ -56,10 +60,18 @@ class block_basicPDE():
             self._list_PDE[i][j] = PDE
         # ...
 
-        # ... finally, we treate the None PDEs as a zero matrix
-        #     TODO
+        # ... create the fem reference
+        for j in range(0,self.size[1]):
+            self._fem = None
+            # ... find a non-None PDE in the same block column as M
+            for i in range(0,self.size[0]):
+                PDE = self._list_PDE[i][j]
+                if PDE is not None:
+                    self._fem = PDE.fem
+                    break
+            if self._fem is not None:
+                break
         # ...
-
 
         # ... create the list of rhs and unknowns
         for j in range(0,self.size[1]):
@@ -75,30 +87,57 @@ class block_basicPDE():
             self._list_rhs.append(rhs)
         # ...
 
-        # ... create the list of rhs and unknowns
+        # ... create the list of unknowns and their norms
         for i in range(0,self.size[0]):
             U   = None
+            N_U = None
             # ... find a non-None PDE in the same block line as M
             for j in range(0,self.size[j]):
                 PDE = self._list_PDE[i][j]
                 if PDE is not None:
                     U   = PDE.unknown
+                    N_U = PDE.N_U
                     break
 
             self._list_unknown.append(U)
+            self._list_norm.append(N_U)
         # ...
 
 
     @property
+    def fem(self):
+        return self._fem
+
+    @property
     def size(self):
         return self._size
+
+    @property
+    def system(self):
+        return self._system
+
+    @property
+    def rhs(self):
+        return self._list_rhs
+
+    @property
+    def unknowns(self):
+        return self._list_unknown
+
+    def norms(self, list_exact=None):
+        if list_exact is not None:
+            for (N_U, exact) in zip(self._list_norm, list_exact):
+                N_U.set_func(exact)
+
+        self.fem.assembly(norms=self._list_norm)
+        return [N_U.get() for N_U in self._list_norm]
 
     def assembly(self):
         # TODO take into account the case where a PDE is not specified and we
         # have to put a zero matrix
         self._dict_system = {}
         for keys, PDE in self._dict_PDE.iteritems():
-            print ">>> Assembly PDE ", keys
+#            print ">>> Assembly PDE ", keys
             PDE.assembly()
             i = keys[0] ; j = keys[1]
             self._dict_system[i,j] = PDE.system
@@ -136,17 +175,20 @@ class block_basicPDE():
         for keys, PDE in self._dict_PDE.iteritems():
             PDE.free()
 
-    @property
-    def system(self):
-        return self._system
 
-    @property
-    def rhs(self):
-        return self._list_rhs
 
-    @property
-    def unknowns(self):
-        return self._list_unknown
+    #-----------------------------------
+    def norm(self, exact=None):
+        """
+        Computing the L2 norm
+        """
+        if exact is not None:
+            self.N_U.set_func(exact)
+
+        self.fem.assembly(norms=[self.N_U])
+
+        return self.N_U.get()
+    #-----------------------------------
 
     #-----------------------------------
     def solve(self, rhs=None):
@@ -188,7 +230,7 @@ class block_basicPDE():
         tol = 1.e-7
         maxiter = 1000
         A = self.system.get()
-        print A.shape, lpr_rhs.shape
+#        print A.shape, lpr_rhs.shape
         X = cg(A, lpr_rhs, tol=tol, maxiter=maxiter)[0]
 
 #        print "###"
@@ -211,7 +253,8 @@ class block_basicPDE():
 
 if __name__ == "__main__":
     from caid.cad_geometry import square as domain
-    nx = 7 ; ny = 7
+    from numpy import pi, sin
+    nx = 15 ; ny = 15
     px = 2 ; py = 2
     geo = domain(n=[nx,ny],p=[px,px])
 
@@ -221,8 +264,20 @@ if __name__ == "__main__":
         # implicit part
         tc = {}
 
-        tc['b']  = lambda x,y : [1.]
-        tc['f']  = lambda x,y : [1.]
+        kx = 2. * pi
+        ky = 2. * pi
+
+        # ... exact solution
+        u = lambda x,y : [sin ( kx * x ) * sin ( ky * y )]
+        # ... rhs
+        f = lambda x,y : [( kx**2 + ky**2 ) * sin ( kx * x ) * sin ( ky * y )]
+
+        A = lambda x,y : [  1., 0. \
+                          , 0., 1. ]
+
+        tc['u']  = u
+        tc['f']  = f
+        tc['A']  = A
 
         tc['AllDirichlet'] = True
 
@@ -250,8 +305,10 @@ if __name__ == "__main__":
     rhs = PDEs.rhs
     PDEs.solve(rhs)
 
-    for U in PDEs.unknowns:
-        print U.get()
+#    for U in PDEs.unknowns:
+#        print U.get()
+
+    print PDEs.norms()
 
 
     PDEs.free()
