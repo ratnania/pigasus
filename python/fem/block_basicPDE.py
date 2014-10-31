@@ -11,7 +11,7 @@ from scipy.sparse.linalg import cg
 # ...
 class block_basicPDE():
 
-    def __init__(self, size, dict_testcases, geometry=None, same_space=True):
+    def __init__(self, size, dict_testcases=None, dict_PDE=None, geometry=None, same_space=True):
         """
         a block of basicPDEs. size must a list of two integers, describing the
         number of rows and columns of the block PDEs
@@ -30,21 +30,33 @@ class block_basicPDE():
         self._list_unknown  = []
         self._list_norm     = []
         self._dict_testcases= dict_testcases
+        self._geometry      = geometry
 
-        # ... first, we create PDEs correponsing to the testcases dictionary
-        #     the result is also a dictionary of PDEs
-        iteration = 0
-        V = None
-        for keys, tc in dict_testcases.items():
-            i = keys[0] ; j = keys[1]
-            if (iteration == 0):
-                PDE = basicPDE(geometry=geo, testcase=tc)
-                V   = PDE.V
-            else:
-                PDE = basicPDE(geometry=geo, testcase=tc, V=V)
-            self._dict_PDE[i,j] = PDE
-            iteration += 1
-        # ...
+        if dict_PDE is not None:
+            self._dict_PDE  = dict_PDE
+
+        if (dict_testcases is None) and (dict_PDE is None):
+            raise ("You should specify either dict_testcases or dict_PDE")
+
+        if (dict_testcases is not None) and (dict_PDE is not None):
+            raise ("You should specify either dict_testcases or dict_PDE")
+
+        if dict_testcases is not None:
+            # ... first, we create PDEs correponsing to the testcases dictionary
+            #     the result is also a dictionary of PDEs
+            iteration = 0
+            PDE = None
+            V = None
+            for keys, tc in dict_testcases.items():
+                i = keys[0] ; j = keys[1]
+                if (iteration == 0) or not same_space:
+                    PDE = basicPDE(geometry=geometry, testcase=tc)
+                    V   = PDE.V
+                else:
+                    PDE = basicPDE(geometry=geometry, testcase=tc, V=V)
+                self._dict_PDE[i,j] = PDE
+                iteration += 1
+            # ...
 
         # ... second, we create a list of PDEs, and initialize all PDE to None
         for i in range(0,self.size[0]):
@@ -107,6 +119,10 @@ class block_basicPDE():
     @property
     def fem(self):
         return self._fem
+
+    @property
+    def geometry(self):
+        return self._geometry
 
     @property
     def size(self):
@@ -292,7 +308,7 @@ if __name__ == "__main__":
 #    dict_testcases[1,0] = testcase()
     dict_testcases[1,1] = testcase()
 
-    PDEs = block_basicPDE(size, dict_testcases, geometry=geo)
+    PDEs = block_basicPDE(size, dict_testcases=dict_testcases, geometry=geo)
     PDEs.assembly()
 
 #    rhs = PDEs.rhs.get()
