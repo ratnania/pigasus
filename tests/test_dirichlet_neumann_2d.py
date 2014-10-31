@@ -2,6 +2,14 @@
 #! /usr/bin/python
 from pigasus.utils.manager import context
 
+# ...
+try:
+    from matplotlib import pyplot as plt
+    PLOT=True
+except ImportError:
+    PLOT=False
+# ...
+
 import sys
 import numpy as np
 from pigasus.fem.basicPDE import *
@@ -18,6 +26,28 @@ sys.stdout = open(filename.split('.py')[0]+'.txt', 'w')
 sin = np.sin ; cos = np.cos ; pi = np.pi
 # ...
 
+
+#-----------------------------------
+try:
+    nx = int(sys.argv[1])
+except:
+    nx = 31
+
+try:
+    ny = int(sys.argv[2])
+except:
+    ny = 31
+
+try:
+    px = int(sys.argv[3])
+except:
+    px = 2
+
+try:
+    py = int(sys.argv[4])
+except:
+    py = 2
+#-----------------------------------
 # ...
 def func_n (x, y):
     list_nx = []
@@ -117,7 +147,7 @@ def testcase():
 # ...
 from caid.cad_geometry import square as domain
 tc = testcase()
-geo = domain(n=[31,31],p=[2,2])
+geo = domain(n=[nx,ny],p=[px,py])
 with context():
     PDE = basicPDE(geometry=geo, testcase=tc)
     # ...
@@ -127,5 +157,13 @@ with context():
     PDE.solve()
     normU = PDE.norm()
     print "norm U = ", normU
-    PDE.plot()  ; pl.show()
     # ...
+
+    # ...
+    if PLOT:
+        PDE.plot()  ; plt.colorbar(); plt.title('$u_h$')
+        plt.savefig(filename.split('.py')[0]+'.png', format='png')
+        plt.clf()
+    # ...
+
+    PDE.free()

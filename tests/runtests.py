@@ -16,9 +16,16 @@ def main():
     testloader = unittest.TestLoader()
     for testfile in testfiles:
         sys.stdout = original_stdout
-        print "======== ", testfile, " ========="
         filename = os.path.basename(testfile)
         testname = os.path.splitext(filename)[0]
+        if testname in [ \
+                        'test_monge_ampere_mesh_picard', \
+                        'test_monge_ampere_mesh_picardtwogrids', \
+                        'test_monge_ampere_picard', \
+                        'test_anisotropicDiffusionMMPDE' \
+                       ]:
+            continue
+        print "======== ", testfile, " ========="
         module = __import__(testname)
         cases = testloader.loadTestsFromModule(module)
         testsuite.addTests(cases)
