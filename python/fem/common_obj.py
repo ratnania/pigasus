@@ -68,6 +68,9 @@ class common_obj(object):
 def isFloat(Obj):
     return Obj.__class__.__name__=="float"
 
+def isList(Obj):
+    return Obj.__class__.__name__=="list"
+
 def isNumpyArray(Obj):
     return Obj.__class__.__name__=="ndarray"
 

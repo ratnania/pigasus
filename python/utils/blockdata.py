@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import numpy as np
 from scipy.sparse import eye
+from pigasus.fem import common_obj as _com
 
 __author__ = 'ARA'
 __all__ = ['BlockVector', 'BlockMatrix']
@@ -75,8 +76,14 @@ def assembly_block_matrices(matrices):
 
 # ---------------------------------------
 class BlockMatrix(object):
+    def __new__(typ, *args, **kwargs):
+        obj = object.__new__(typ)
+        obj._id = None
+        return obj
+
     def __init__(self, matrices):
         self.M = None
+        self._id = None
 
         n = len(matrices)
         m = len(matrices[0])
@@ -111,6 +118,10 @@ class BlockMatrix(object):
         # ...
 
     @property
+    def id(self):
+        return self._id
+
+    @property
     def matrices(self):
         return self._matrices
 
@@ -129,6 +140,88 @@ class BlockMatrix(object):
 
     def get(self):
         return self.M
+
+    def dot(self, other):
+        """
+        scalar dot between a matrix and a field
+        """
+        return self.__mul__(other)
+
+    def __mul__(self, other):
+        # ... case of numpy array
+        if _com.isNumpyArray(other):
+            M = self.get()
+            Y = M.dot(other)
+            return Y
+        # ...
+        # ... case of pigasus field
+        if _com.isField(other):
+            M = self.get()
+            Y = M.dot(other.get())
+            from pigasus.fem.field import field
+            F = field.__new__(field)
+            F.set(Y)
+            return F
+        # ...
+        # ... case of list of numpy arrays or pigasus fields
+        if _com.isList(other):
+            L = []
+            for F in other:
+                if _com.isNumpyArray(F):
+                    L += list(F)
+                if _com.isField(F):
+                    L += list(F.get())
+            X = np.asarray(L)
+            M = self.get()
+            Y = M.dot(X)
+            from pigasus.fem.field import field
+            ind_b = 0
+            list_F = []
+            for U in other:
+                F = None
+                if _com.isNumpyArray(U):
+                    U_size = U.shape[0]
+                    F = Y[ind_b:ind_b+U_size]
+                    ind_b += U_size
+                if _com.isField(U):
+                    F = field.__new__(field)
+                    F.set(Y[ind_b:ind_b+U.size])
+                    ind_b += U.size
+                list_F.append(F)
+            return list_F
+        # ...
+
+#        # ... case of a scalar number
+#        if _com.isFloat(other):
+#            M = BlockMatrix.__new__(BlockMatrix)
+#            M.set(other * self.get ())
+#            return M
+#        # ...
+#        if _com.isScipyMatrix(other):
+#            M = BlockMatrix.__new__(BlockMatrix)
+#            M.set(other * self.get ())
+#            return M
+        # ...
+
+        print("Not yet implemented in __mul__")
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
+    def __pos__(self):
+        self.__mul__(1.0)
+
+    def __neg__(self):
+        self.__mul__(-1.0)
+
+    def __imul__(self, other):
+        if _com.isFloat(other):
+            self.com.pyfem.matrix_mult_scal (self.id, other, self.id)
+        if _com.isMatrix(other):
+            self.com.pyfem.matrix_mult_matrix (self.id,other.id,self.id)
+        if _com.isScipyMatrix(other):
+            self.set(other * self.get ())
+        return self
 # ---------------------------------------
 
 # ---------------------------------------
@@ -262,34 +355,6 @@ if __name__ == '__main__':
     matrices7 = [ [-S, -0.5*Rx, 0.5*Ry] \
                 , [Dx,     -Mx,    None] \
                 , [Dy,     None,    -My] ]
-#    n = len(matrices7)
-#    m = len(matrices7[0])
-#    # .. find None matrices and replace them by a zero matrix
-#    list_matrices = []
-#    for i in range(0,n):
-#        line = []
-#        for j in range(0,m):
-#            M = matrices7[i][j]
-#            if M is None:
-#                M_shape = [0,0]
-#                # ... find a non-None matrix in the same block line as M
-#                for i1 in range(0,n):
-#                    M1 = matrices7[i1][j]
-#                    if M1 is not None:
-#                        M_shape[0] = M1.shape[0]
-#                # ... find a non-None matrix in the same block column as M
-#                for j1 in range(0,m):
-#                    M1 = matrices7[i][j1]
-#                    if M1 is not None:
-#                        M_shape[1] = M1.shape[1]
-#
-#                Z = 0. * eye(M_shape[0], M_shape[1]) ; Z = Z.tocsr() # zero matrix
-#                line.append(Z)
-#            else:
-#                line.append(M)
-#
-#        list_matrices.append(line)
-#    matrices7 = list_matrices
     # ...
 
     list_matrices = []

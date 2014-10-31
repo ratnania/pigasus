@@ -305,6 +305,21 @@ if __name__ == "__main__":
     rhs = PDEs.rhs
     PDEs.solve(rhs)
 
+    # ... example of multiplication with a list of fields
+    unknowns = PDEs.unknowns
+    system = PDEs.system
+    X = system.dot(unknowns)
+    print([np.linalg.norm(x.get()-r.get()) for (x,r) in zip(X,rhs)])
+    # ...
+
+    # ... example of multiplication with a list of numpy arrays
+    unknowns = [U.get() for U in PDEs.unknowns]
+    system = PDEs.system
+    X = system.dot(unknowns)
+    print([np.linalg.norm(x-r.get()) for (x,r) in zip(X,rhs)])
+    # ...
+
+
 #    for U in PDEs.unknowns:
 #        print U.get()
 

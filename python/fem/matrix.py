@@ -8,7 +8,7 @@ __author__="ARA"
 __all__ = ['matrix']
 __date__ ="$Jan 11, 2012 3:32:21 PM$"
 
-from .pigasusObject import *
+from pigasusObject import *
 #from graph import *
 from . import common_obj as _com
 from . import constants as _cst
