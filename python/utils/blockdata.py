@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 import numpy as np
+from scipy.sparse import eye
 
 __author__ = 'ARA'
 __all__ = ['BlockVector', 'BlockMatrix']
@@ -75,8 +76,47 @@ def assembly_block_matrices(matrices):
 # ---------------------------------------
 class BlockMatrix(object):
     def __init__(self, matrices):
-        self.matrices = matrices
         self.M = None
+
+        n = len(matrices)
+        m = len(matrices[0])
+        self._shape = [n,m]
+
+        # .. find None matrices and replace them by a zero matrix
+        list_matrices = []
+        for i in range(0,n):
+            line = []
+            for j in range(0,m):
+                M = matrices[i][j]
+                if M is None:
+                    M_shape = [0,0]
+                    # ... find a non-None matrix in the same block line as M
+                    for i1 in range(0,n):
+                        M1 = matrices[i1][j]
+                        if M1 is not None:
+                            M_shape[0] = M1.shape[0]
+                    # ... find a non-None matrix in the same block column as M
+                    for j1 in range(0,m):
+                        M1 = matrices[i][j1]
+                        if M1 is not None:
+                            M_shape[1] = M1.shape[1]
+
+                    Z = 0. * eye(M_shape[0], M_shape[1]) ; Z = Z.tocsr() # zero matrix
+                    line.append(Z)
+                else:
+                    line.append(M)
+
+            list_matrices.append(line)
+        self._matrices = list_matrices
+        # ...
+
+    @property
+    def matrices(self):
+        return self._matrices
+
+    @property
+    def shape(self):
+        return self._shape
 
     def assembly(self):
         list_M = []
@@ -218,6 +258,38 @@ if __name__ == '__main__':
     Yt = Y.transpose().tocsr()
     matrices6 = [ [S , X] \
                 , [Yt, I] ]
+
+    matrices7 = [ [-S, -0.5*Rx, 0.5*Ry] \
+                , [Dx,     -Mx,    None] \
+                , [Dy,     None,    -My] ]
+#    n = len(matrices7)
+#    m = len(matrices7[0])
+#    # .. find None matrices and replace them by a zero matrix
+#    list_matrices = []
+#    for i in range(0,n):
+#        line = []
+#        for j in range(0,m):
+#            M = matrices7[i][j]
+#            if M is None:
+#                M_shape = [0,0]
+#                # ... find a non-None matrix in the same block line as M
+#                for i1 in range(0,n):
+#                    M1 = matrices7[i1][j]
+#                    if M1 is not None:
+#                        M_shape[0] = M1.shape[0]
+#                # ... find a non-None matrix in the same block column as M
+#                for j1 in range(0,m):
+#                    M1 = matrices7[i][j1]
+#                    if M1 is not None:
+#                        M_shape[1] = M1.shape[1]
+#
+#                Z = 0. * eye(M_shape[0], M_shape[1]) ; Z = Z.tocsr() # zero matrix
+#                line.append(Z)
+#            else:
+#                line.append(M)
+#
+#        list_matrices.append(line)
+#    matrices7 = list_matrices
     # ...
 
     list_matrices = []
@@ -227,12 +299,13 @@ if __name__ == '__main__':
     list_matrices += [matrices4]
     list_matrices += [matrices5]
     list_matrices += [matrices6]
+    list_matrices += [matrices7]
     for i,matrices in enumerate(list_matrices):
         print "============= Test "+ str(i+1) +" ==========="
 
         A = BlockMatrix(matrices)
         A.assembly()
 
-        Adense = assembly_dense(matrices)
+        Adense = assembly_dense(A.matrices)
 
         print "Assembling error = ", np.sum(A.todense()-Adense)

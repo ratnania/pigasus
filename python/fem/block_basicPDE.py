@@ -62,21 +62,32 @@ class block_basicPDE():
 
 
         # ... create the list of rhs and unknowns
-        for i in range(0,self.size[0]):
-            # in case where a PDE is None, we have to use the transposed PDE
-            # [i][j] <-> [j][i]
-            try:
-                PDE = self._list_PDE[i][0]
-                U   = PDE.unknown
-                rhs = PDE.rhs
-            except:
-                PDE = self._list_PDE[0][i]
-                U   = PDE.unknown
-                rhs = PDE.rhs
+        for j in range(0,self.size[1]):
+            rhs = None
+            # ... find a non-None PDE in the same block column as M
+            for i in range(0,self.size[0]):
+                PDE = self._list_PDE[i][j]
+                if PDE is not None:
+                    U   = PDE.unknown
+                    rhs = PDE.rhs
+                    break
 
-            self._list_unknown.append(U)
             self._list_rhs.append(rhs)
         # ...
+
+        # ... create the list of rhs and unknowns
+        for i in range(0,self.size[0]):
+            U   = None
+            # ... find a non-None PDE in the same block line as M
+            for j in range(0,self.size[j]):
+                PDE = self._list_PDE[i][j]
+                if PDE is not None:
+                    U   = PDE.unknown
+                    break
+
+            self._list_unknown.append(U)
+        # ...
+
 
     @property
     def size(self):
@@ -131,7 +142,11 @@ class block_basicPDE():
 
     @property
     def rhs(self):
-        return self._rhs
+        return self._list_rhs
+
+    @property
+    def unknowns(self):
+        return self._list_unknown
 
     #-----------------------------------
     def solve(self, rhs=None):
@@ -185,14 +200,12 @@ class block_basicPDE():
 #        print "*****"
 
         ind_b = 0
-        for i in range(0, self.size[0]):
-            PDE = self._list_PDE[i][0]
-            if PDE is None:
-                PDE = self._list_PDE[0][i]
-            U = PDE.unknown
+        for U in self.unknowns:
             U.set(X[ind_b:ind_b+U.size])
             ind_b += U.size
         # ...
+
+
     #-----------------------------------
 
 
@@ -220,8 +233,8 @@ if __name__ == "__main__":
 
     dict_testcases = {}
     dict_testcases[0,0] = testcase()
-    dict_testcases[0,1] = testcase()
-    dict_testcases[1,0] = testcase()
+#    dict_testcases[0,1] = testcase()
+#    dict_testcases[1,0] = testcase()
     dict_testcases[1,1] = testcase()
 
     PDEs = block_basicPDE(size, dict_testcases, geometry=geo)
@@ -234,12 +247,11 @@ if __name__ == "__main__":
 #    Y = matrix.dot(rhs)
 #    print Y.shape
 
-    rhs = PDEs.rhs.get()
+    rhs = PDEs.rhs
     PDEs.solve(rhs)
 
-    for i in range(0, PDEs.size[0]):
-        PDE = PDEs._list_PDE[i][0]
-        print PDE.unknown.get()
+    for U in PDEs.unknowns:
+        print U.get()
 
 
     PDEs.free()
