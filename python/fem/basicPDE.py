@@ -280,22 +280,30 @@ class basicPDE(pigasus):
         self.list_DirFaces = list_DirFaces
 
         # ...
-        self.UseDuplicateFaces = False
-        list_DuplicatedFaces   = []
-        list_DuplicataFaces    = []
+        self.UseDuplicateFaces          = False
+        list_DuplicatedFaces            = []
+        list_DuplicataFaces             = []
+        list_DuplicatedFacesPeriodic    = []
         try:
             list_connectivity = self.testcase['connectivity']
         except:
             list_connectivity = self.geometry.connectivity
-            for dict_con in list_connectivity:
-                list_DuplicatedFaces.append(dict_con['original'])
-                list_DuplicataFaces.append(dict_con['clone'])
+
+        for dict_con in list_connectivity:
+            list_DuplicatedFaces.append(dict_con['original'])
+            list_DuplicataFaces.append(dict_con['clone'])
+            try:
+                list_DuplicatedFacesPeriodic.append(dict_con['periodic'])
+            except:
+                list_DuplicatedFacesPeriodic.append(False)
+
         if len(list_DuplicatedFaces) > 0:
             self.UseDuplicateFaces = True
         # ...
 
-        self.list_DuplicataFaces  = list_DuplicataFaces
-        self.list_DuplicatedFaces = list_DuplicatedFaces
+        self.list_DuplicataFaces            = list_DuplicataFaces
+        self.list_DuplicatedFaces           = list_DuplicatedFaces
+        self.list_DuplicatedFacesPeriodic    = list_DuplicatedFacesPeriodic
 
         # ...
         self.meanConstraint = False
@@ -304,8 +312,10 @@ class basicPDE(pigasus):
         nDuplicatedFaces    = len(self.list_DuplicataFaces)
         if (nExtFaces == nBCNeumann) \
            or (nExtFaces == nDuplicatedFaces) \
-           or (nExtFaces == nBCNeumann+nDuplicatedFaces) :
+           or (nExtFaces == nBCNeumann+nDuplicatedFaces) \
+           or (nExtFaces == 0):
             self.meanConstraint = True
+            print (" self.meanConstraint ", self.meanConstraint)
         # ...
 
         #-----------------------------------
@@ -355,11 +365,16 @@ class basicPDE(pigasus):
                 print("* DuplicatedFaces ", list_DuplicatedFaces)
                 print("* DuplicataFaces  ", list_DuplicataFaces)
 
+#            print("* DuplicatedFaces ", list_DuplicatedFaces)
+#            print("* DuplicataFaces  ", list_DuplicataFaces)
+#            print("* DuplicatedFacesPeriodic ", list_DuplicatedFacesPeriodic)
+
             V = space(geometry=self.geometry)
             V.dirichlet(faces=list_DirFaces_V)
             if self.UseDuplicateFaces:
                 V.duplicate(  faces_base = list_DuplicatedFaces \
-                            , faces      = list_DuplicataFaces  )
+                            , faces      = list_DuplicataFaces  \
+                            , isPeriodic = list_DuplicatedFacesPeriodic)
             V.set_boundary_conditions()
             if self.withMetric:
                 V.create_grids(type="legendre", k=lpi_ordergl, metric=Metric)

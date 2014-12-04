@@ -14,10 +14,6 @@ from . import common_obj as _com
 from . import constants as _cst
 from .pigasusObject import *
 from .ElementsManager import ElementsManager
-from . import connectivity_1D as con_1D
-from . import connectivity_2D as con_2D
-from . import connectivity_3D as con_3D
-from . import boundary_conditions as bc
 from numpy import zeros, asarray
 # ...
 
@@ -81,16 +77,10 @@ class space(pigasusObject):
 
 #        self.updatePoints = True
 
-        if self.dim == 1 :
-            self.connectivity = con_1D.connectivity_1D(self.geometry, ai_ndof=self.ndof)
-
-        if self.dim == 2 :
-            self.connectivity = con_2D.connectivity_2D(self.geometry, ai_ndof=self.ndof)
-
-        if self.dim == 3 :
-            self.connectivity = con_3D.connectivity_3D(self.geometry, ai_ndof=self.ndof)
-
-        self.boundary_conditions = bc.boundary_conditions(self.geometry)
+        from caid.numbering.connectivity import connectivity
+        from caid.numbering.boundary_conditions import boundary_conditions
+        self.connectivity = connectivity(self.geometry, ai_ndof=self.ndof)
+        self.boundary_conditions = boundary_conditions(self.geometry)
 
         if self.dim not in [1,2,3] :
             print("Error space: dimension not implemented yet")
@@ -363,10 +353,51 @@ class space(pigasusObject):
             self.boundary_conditions.dirichlet(self.geometry, faces)
             self.list_faces_dir = faces
 
-    def duplicate(self, faces_base=None, faces=None, shift_base=None, shift=None):
-        self.boundary_conditions.duplicate(self.geometry, faces_base, faces, shift_base, shift)
-        self.list_faces_duplicated = faces_base
-        self.list_faces_duplicata  = faces
+    def duplicate(self, \
+                  faces_base=None, faces=None, \
+                  isPeriodic=None):
+        if isPeriodic is None:
+            pass # TODO
+        _faces_base = []
+        _faces = []
+        for (pf_base, pf, periodic) in zip(faces_base, faces, isPeriodic):
+#            print "pf_base =", pf_base, "       pf =", pf
+            pbase_id = pf_base[0] ; fbase_id = pf_base[1]
+            p_id = pf[0] ; f_id = pf[1]
+            if periodic:
+                print ">>> is Periodic"
+                nrb_base = self.geometry[pbase_id]
+                nrb      = self.geometry[p_id]
+                assert(nrb_base.dim == nrb.dim)
+                axis = None
+                if nrb_base.dim == 1:
+                    if f_id in [0,1]:
+                        axis = 0
+                if nrb_base.dim == 2:
+                    if f_id in [0,2]:
+                        axis = 0
+                    if f_id in [1,3]:
+                        axis = 1
+                if nrb_base.dim == 3:
+                    # TODO
+                    print ("Not yet implemented")
+
+                degree = nrb_base.degree[axis]
+                for i_base in range(0, degree):
+                    i = i_base - degree + 1
+                    new_pf_base = [pbase_id, fbase_id, i_base]
+                    new_pf      = [p_id, f_id, i]
+                    _faces_base.append(new_pf_base)
+                    _faces.append(new_pf)
+            else:
+                new_pf_base = [pbase_id, fbase_id, 0]
+                new_pf      = [p_id, f_id, 0]
+                _faces_base.append(new_pf_base)
+                _faces.append(new_pf)
+
+        self.boundary_conditions.duplicate(self.geometry, _faces_base, _faces)
+        self.list_faces_duplicated = _faces_base
+        self.list_faces_duplicata  = _faces
 
     def set_boundary_conditions(self):
         self.connectivity.init_data_structure(self.boundary_conditions)
