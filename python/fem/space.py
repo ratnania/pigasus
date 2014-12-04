@@ -365,7 +365,7 @@ class space(pigasusObject):
             pbase_id = pf_base[0] ; fbase_id = pf_base[1]
             p_id = pf[0] ; f_id = pf[1]
             if periodic:
-                print ">>> is Periodic"
+#                print ">>> is Periodic"
                 nrb_base = self.geometry[pbase_id]
                 nrb      = self.geometry[p_id]
                 assert(nrb_base.dim == nrb.dim)

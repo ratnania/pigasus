@@ -315,7 +315,7 @@ class basicPDE(pigasus):
            or (nExtFaces == nBCNeumann+nDuplicatedFaces) \
            or (nExtFaces == 0):
             self.meanConstraint = True
-            print (" self.meanConstraint ", self.meanConstraint)
+#            print (" self.meanConstraint ", self.meanConstraint)
         # ...
 
         #-----------------------------------
