@@ -258,6 +258,15 @@ class basicPDE(pigasus):
             self.solverInfo = None
         # ...
 
+        # ... set geometry
+        if self.geometry is None:
+            try:
+                V  = kwargs['V']
+                self.geometry = V.geometry
+            except:
+                raise("Unable to find a geometry for the current basicPDE")
+        # ...
+
         self.withAllDirichlet = withAllDirichlet
 
         # ...
@@ -508,17 +517,25 @@ class basicPDE(pigasus):
 
         # ...
         try:
+            trial = kwargs['trial']
+        except:
+            trial = V
+        # ...
+
+        # ...
+        try:
             M_V  = kwargs['M_V']
         except:
             if self.withMass:
-                M_V  = oper(spaces=[V, V], type=MASS        , func=func_mass)
+                M_V  = oper(spaces=[V, trial], type=MASS        , func=func_mass)
                 M_V.addto(Matrix_V)
                 # ...
                 if self.withTAdvection:
-                    Mdw_V  = oper(spaces=[V, V], type=MASS  , func=func_dw)
+                    Mdw_V  = oper(spaces=[V, trial], type=MASS  , func=func_dw)
                     Mdw_V.addto(Matrix_V)
                 # ...
 
+        # TODO what to do with the trial space for VW?
         try:
             M_VW  = kwargs['M_VW']
         except:
@@ -532,7 +549,7 @@ class basicPDE(pigasus):
             A_V  = kwargs['A_V']
         except:
             if self.withAdvection:
-                A_V  = oper(spaces=[V, V], type=ADVECTION   , func=func_adv)
+                A_V  = oper(spaces=[V, trial], type=ADVECTION   , func=func_adv)
                 A_V.addto(Matrix_V)
 
         try:
@@ -548,7 +565,7 @@ class basicPDE(pigasus):
             At_V  = kwargs['At_V']
         except:
             if self.withTAdvection:
-                At_V  = oper(spaces=[V, V], type=ADVECTION  , func=func_tadv, transpose=True)
+                At_V  = oper(spaces=[V, trial], type=ADVECTION  , func=func_tadv, transpose=True)
                 At_V.addto(Matrix_V)
 
         try:
@@ -564,7 +581,7 @@ class basicPDE(pigasus):
             S_V  = kwargs['S_V']
         except:
             if self.withStiffness:
-                S_V  = oper(spaces=[V, V], type=STIFFNESS   , func=func_stiff)
+                S_V  = oper(spaces=[V, trial], type=STIFFNESS   , func=func_stiff)
                 S_V.addto(Matrix_V)
 
         try:
@@ -580,7 +597,7 @@ class basicPDE(pigasus):
             B_V  = kwargs['B_V']
         except:
             if self.withD2:
-                B_V  = oper(spaces=[V, V], type=SECOND_DERIV, func=func_D2)
+                B_V  = oper(spaces=[V, trial], type=SECOND_DERIV, func=func_D2)
                 B_V.addto(Matrix_V)
 
         try:
