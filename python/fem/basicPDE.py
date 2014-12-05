@@ -332,7 +332,12 @@ class basicPDE(pigasus):
         list_n = nrb.shape
         list_p = nrb.degree
 
-        lpi_ordergl = list_p
+        # ...
+        try:
+            n_gauss  = kwargs['n_gauss']
+            lpi_ordergl = n_gauss
+        except:
+            lpi_ordergl = list_p
 
         _system = matrix()
         _slv    = solver(matrix=_system, solverInfo=self.solverInfo)
