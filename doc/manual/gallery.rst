@@ -14,6 +14,8 @@ Gallery
 
 .. include:: gallery/parabolic.rst
 
+.. include:: gallery/anidiff.rst
+
 .. include:: gallery/paramimpact.rst
 
 .. include:: gallery/nonlinpde.rst

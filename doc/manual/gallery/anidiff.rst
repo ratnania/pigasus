@@ -76,6 +76,119 @@ Which gives the numerical solution
    :width: 9cm
    :height: 9cm
 
+Anisotropic Diffusion eigenvalue problem
+****************************************
+
+In this example, we solve the 2D anisotropic Diffusion steady state problem.
+
+.. math::
+
+  - \nabla \cdot \left( \mathbf{b} \otimes \mathbf{b} \nabla u \right) &= \omega^2 u, ~~~~ \Omega
+  \\
+  u &= 0, ~~~~  \partial \Omega
+
+Naive formulation
+^^^^^^^^^^^^^^^^^
+
+The weak formulation writes
+
+.. math::
+
+   \sum_j [u]^j \int ( \mathbf{b} \cdot \nabla \phi_i ) ( \mathbf{b} \cdot \nabla \phi_j ) = \omega^2 \sum_j [u]^j \int \phi_i \phi_j 
+
+which leads to the linear eigenvalue problem
+
+.. math::
+
+  \mathcal{S} [u] = \omega^2 \mathcal{M} [u]
+  
+Mixed formulation
+^^^^^^^^^^^^^^^^^
+
+Let us introduce the auxiliary vector function variable :math:`\mathbf{p}` such that
+
+.. math::
+
+  p_{\parallel} := \mathbf{b} \cdot \mathbf{p} = \mathbf{b} \cdot \nabla u
+
+In this case, our annistropic diffusion eigenvalue problem writes
+
+.. math::
+
+  \mathbf{b} \cdot \mathbf{p} = \mathbf{b} \cdot \nabla u
+  \\
+  - \nabla \cdot ( \mathbf{b} p_{\parallel} ) = \omega^2 u
+
+We assume that :math:`u \in V` and :math:`\mathbf{p} \in W` where :math:`V` and :math:`W` are two spaces that we will introduce later. 
+
+.. math::
+
+  \sum_j [\mathbf{p}]^j \int (\mathbf{b} \cdot \Psi_j) (\mathbf{b} \cdot \Psi_i) = \sum_j [u]^j \int (\mathbf{b} \cdot \nabla \phi_j) (\mathbf{b} \cdot \Psi_i)
+  \\
+  \sum_j [\mathbf{p}]^j( \mathbf{b} \cdot \Psi_j ) ( \mathbf{b} \cdot \nabla \phi_i) = \omega^2 \sum_j [u]^j \int \phi_i \phi_j   
+
+By introducing the matrices
+
+.. math::
+
+  \mathcal{M}_W = (\int ( \mathbf{b} \cdot \Psi_j) ( \mathbf{b} \cdot \Psi_i) )_{1 \leq i,j \leq n_W}
+  \\
+  \mathcal{M}_V = (\int \phi_j \phi_i )_{1 \leq i,j \leq n_V}
+  \\
+  \mathcal{K}_{WV} = (\int (\mathbf{b} \cdot \nabla \phi_j) ( \mathbf{b} \cdot \Psi_i) )_{1 \leq i \leq n_W, 1 \leq j \leq n_V}
+  \\ 
+  \mathcal{K}_{VW} = \mathcal{K}_{WV}^T  
+
+The linear system writes
+
+.. math:: 
+
+  \mathcal{M}_W [\mathbf{p}] = \mathcal{K}_{WV} [u]
+  \\
+  \mathcal{K}_{VW} [\mathbf{p}] = \omega^2 \mathcal{M}_{V} [u]
+
+which can be written as
+
+.. math::
+
+  \mathcal{A} \begin{pmatrix}
+  [\mathbf{p}] \\
+  [u] 
+  \end{pmatrix}
+  = \omega^2
+  \mathcal{M} \begin{pmatrix}
+  [\mathbf{p}] \\
+  [u] 
+  \end{pmatrix}
+
+with
+
+.. math::
+
+  \mathcal{A} = \begin{pmatrix}
+   -\mathcal{M}_W  &  \mathcal{K}_{WV} \\
+  \mathcal{K}_{VW}   & 0 
+  \end{pmatrix}
+
+and  
+
+.. math::
+
+  \mathcal{M} = \begin{pmatrix}
+   0 & 0 \\
+   0 & \mathcal{M}_V 
+  \end{pmatrix}
+
+Standard discretization
+_______________________
+
+In this case we consider that :math:`\mathbf{p}` coordinates lives in :math:`V`.
+
+Compatible discretization
+_________________________
+
+In this case
+
 
 .. Local Variables:
 .. mode: rst
