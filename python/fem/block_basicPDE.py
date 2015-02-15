@@ -140,6 +140,10 @@ class block_basicPDE():
     def unknowns(self):
         return self._list_unknown
 
+    @property
+    def PDE(self, i, j):
+        return self._list_PDE[i][j]
+
     def norms(self, list_exact=None):
         if list_exact is not None:
             for (N_U, exact) in zip(self._list_norm, list_exact):

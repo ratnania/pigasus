@@ -22,9 +22,10 @@ return 2.0*y
 
 class impeqpy:
     #this class contains some useful function for solving equation : f(x,y)
-    def __init__ ( self ):
-        self.tol = 1e-9
-        self.maxniter = 300
+    def __init__ ( self, tol=1.e-9, maxniter = 5000, verbose=False ):
+        self.tol = tol
+        self.verbose = verbose
+        self.maxniter = maxniter
 
     """
     Ubiquitous Newton-Raphson algorithm for solving
@@ -50,6 +51,8 @@ class impeqpy:
             f, fd = func(x), funcd(x)
             f = f - level
             count = count + 1
+            if self.verbose and (count == self.maxniter):
+                print("Warning: newton solver iterations = ", self.maxniter)
             #print "newton(%d): x=%s, f(x)=%s" % (count, x, f)
 
     def newton2D(self,func,dfunc,param,val, level=0.0,init=1.0):
@@ -74,6 +77,8 @@ class impeqpy:
                 f, fd = func(x,y), dfunc(x,y)
                 f = f - level
                 count = count + 1
+                if self.verbose and (count == self.maxniter):
+                    print("Warning: newton solver iterations = ", self.maxniter)
                 #print "newton(%d): x=%s, f(x)=%s" % (count, x, f)
                 #if maxniter achieved
             return None
@@ -88,6 +93,8 @@ class impeqpy:
                 f, fd = func(x,y), dfunc(x,y)
                 f = f - level
                 count = count + 1
+                if self.verbose and (count == self.maxniter):
+                    print("Warning: newton solver iterations = ", self.maxniter)
                 #print "newton(%d): x=%s, f(x)=%s" % (count, x, f)
                 #if maxniter achieved
             return  None
