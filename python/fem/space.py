@@ -395,7 +395,7 @@ class space(pigasusObject):
                 _faces_base.append(new_pf_base)
                 _faces.append(new_pf)
 
-        self.boundary_conditions.duplicate(self.geometry, _faces_base, _faces)
+        self.boundary_conditions.duplicate(self.geometry)
         self.list_faces_duplicated = _faces_base
         self.list_faces_duplicata  = _faces
 
