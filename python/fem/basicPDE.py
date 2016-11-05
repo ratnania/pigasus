@@ -5,6 +5,7 @@ import sys
 import numpy as np
 from scipy.sparse.linalg import cg as ConjugateGradient
 from caid.cad_geometry import cad_geometry
+from caid.cad_geometry import entier_vers_couple as face_to_bc
 
 from .constants import *
 from .field import *
@@ -33,7 +34,8 @@ class boundary_function():
 #        print "* evaluate *"
 #        print "patch_id, face : ", self.patch_id, self.face_id
         nrb = self.patch
-        nrb_bnd = nrb.extract_face(self.face_id).clone()
+        axis, side = face_to_bc(self.face_id)
+        nrb_bnd = nrb.extract_face(axis, side).clone()
         sgn = nrb_bnd.orientation[0]
         P = nrb_bnd.evaluate_deriv(u)
         x  = P[0,:,0]
@@ -631,7 +633,10 @@ class basicPDE(pigasus):
                     self.list_G_V_BC_faces.append([patch_id,face_id])
 
                     nrb = self.geometry[patch_id]
-                    nrb_bnd = nrb.extract_face(face_id)
+
+                    axis, side = face_to_bc(face_id)
+
+                    nrb_bnd = nrb.extract_face(axis, side)
                     geo = cad_geometry()
                     geo.append(nrb_bnd)
 

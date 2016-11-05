@@ -283,8 +283,7 @@ class space(pigasusObject):
         # ... defining the evaluate function
 #        EVALUATE = srf.evaluate_deriv
         def EVALUATE(u=None, v=None, w=None):
-            return srf.evaluate_deriv(u=u, v=v, w=w \
-                       , fields=None, nderiv=nderiv, rationalize=srf.rational)
+            return srf.evaluate_deriv(u=u, v=v, w=w, nderiv=nderiv)
 #        APPEND = True
         APPEND = False
         # ...

@@ -65,18 +65,9 @@ The installation needs the following steps::
      # choose and export your compiler
      #export FC=ifort ; export FC_CONSTRUCTOR=intelem
      export FC=gfortran  ; export FC_CONSTRUCTOR=gnu95
-     cmake ..
-     make
-     cd ..
-     cd pigasus
-     # define the installation directory
-     mkdir -p $HOME/pigasus
-     export PIGASUS_INSTALL_DIR=$HOME/pigasus
-     export LD_LIBRARY_PATH=$PIGASUS_INSTALL_DIR/lib:$LD_LIBRARY_PATH
-     # build-step
-     python setup.py build --fcompiler=$FC_CONSTRUCTOR
-     # installation-step
-     python setup.py install --prefix=$PIGASUS_INSTALL_DIR
+     # configure with prefix install dir
+     cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/installation/pigasus
+     make install
 
 .. notes::
    
