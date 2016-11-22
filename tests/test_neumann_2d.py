@@ -26,12 +26,12 @@ sin = np.sin ; cos = np.cos ; pi = np.pi ; exp = np.exp
 try:
     nx = int(sys.argv[1])
 except:
-    nx = 31
+    nx = 1
 
 try:
     ny = int(sys.argv[2])
 except:
-    ny = 31
+    ny = 1
 
 try:
     px = int(sys.argv[3])
@@ -186,6 +186,9 @@ with context():
 
     PDE.assembly(f=f)
     PDE.solve()
+    from scipy.io import mmwrite
+    mmwrite("M.mtx", PDE.system.get())
+    np.savetxt("rhs.txt", PDE.rhs.get())
     # ...
 
     # ...
